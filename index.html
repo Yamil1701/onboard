@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#08131f">
   <meta name="description" content="Un viaje por la muestra de Práctica Docente IV del Profesorado de Francés.">
-  <title>Voyageurs, tous à bord !</title>
+  <title>Viajeros, ¡todos a bordo!</title>
   <link rel="icon" href="./src/assets/plane.svg" type="image/svg+xml">
   <link rel="preload" as="image" href="./src/assets/runway.webp">
 </head>
@@ -13,6 +13,7 @@
   <svg class="symbols" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
     <symbol id="plane" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.4c1 0 1.7.9 1.7 2v6.5l8.2 5v2.3l-8.2-2.7v5.2l2.8 1.9v1.5L12 22l-4.5 1.1v-1.5l2.8-1.9v-5.2l-8.2 2.7v-2.3l8.2-5V3.4c0-1.1.7-2 1.7-2Z"/></symbol>
     <symbol id="arrow" viewBox="0 0 24 24"><path d="M3 12h16m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="restart" viewBox="0 0 24 24"><path d="M4 11a8 8 0 1 1 2.7 6m-2.7-6V5m0 6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="pencil" viewBox="0 0 24 24"><path d="m5 15-1 5 5-1L20 8a1.4 1.4 0 0 0 0-2l-2-2a1.4 1.4 0 0 0-2 0ZM14.5 5.5l4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   </svg>
 
@@ -29,6 +30,7 @@
         id="window-photo" src="./src/assets/runway.webp" width="840" height="1132"
         alt="" fetchpriority="high" decoding="async"></picture>
       <div id="runway-lights" class="runway-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="takeoff-veil" id="takeoff-veil" aria-hidden="true"></div>
 
       <section class="gate" id="gate" aria-labelledby="destination">
         <div class="board">
@@ -43,10 +45,10 @@
       </section>
 
       <section class="boarding" id="boarding" aria-labelledby="journey-title" hidden>
-        <div class="ticket">
+        <div class="ticket" id="ticket">
           <div class="ticket-head">
             <p class="ticket-label"><span data-copy="boardingPass">Pase de embarque</span><svg aria-hidden="true"><use href="#plane"/></svg></p>
-            <h1 class="journey-title" id="journey-title" lang="fr">Voyageurs,<br class="ticket-break"> <em>tous à bord !</em></h1>
+            <h1 class="journey-title" id="journey-title"><span data-copy="titleLead">Viajeros,</span><br class="ticket-break"> <em data-copy="titleEnd">¡todos a bordo!</em></h1>
             <p class="ticket-date"><time datetime="2026-11-30T20:00:00-03:00" data-copy="longDate">30 noviembre 2026 · 20 h</time></p>
             <p class="venue">Profesorado Superior de Lenguas Vivas N.º 6007</p>
           </div>
@@ -63,7 +65,8 @@
             <button class="primary" type="submit"><span data-copy="board">Embarcar</span><svg aria-hidden="true"><use href="#arrow"/></svg></button>
           </form>
           <div class="stamp" id="stamp" hidden aria-hidden="true">
-            <strong data-copy="aboard">A bordo</strong><small>30·11·2026</small>
+            <div class="stamp-wing"><svg><use href="#plane"/></svg></div>
+            <strong data-copy="aboard">A bordo</strong><small>30 · 11 · 2026</small>
           </div>
         </div>
       </section>
@@ -89,7 +92,11 @@
         <i></i><i></i><i></i><i></i><i></i><i></i>
         <svg><use href="#plane"/></svg>
       </div>
-      <div class="progress-label"><span data-copy="journey">Recorrido</span><span id="progress-value">1 / 6</span></div>
+      <div class="progress-label">
+        <span data-copy="journey">Recorrido</span>
+        <button class="restart" type="button" id="restart-journey"><svg aria-hidden="true"><use href="#restart"/></svg><span data-copy="restart">Reiniciar</span></button>
+        <span id="progress-value">1 / 6</span>
+      </div>
     </footer>
   </div>
   <noscript>Activá JavaScript para embarcar. / Active JavaScript pour embarquer.</noscript>

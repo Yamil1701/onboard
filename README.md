@@ -2,7 +2,7 @@
 
 Experiencia web bilingüe para la muestra de Práctica Docente IV del Profesorado de Francés. 30 de noviembre de 2026, 20 h, Profesorado Superior de Lenguas Vivas N.º 6007.
 
-Repositorio: `Yamil1701/onboard`. El título de la experiencia queda en francés.
+Repositorio: `Yamil1701/onboard`. El boleto muestra el título en el idioma activo.
 
 ## Decisiones acordadas
 
@@ -38,7 +38,7 @@ Los formularios propios son las preguntas y opciones dibujadas como parte de la 
 
 ## Vista previa móvil
 
-Incluye la bienvenida y la encuesta inicial. El nombre y la respuesta de prueba se conservan en la sesión del navegador. El envío usa almacenamiento de sesión y no tiene un servidor de encuestas conectado.
+Incluye la bienvenida y la encuesta inicial. El nombre y la respuesta de prueba se conservan en la sesión del navegador. El envío usa almacenamiento de sesión y no tiene un servidor de encuestas conectado. El control «Reiniciar» en el indicador del recorrido vuelve al boleto y limpia el nombre y la respuesta de prueba de esta sesión, conservando el idioma.
 
 ```sh
 npm ci
