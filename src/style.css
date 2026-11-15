@@ -204,7 +204,7 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding: clamp(118px, calc(var(--view-height) - 480px), 355px) 21px 8px;
+  padding: clamp(118px, calc(var(--view-height) - 498px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)), 355px) 21px 8px;
 }
 .ticket, .survey-card {
   color-scheme: light;
