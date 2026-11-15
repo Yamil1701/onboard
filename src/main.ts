@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 import { copy, type CopyKey, type Language } from './copy';
+import { createTakeoff, surveyEntry } from './takeoff';
 import './style.css';
 
 type Phase = 'gate' | 'boarding' | 'takeoff' | 'survey';
@@ -23,9 +24,7 @@ const boardButton = ticketForm.querySelector<HTMLButtonElement>('button')!;
 const boardAction = boardButton.querySelector<HTMLElement>('[data-copy]')!;
 const nameInput = find<HTMLInputElement>('passenger');
 const stamp = find('stamp');
-const lights = find('runway-lights');
-const streaks = Array.from(lights.children);
-const takeoffVeil = find('takeoff-veil');
+const takeoff = createTakeoff(find('flight-scene'));
 const survey = find('survey');
 const surveyTitle = find('survey-title');
 const surveyForm = find<HTMLFormElement>('survey-form');
@@ -47,6 +46,7 @@ const state: {
 } = { language: 'ar', name: '', selected: null, submitted: null };
 let storageBlock = false;
 let flight: gsap.core.Timeline | undefined;
+let flightBeat: 'runway' | 'climb' | null = null;
 
 function isExpectation(value: unknown): value is Expectation {
   return value === 'adapt' || value === 'play' || value === 'ideas';
@@ -103,11 +103,17 @@ function renderPoll() {
   if (!result.hidden) result.textContent = copy[state.language].received;
 }
 
+function renderStageLabel() {
+  const key = phase === 'survey' ? 'survey' : flightBeat ?? 'welcome';
+  stageLabel.dataset.copy = key;
+  stageLabel.textContent = copy[state.language][key];
+}
+
 function renderLanguage() {
   const language = copy[state.language];
   document.documentElement.lang = state.language === 'fr' ? 'fr' : 'es-AR';
   document.title = `${language.titleLead} ${language.titleEnd}`;
-  stageLabel.dataset.copy = phase === 'survey' ? 'survey' : 'welcome';
+  renderStageLabel();
   boardAction.dataset.copy = phase === 'takeoff' ? 'boardingAction' : 'board';
   for (const element of translated) {
     element.textContent = language[element.dataset.copy as CopyKey];
@@ -135,8 +141,12 @@ function openBoarding(focusButton = false) {
   if (phase !== 'gate') return;
   phase = 'boarding';
   renderPhase();
-  gsap.fromTo(boarding, { opacity: 0, y: 7 }, {
-    opacity: 1, y: 0, duration: .45, ease: 'power2.out', clearProps: 'opacity,transform',
+  takeoff.preload();
+  gsap.fromTo(windowPhoto, { opacity: .5, scale: 1.025 }, {
+    opacity: 1, scale: 1, duration: .9, ease: 'sine.out', clearProps: 'opacity,transform',
+  });
+  gsap.fromTo(boarding, { opacity: 0, y: 28 }, {
+    opacity: 1, y: 0, duration: .76, ease: 'power2.out', clearProps: 'opacity,transform',
   });
   if (focusButton) boardButton.focus({ preventScroll: true });
 }
@@ -156,6 +166,8 @@ function beginFlight() {
   state.name = nameInput.value;
   save();
   nameInput.blur();
+  gsap.killTweensOf([boarding, windowPhoto]);
+  gsap.set([boarding, windowPhoto], { clearProps: 'opacity,transform' });
   phase = 'takeoff';
   renderPhase();
   renderLanguage();
@@ -163,41 +175,53 @@ function beginFlight() {
   nameInput.readOnly = true;
   stamp.hidden = false;
 
-  flight = gsap.timeline({
+  const timeline = gsap.timeline({
     onComplete() {
       flight = undefined;
+      flightBeat = null;
       phase = 'survey';
+      survey.inert = false;
       renderPhase();
       renderLanguage();
+      takeoff.clear();
       save();
       window.scrollTo(0, 0);
       surveyTitle.focus({ preventScroll: true });
-      gsap.fromTo(survey, { opacity: 0, y: 9 }, {
-        opacity: 1, y: 0, duration: .48, ease: 'power2.out', clearProps: 'opacity,transform',
-      });
     },
-  })
+  });
+  flight = timeline;
+  timeline
     .fromTo(stamp, { opacity: 0, scale: 1.55, y: -51, rotation: -21 }, {
       opacity: 1, scale: 1, y: 0, rotation: -8, duration: .43, ease: 'power2.in',
     })
     .to(ticket, { y: 3, scaleY: .989, duration: .07, ease: 'power2.out' }, .40)
     .to(ticket, { y: 0, scaleY: 1, duration: .20, ease: 'power2.out' }, .47)
-    .addLabel('roll', 1.14)
-    .to(lights, { opacity: .92, duration: .25, ease: 'power1.inOut' }, 'roll')
-    .to(windowPhoto, { y: 31, scale: 1.13, duration: 1.37, ease: 'power2.in' }, 'roll')
-    .to(streaks, {
-      x: index => index < 3 ? -148 : 148, y: 53, scaleX: 2.2,
-      opacity: .08, duration: 1.37, ease: 'power2.in',
-    }, 'roll')
-    .to(boarding, { y: 45, opacity: 0, duration: .58, ease: 'power2.in' }, 1.91)
-    .to(takeoffVeil, { opacity: 1, duration: .53, ease: 'power1.in' }, 1.98);
+    .to(boarding, { y: 112, opacity: 0, duration: .76, ease: 'power2.inOut' }, 1.1);
+  takeoff.addTo(timeline, () => {
+    flightBeat = 'runway';
+    renderStageLabel();
+  }, () => {
+    flightBeat = 'climb';
+    renderStageLabel();
+  });
+  timeline
+    .call(() => {
+      boarding.hidden = true;
+      survey.inert = true;
+      survey.hidden = false;
+    }, [], surveyEntry)
+    .fromTo(survey, { opacity: 0, y: 32 }, {
+      opacity: 1, y: 0, duration: .86, ease: 'power2.out', clearProps: 'opacity,transform',
+    }, surveyEntry);
 }
 
 function restartJourney() {
   flight?.kill();
   flight = undefined;
-  gsap.killTweensOf([boarding, survey]);
-  gsap.set([boarding, survey, ticket, stamp, windowPhoto, lights, takeoffVeil, ...streaks], {
+  flightBeat = null;
+  takeoff.clear();
+  gsap.killTweensOf([boarding, windowPhoto]);
+  gsap.set([boarding, survey, ticket, stamp, windowPhoto], {
     clearProps: 'opacity,transform',
   });
   state.name = '';
@@ -207,6 +231,7 @@ function restartJourney() {
   nameInput.readOnly = false;
   boardButton.disabled = false;
   stamp.hidden = true;
+  survey.inert = false;
   for (const option of pollOptions) option.checked = false;
   phase = 'gate';
   renderPhase();

@@ -124,8 +124,64 @@ svg { display: block; width: 1em; height: 1em; }
   transform-origin: 50% 58%;
 }
 .journey[data-phase="gate"] .window { inset-block-start: -5px; opacity: .41; }
-.journey[data-phase="survey"] .window,
-.journey[data-phase="survey"] .runway-lights { visibility: hidden; }
+.journey[data-phase="survey"] .window { visibility: hidden; }
+
+.flight-scene {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 42%, #101e2e, var(--night) 68%);
+  pointer-events: none;
+}
+.flight-window {
+  position: absolute;
+  inset: -46px 0 auto;
+  aspect-ratio: 840 / 1132;
+  transform-origin: 50% 39%;
+}
+.flight-window img, .flight-glass, .flight-lights, .flight-glint {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.flight-frame { mask-image: linear-gradient(#000 77%, transparent 100%); }
+.flight-glass { clip-path: url(#flight-glass); }
+.flight-air {
+  inset: -16.5% 0 auto;
+  background: #0a2031 url('./assets/cabin-sky.webp') center top / cover no-repeat;
+  transform-origin: 50% 40%;
+}
+.flight-ground, .flight-distant {
+  background: url('./assets/runway.webp') center / 100% 100% no-repeat;
+  transform-origin: 50% 42%;
+  clip-path: url(#flight-glass);
+}
+.flight-ground {
+  --terrain-cut: -8%;
+  mask-image: linear-gradient(transparent var(--terrain-cut), #000 calc(var(--terrain-cut) + 8%));
+}
+.flight-distant { mask-image: linear-gradient(transparent 4%, #000 14% 37%, transparent 53%); }
+.flight-lights { mix-blend-mode: screen; }
+.flight-wing {
+  clip-path: url(#flight-wing);
+  transform-origin: 92% 44%;
+}
+.flight-glint {
+  opacity: .34;
+  background: linear-gradient(116deg, transparent 22%, #5dc5ea18 34%, transparent 44%);
+  mix-blend-mode: screen;
+  transform: translateX(-11%);
+}
+.flight-glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 51% 38%, transparent 22%, #0714224a 64%, #0714228c 90%);
+  pointer-events: none;
+}
 
 .gate {
   display: grid;
@@ -237,7 +293,7 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 .ticket-label svg { color: #32525a; font-size: 17px; }
 .journey-title {
   margin-top: 10px;
-  font: 520 clamp(29px, 10.3vw, 44px)/1.08 var(--serif);
+  font: 600 clamp(29px, 10.3vw, 44px)/1.08 var(--serif);
   letter-spacing: -.024em;
 }
 .journey-title em, .survey-title em { font-weight: inherit; }
@@ -362,42 +418,6 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 .stamp-wing svg { font-size: 12px; transform: rotate(90deg); }
 .stamp small { font-size: 8px; font-weight: 600; }
 
-.takeoff-veil {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  opacity: 0;
-  background: linear-gradient(#08131fcd, var(--night) 74%);
-  pointer-events: none;
-}
-.journey:not([data-phase="takeoff"]) .takeoff-veil { visibility: hidden; }
-.runway-lights {
-  position: absolute;
-  top: min(50vw, 275px);
-  width: 100%;
-  height: 118px;
-  z-index: -1;
-  opacity: 0;
-  pointer-events: none;
-}
-.runway-lights i {
-  position: absolute;
-  inset: auto auto 0 8%;
-  width: 13%;
-  height: 2px;
-  border-radius: 100%;
-  background: var(--gold);
-  box-shadow: 0 0 8px currentColor;
-  color: var(--gold);
-  transform: rotate(-17deg);
-}
-.runway-lights i:nth-child(2n) { color: var(--teal); background: var(--teal); }
-.runway-lights i:nth-child(2) { bottom: 20%; left: 21%; }
-.runway-lights i:nth-child(3) { bottom: 45%; left: 5%; }
-.runway-lights i:nth-child(4) { bottom: 40%; left: 83%; }
-.runway-lights i:nth-child(5) { bottom: 26%; left: 71%; }
-.runway-lights i:nth-child(6) { bottom: 74%; left: 75%; }
-
 .survey {
   display: flex;
   flex-direction: column;
@@ -416,7 +436,7 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 }
 .survey-title {
   color: #f7f0dd;
-  font: 520 clamp(41px, 12.3vw, 52px)/1.04 var(--serif);
+  font: 600 clamp(41px, 12.3vw, 52px)/1.04 var(--serif);
   letter-spacing: -.02em;
 }
 .survey-title:focus { outline: none; }
@@ -427,7 +447,7 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   padding: 20px 19px 15px;
 }
 .survey-card fieldset { display: grid; gap: 7px; margin: 0; padding: 0; border: 0; min-width: 0; }
-.survey-card legend { padding: 0; margin-bottom: 17px; font: 560 25px/1.18 var(--serif); }
+.survey-card legend { padding: 0; margin-bottom: 17px; font: 600 25px/1.18 var(--serif); }
 .choice {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -517,7 +537,7 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 .restart:active { color: var(--gold); }
 
 .is-keyboard-open .boarding { padding-block: clamp(0px, calc(var(--view-height) - 375px), 136px) 12px; }
-.is-keyboard-open .window { top: -86px; }
+.is-keyboard-open :is(.window, .flight-window) { top: -86px; }
 .is-keyboard-open .ticket-head { padding-bottom: 10px; }
 .is-keyboard-open .journey-title { font-size: clamp(19px, 6vw, 28px); }
 .is-keyboard-open .ticket-break { display: none; }
