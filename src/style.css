@@ -147,7 +147,7 @@ svg { display: block; width: 1em; height: 1em; }
   width: 100%;
   height: 100%;
 }
-.flight-frame { mask-image: linear-gradient(#000 77%, transparent 100%); }
+.flight-frame { mask-image: linear-gradient(transparent, #000 8% 77%, transparent 100%); }
 .flight-glass { clip-path: url(#flight-glass); }
 .flight-air {
   inset: -16.5% 0 auto;
@@ -163,7 +163,7 @@ svg { display: block; width: 1em; height: 1em; }
   --terrain-cut: -8%;
   mask-image: linear-gradient(transparent var(--terrain-cut), #000 calc(var(--terrain-cut) + 8%));
 }
-.flight-distant { mask-image: linear-gradient(transparent 4%, #000 14% 37%, transparent 53%); }
+.flight-distant { mask-image: linear-gradient(transparent 4%, #000 14% 33%, transparent 40%); }
 .flight-lights { mix-blend-mode: screen; }
 .flight-wing {
   clip-path: url(#flight-wing);

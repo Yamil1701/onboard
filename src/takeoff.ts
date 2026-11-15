@@ -115,15 +115,15 @@ export function createTakeoff(scene: HTMLElement) {
         travel: 845, speed: .31, climb: 1, brightness: 0,
         duration: 2.81, ease: 'sine.inOut', onUpdate: drawLights,
       }, wheelsUp)
-      .to(ground, { yPercent: 34, xPercent: -5, scale: .8, rotation: -4.4, duration: 2.53, ease: 'power2.out' }, wheelsUp)
+      .to(ground, { yPercent: 34, xPercent: -5, scale: .8, rotation: -4.4, duration: 2.53, ease: 'sine.inOut' }, wheelsUp)
       .to(ground, { '--terrain-cut': '29%', duration: .84, ease: 'power1.out' }, wheelsUp)
       .to(distant, { yPercent: 23, xPercent: -2.3, scale: .95, rotation: -2.1, duration: 2.65, ease: 'sine.inOut' }, wheelsUp)
       .to(wing, { rotation: 4.5, yPercent: -1.7, duration: .91, ease: 'sine.inOut' }, wheelsUp)
       .to(wing, { rotation: 2.2, yPercent: -.9, duration: 1.58, ease: 'sine.inOut' }, wheelsUp + .91)
       .to(glint, { xPercent: 51, opacity: .24, duration: 2.5, ease: 'sine.inOut' }, wheelsUp + .12)
       .fromTo(air, { scale: 1.135, yPercent: -4 }, { scale: 1.02, yPercent: 1, duration: 2.8, ease: 'sine.inOut' }, wheelsUp)
-      .to(ground, { opacity: 0, duration: 1.6, ease: 'sine.inOut' }, 5.14)
-      .to(distant, { opacity: 0, duration: 1.46, ease: 'sine.inOut' }, 5.48);
+      .to(ground, { opacity: 0, duration: 1.12, ease: 'sine.inOut' }, 5.72)
+      .to(distant, { opacity: 0, duration: 1.36, ease: 'sine.inOut' }, 4.83);
   }
 
   function clear() {
