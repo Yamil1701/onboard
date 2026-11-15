@@ -140,7 +140,7 @@ svg { display: block; width: 1em; height: 1em; }
   aspect-ratio: 840 / 1132;
   transform-origin: 50% 39%;
 }
-.flight-window img, .flight-glass, .flight-lights, .flight-glint {
+.flight-window :where(img), .flight-glass, .flight-lights, .flight-glint {
   display: block;
   position: absolute;
   inset: 0;
