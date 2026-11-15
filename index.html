@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08131f">
+  <meta name="description" content="Un viaje por la muestra de Práctica Docente IV del Profesorado de Francés.">
+  <title>Voyageurs, tous à bord !</title>
+  <link rel="icon" href="./src/assets/plane.svg" type="image/svg+xml">
+  <link rel="preload" as="image" href="./src/assets/runway.webp">
+</head>
+<body>
+  <svg class="symbols" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="plane" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.4c1 0 1.7.9 1.7 2v6.5l8.2 5v2.3l-8.2-2.7v5.2l2.8 1.9v1.5L12 22l-4.5 1.1v-1.5l2.8-1.9v-5.2l-8.2 2.7v-2.3l8.2-5V3.4c0-1.1.7-2 1.7-2Z"/></symbol>
+    <symbol id="arrow" viewBox="0 0 24 24"><path d="M3 12h16m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="pencil" viewBox="0 0 24 24"><path d="m5 15-1 5 5-1L20 8a1.4 1.4 0 0 0 0-2l-2-2a1.4 1.4 0 0 0-2 0ZM14.5 5.5l4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </svg>
+
+  <div class="journey" id="journey" data-phase="gate">
+    <header class="topbar">
+      <span class="stage-label"><svg aria-hidden="true"><use href="#plane"/></svg><span id="stage-label" data-copy="welcome">Bienvenida</span></span>
+      <div class="languages" role="group" id="languages" aria-label="Idioma">
+        <button type="button" data-lang="ar" aria-pressed="true" aria-label="Español (Argentina)">AR</button>
+        <button type="button" data-lang="fr" aria-pressed="false" aria-label="Français" lang="fr">FR</button>
+      </div>
+    </header>
+    <main class="stage">
+      <picture class="window"><img
+        id="window-photo" src="./src/assets/runway.webp" width="840" height="1132"
+        alt="" fetchpriority="high" decoding="async"></picture>
+      <div id="runway-lights" class="runway-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+      <section class="gate" id="gate" aria-labelledby="destination">
+        <div class="board">
+          <div class="board-inner">
+            <p class="board-heading"><span data-copy="departures">Salidas</span><span class="lamp" aria-hidden="true"></span></p>
+            <p class="destination-label" data-copy="destination">Destino</p>
+            <h1 class="board-destination" id="destination" aria-label="Práctica Docente IV"><span class="board-fallback">PRÁCTICA<br>DOCENTE IV</span></h1>
+            <p class="boarding-status" role="status"><span class="lamp" aria-hidden="true"></span><span data-copy="preparing">Preparando el embarque…</span></p>
+            <p class="board-date"><time datetime="2026-11-30" data-copy="shortDate">30 nov 2026</time><time datetime="20:00">20 h</time></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="boarding" id="boarding" aria-labelledby="journey-title" hidden>
+        <div class="ticket">
+          <div class="ticket-head">
+            <p class="ticket-label"><span data-copy="boardingPass">Pase de embarque</span><svg aria-hidden="true"><use href="#plane"/></svg></p>
+            <h1 class="journey-title" id="journey-title" lang="fr">Voyageurs,<br class="ticket-break"> <em>tous à bord !</em></h1>
+            <p class="ticket-date"><time datetime="2026-11-30T20:00:00-03:00" data-copy="longDate">30 noviembre 2026 · 20 h</time></p>
+            <p class="venue">Profesorado Superior de Lenguas Vivas N.º 6007</p>
+          </div>
+          <form class="ticket-stub" id="ticket-form">
+            <div class="name-row">
+              <label for="passenger" class="name-label">
+                <strong data-copy="name">Nombre y apellido</strong><span data-copy="optional">Opcional</span>
+              </label>
+              <div class="name-line">
+                <input id="passenger" name="name" type="text" autocomplete="name" autocapitalize="words" enterkeyhint="done">
+                <svg aria-hidden="true"><use href="#pencil"/></svg>
+              </div>
+            </div>
+            <button class="primary" type="submit"><span data-copy="board">Embarcar</span><svg aria-hidden="true"><use href="#arrow"/></svg></button>
+          </form>
+          <div class="stamp" id="stamp" hidden aria-hidden="true">
+            <strong data-copy="aboard">A bordo</strong><small>30·11·2026</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="survey" id="survey" aria-labelledby="survey-title" hidden>
+        <div class="survey-title-wrap">
+          <h1 class="survey-title" id="survey-title" tabindex="-1"><span data-copy="beforeTitle">Antes de</span> <em data-copy="takeoffTitle">despegar</em></h1>
+        </div>
+        <form class="survey-card" id="survey-form">
+          <fieldset>
+            <legend data-copy="question">¿Qué esperás llevarte de esta muestra?</legend>
+            <label class="choice"><input type="radio" name="expectation" value="adapt"><span data-copy="adapt">Adaptar una clase</span></label>
+            <label class="choice"><input type="radio" name="expectation" value="play"><span data-copy="play">Participar del juego</span></label>
+            <label class="choice"><input type="radio" name="expectation" value="ideas"><span data-copy="ideas">Llevarme ideas para mi futura Práctica IV</span></label>
+          </fieldset>
+          <button class="primary" id="send-answer" type="submit" disabled><span data-copy="send">Enviar respuesta</span></button>
+          <p class="survey-result" id="survey-result" role="status" hidden></p>
+        </form>
+      </section>
+    </main>
+    <footer class="progress" id="progress" hidden>
+      <div class="progress-track" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i>
+        <svg><use href="#plane"/></svg>
+      </div>
+      <div class="progress-label"><span data-copy="journey">Recorrido</span><span id="progress-value">1 / 6</span></div>
+    </footer>
+  </div>
+  <noscript>Activá JavaScript para embarcar. / Active JavaScript pour embarquer.</noscript>
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>

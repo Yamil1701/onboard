@@ -2,7 +2,7 @@
 
 Experiencia web bilingüe para la muestra de Práctica Docente IV del Profesorado de Francés. 30 de noviembre de 2026, 20 h, Profesorado Superior de Lenguas Vivas N.º 6007.
 
-Repositorio previsto: `viajeros-todos-a-bordo`. El título de la experiencia queda en francés.
+Repositorio: `Yamil1701/onboard`. El título de la experiencia queda en francés.
 
 ## Decisiones acordadas
 
@@ -25,7 +25,7 @@ Los formularios propios son las preguntas y opciones dibujadas como parte de la 
 
 ## Dirección visual y técnica
 
-- Avión y pista con capas 2D. GSAP para el sello y las transiciones principales. Respetar la preferencia de movimiento reducido.
+- Avión y pista con capas 2D. GSAP para el sello y las transiciones principales.
 - La ruta y el avión indican el avance. El lector desacelera la experiencia: fondo quieto, lectura cómoda y regreso claro. PDF.js es la primera opción a probar con el PDF real en Safari móvil y Chrome Android. Usar HTML para los contenidos que se beneficien de una lectura adaptada.
 - Mantener el alcance de una implementación inicial breve. Escritorio queda para después de cerrar el recorrido móvil. Definir alojamiento, recepción de encuestas y materiales definitivos durante el diseño.
 
@@ -36,4 +36,14 @@ Los formularios propios son las preguntas y opciones dibujadas como parte de la 
 3. Con la dirección visual aprobada, incorporar la carpeta y probar abrir un documento y volver al mismo lugar. Luego completar las encuestas reales, la actividad, la llegada y la bitácora.
 4. Para cada entrega, adjuntar los fotogramas aprobados, el texto bilingüe y los comportamientos esperados. Registrar las decisiones visuales pendientes antes de implementarlas. El próximo encargo termina en la primera vista previa móvil.
 
-Estado: documentación de diseño inicial. La implementación web todavía no comenzó.
+## Vista previa móvil
+
+Incluye la bienvenida y la encuesta inicial. El nombre y la respuesta de prueba se conservan en la sesión del navegador. El envío usa almacenamiento de sesión y no tiene un servidor de encuestas conectado.
+
+```sh
+npm ci
+npm run dev
+npm run build
+```
+
+Usá Node.js 24. GitHub Actions compila y publica en [GitHub Pages](https://yamil1701.github.io/onboard/) al incorporar cambios a `main`.
