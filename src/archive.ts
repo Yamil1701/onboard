@@ -86,10 +86,15 @@ export function createArchive(canOpen: () => boolean) {
     const requested = albumIds.find(id => hash === archiveHash + id);
     if (requested && canOpen()) {
       if (active === requested) return;
-      if (!active) originY = window.scrollY;
+      if (!active) {
+        originY = window.scrollY;
+        frame.replaceChildren();
+        openImage.removeAttribute('href');
+      }
       active = requested;
       index = 0;
       archive.open = true;
+      panel.inert = false;
       panel.hidden = false;
       journey.classList.add('is-reading');
       stage.inert = progress.inert = true;
@@ -103,12 +108,11 @@ export function createArchive(canOpen: () => boolean) {
     if (active) {
       const trigger = buttons.get(active);
       active = undefined;
+      panel.inert = true;
       panel.hidden = true;
       pendingImage = undefined;
       delete frame.dataset.loading;
       frame.removeAttribute('aria-busy');
-      frame.replaceChildren();
-      openImage.removeAttribute('href');
       if (hash !== '#informe') {
         journey.classList.remove('is-reading');
         stage.inert = progress.inert = false;

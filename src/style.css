@@ -833,6 +833,15 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   color: #f5edda;
   box-shadow: 0 0 45px #0007;
 }
+@media (prefers-reduced-motion: no-preference) {
+  .reader {
+    transition: opacity .28s ease, transform .28s ease, display .28s allow-discrete;
+  }
+  .reader[hidden] { opacity: 0; transform: translateY(12px); }
+  @starting-style {
+    .reader:not([hidden]) { opacity: 0; transform: translateY(12px); }
+  }
+}
 body:has(.is-reading) { overflow: hidden; }
 .reader-header, .reader-controls { padding-inline: 12px; background: #11232c; }
 .reader-header { display: flex; align-items: center; gap: 10px; min-height: 54px; border-bottom: 1px solid #334a54; }

@@ -120,6 +120,7 @@ export function createReader(onOpen: () => boolean) {
         return;
       }
       originY = window.scrollY;
+      element.inert = false;
       element.hidden = false;
       journey.classList.add('is-reading');
       stage.inert = progress.inert = true;
@@ -129,6 +130,7 @@ export function createReader(onOpen: () => boolean) {
       priorOffset = { x: view.scrollLeft, y: view.scrollTop };
       ++generation;
       renderer?.cancel();
+      element.inert = true;
       element.hidden = true;
       journey.classList.remove('is-reading');
       stage.inert = progress.inert = false;
