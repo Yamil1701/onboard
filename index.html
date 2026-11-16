@@ -22,6 +22,8 @@
     <symbol id="plane" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.4c1 0 1.7.9 1.7 2v6.5l8.2 5v2.3l-8.2-2.7v5.2l2.8 1.9v1.5L12 22l-4.5 1.1v-1.5l2.8-1.9v-5.2l-8.2 2.7v-2.3l8.2-5V3.4c0-1.1.7-2 1.7-2Z"/></symbol>
     <symbol id="arrow" viewBox="0 0 24 24"><path d="M3 12h16m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="restart" viewBox="0 0 24 24"><path d="M4 11a8 8 0 1 1 2.7 6m-2.7-6V5m0 6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></symbol>
     <symbol id="pencil" viewBox="0 0 24 24"><path d="m5 15-1 5 5-1L20 8a1.4 1.4 0 0 0 0-2l-2-2a1.4 1.4 0 0 0-2 0ZM14.5 5.5l4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   </svg>
 
@@ -94,6 +96,7 @@
         <div class="survey-title-wrap">
           <h1 class="survey-title" id="survey-title" tabindex="-1"><span data-copy="beforeTitle">Antes de</span> <em data-copy="takeoffTitle">despegar</em></h1>
         </div>
+        <div class="survey-stack">
         <form class="survey-card" id="survey-form">
           <fieldset>
             <legend data-copy="question">¿Qué esperás llevarte de esta muestra?</legend>
@@ -102,8 +105,30 @@
             <label class="choice"><input type="radio" name="expectation" value="ideas"><span data-copy="ideas">Llevarme ideas para mi futura Práctica IV</span></label>
           </fieldset>
           <button class="primary" id="send-answer" type="submit" disabled><span data-copy="send">Enviar respuesta</span></button>
-          <p class="survey-result" id="survey-result" role="status" hidden></p>
         </form>
+        <section class="survey-card survey-confirmation" id="survey-result" aria-labelledby="response-title" hidden>
+          <div class="confirmation-stamp" aria-hidden="true"><svg><use href="#check"/></svg></div>
+          <h2 id="response-title" data-copy="responseTitle" tabindex="-1">Respuesta guardada</h2>
+          <p data-copy="received">Tu respuesta de prueba quedó en este navegador.</p>
+          <p class="chosen-answer"><svg aria-hidden="true"><use href="#check"/></svg><span id="chosen-answer"></span></p>
+          <button type="button" class="primary" id="continue-journey"><span data-copy="continue">Continuar</span><svg aria-hidden="true"><use href="#arrow"/></svg></button>
+        </section>
+        </div>
+      </section>
+
+      <section class="materials" id="materials" aria-labelledby="materials-title" hidden>
+        <h1 id="materials-title" tabindex="-1" data-copy="materials">Pasaporte y materiales</h1>
+        <div class="folio" id="folio">
+          <div class="folio-cover" aria-hidden="true"><svg><use href="#plane"/></svg></div>
+          <div class="folio-sheet" id="folio-sheet">
+            <p class="folio-title" data-copy="materialIndex">Índice de materiales</p>
+            <button class="document-entry" type="button" id="open-passport">
+              <svg aria-hidden="true"><use href="#file"/></svg>
+              <span><strong data-copy="reportTitle">Informe de práctica</strong><small data-copy="reportDetails">Estaciones 1 y 4 · PDF en español</small></span>
+              <svg aria-hidden="true"><use href="#arrow"/></svg>
+            </button>
+          </div>
+        </div>
       </section>
     </main>
     <footer class="progress" id="progress" hidden>
@@ -117,6 +142,32 @@
         <span id="progress-value">1 / 6</span>
       </div>
     </footer>
+    <section class="reader" id="reader" aria-labelledby="reader-title" hidden>
+      <header class="reader-header">
+        <button type="button" id="close-reader"><span aria-hidden="true">‹</span> <span data-copy="backMaterials">Volver</span></button>
+        <h2 id="reader-title" data-copy="reportTitle" tabindex="-1">Informe de práctica</h2>
+      </header>
+      <div class="reader-controls" aria-label="PDF">
+        <div class="reader-pages">
+          <button type="button" id="previous-page" disabled><span aria-hidden="true">‹</span><span class="visually-hidden" data-copy="previousPage">Página anterior</span></button>
+          <output id="reader-page" aria-live="polite">—</output>
+          <button type="button" id="next-page" disabled><span aria-hidden="true">›</span><span class="visually-hidden" data-copy="nextPage">Página siguiente</span></button>
+        </div>
+        <div class="reader-zoom">
+          <button type="button" id="zoom-out" disabled><span aria-hidden="true">−</span><span class="visually-hidden" data-copy="zoomOut">Alejar</span></button>
+          <button type="button" id="zoom-in" disabled><span aria-hidden="true">+</span><span class="visually-hidden" data-copy="zoomIn">Acercar</span></button>
+          <button type="button" id="zoom-fit" disabled data-copy="fit">Ajustar</button>
+        </div>
+      </div>
+      <div class="reader-view" id="reader-view" tabindex="0" role="region" aria-labelledby="reader-title">
+        <div id="reader-notice" class="reader-notice" role="status" hidden>
+          <span id="reader-message"></span>
+          <button type="button" id="retry-reader" data-copy="retry" hidden>Reintentar</button>
+          <a id="download-report" target="_blank" rel="noopener" data-copy="openPdf" hidden>Abrir PDF</a>
+        </div>
+        <div class="reader-page" id="reader-paper"></div>
+      </div>
+    </section>
   </div>
   <noscript>Activá JavaScript para embarcar. / Active JavaScript pour embarquer.</noscript>
   <script type="module" src="./src/main.ts"></script>

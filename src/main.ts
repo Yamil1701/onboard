@@ -1,9 +1,10 @@
 import { gsap } from 'gsap';
 import { copy, type CopyKey, type Language } from './copy';
 import { createTakeoff, surveyEntry } from './takeoff';
+import { createReader } from './reader';
 import './style.css';
 
-type Phase = 'gate' | 'boarding' | 'takeoff' | 'survey';
+type Phase = 'gate' | 'boarding' | 'takeoff' | 'survey' | 'materials';
 type Expectation = 'adapt' | 'play' | 'ideas';
 
 function find<T extends HTMLElement>(id: string): T {
@@ -30,6 +31,15 @@ const surveyTitle = find('survey-title');
 const surveyForm = find<HTMLFormElement>('survey-form');
 const send = find<HTMLButtonElement>('send-answer');
 const result = find('survey-result');
+const answerTitle = find('response-title');
+const chosenAnswer = find('chosen-answer');
+const confirmationStamp = result.querySelector('.confirmation-stamp')!;
+const continueJourney = find('continue-journey');
+const materials = find('materials');
+const materialsTitle = find('materials-title');
+const folio = find('folio');
+const folioSheet = find('folio-sheet');
+const folioCover = folio.querySelector('.folio-cover')!;
 const progress = find('progress');
 const progressValue = find('progress-value');
 const restart = find<HTMLButtonElement>('restart-journey');
@@ -47,6 +57,8 @@ const state: {
 let storageBlock = false;
 let flight: gsap.core.Timeline | undefined;
 let flightBeat: 'runway' | 'climb' | null = null;
+let folderOpening: gsap.core.Timeline | undefined;
+const reader = createReader(() => phase === 'materials');
 
 function isExpectation(value: unknown): value is Expectation {
   return value === 'adapt' || value === 'play' || value === 'ideas';
@@ -60,7 +72,8 @@ function restore() {
     if (typeof stored.name === 'string') state.name = stored.name;
     if (isExpectation(stored.selected)) state.selected = stored.selected;
     if (isExpectation(stored.submitted)) state.submitted = stored.submitted;
-    if (stored.stop === 2) phase = 'survey';
+    if (stored.stop === 3 && state.submitted) phase = 'materials';
+    else if (stored.stop === 2) phase = 'survey';
   } catch {
     // A malformed or inaccessible session should still allow boarding.
   }
@@ -71,7 +84,7 @@ function save() {
   try {
     sessionStorage.setItem(storageKey, JSON.stringify({
       ...state,
-      stop: phase === 'survey' ? 2 : 1,
+      stop: currentStop(),
     }));
   } catch {
     storageBlock = true;
@@ -98,13 +111,14 @@ function renderDestination() {
 }
 
 function renderPoll() {
-  send.disabled = state.selected === null || state.selected === state.submitted;
-  result.hidden = state.submitted === null || state.selected !== state.submitted;
-  if (!result.hidden) result.textContent = copy[state.language].received;
+  send.disabled = state.selected === null;
+  surveyForm.hidden = state.submitted !== null;
+  result.hidden = state.submitted === null;
+  if (state.submitted) chosenAnswer.textContent = copy[state.language][state.submitted];
 }
 
 function renderStageLabel() {
-  const key = phase === 'survey' ? 'survey' : flightBeat ?? 'welcome';
+  const key = phase === 'materials' || phase === 'survey' ? phase : flightBeat ?? 'welcome';
   stageLabel.dataset.copy = key;
   stageLabel.textContent = copy[state.language][key];
 }
@@ -124,6 +138,11 @@ function renderLanguage() {
   }
   if (phase === 'gate') renderDestination();
   renderPoll();
+  reader.translate(language);
+}
+
+function currentStop() {
+  return phase === 'materials' ? 3 : phase === 'survey' ? 2 : 1;
 }
 
 function renderPhase() {
@@ -131,9 +150,10 @@ function renderPhase() {
   gate.hidden = phase !== 'gate';
   boarding.hidden = phase !== 'boarding' && phase !== 'takeoff';
   survey.hidden = phase !== 'survey';
+  materials.hidden = phase !== 'materials';
   progress.hidden = phase === 'gate';
-  const stop = phase === 'survey' ? '2' : '1';
-  progress.dataset.stop = stop;
+  const stop = currentStop();
+  progress.dataset.stop = String(stop);
   progressValue.textContent = `${stop} / 6`;
 }
 
@@ -186,7 +206,7 @@ function beginFlight() {
       takeoff.clear();
       save();
       window.scrollTo(0, 0);
-      surveyTitle.focus({ preventScroll: true });
+      (state.submitted ? answerTitle : surveyTitle).focus({ preventScroll: true });
     },
   });
   flight = timeline;
@@ -218,6 +238,11 @@ function beginFlight() {
 function restartJourney() {
   flight?.kill();
   flight = undefined;
+  folderOpening?.kill();
+  folderOpening = undefined;
+  folio.inert = false;
+  gsap.set([folio, folioCover, folioSheet], { clearProps: 'transform,opacity' });
+  reader.reset();
   flightBeat = null;
   takeoff.clear();
   gsap.killTweensOf([boarding, windowPhoto]);
@@ -248,6 +273,7 @@ for (const option of pollOptions) {
 }
 renderPhase();
 renderLanguage();
+reader.syncRoute();
 
 for (const button of languageButtons) {
   button.addEventListener('click', () => {
@@ -281,10 +307,35 @@ surveyForm.addEventListener('change', event => {
 });
 surveyForm.addEventListener('submit', event => {
   event.preventDefault();
-  if (state.selected === null || state.selected === state.submitted) return;
+  if (state.selected === null || state.submitted !== null) return;
   state.submitted = state.selected;
   save();
   renderPoll();
+  answerTitle.focus({ preventScroll: true });
+  gsap.from(result, { y: 14, opacity: 0, duration: .45, ease: 'power2.out', clearProps: 'transform,opacity' });
+  gsap.from(confirmationStamp, { scale: .62, rotation: -9, duration: .50, ease: 'back.out(1.35)', clearProps: 'transform' });
+});
+
+continueJourney.addEventListener('click', () => {
+  if (phase !== 'survey' || state.submitted === null) return;
+  phase = 'materials';
+  renderPhase();
+  renderLanguage();
+  save();
+  window.scrollTo(0, 0);
+  materialsTitle.focus({ preventScroll: true });
+  folio.inert = true;
+  folderOpening = gsap.timeline({
+    onComplete() {
+      folderOpening = undefined;
+      folio.inert = false;
+    },
+  })
+    .from(folio, { y: 59, rotation: -4, opacity: 0, duration: .77, ease: 'power2.out', clearProps: 'transform,opacity' })
+    .fromTo(folioCover, { rotationX: 0, opacity: 1 }, {
+      rotationX: -99, opacity: 0, duration: .70, ease: 'power2.inOut', clearProps: 'transform,opacity',
+    }, .54)
+    .from(folioSheet, { y: 13, opacity: 0, duration: .54, ease: 'power2.out', clearProps: 'transform,opacity' }, .99);
 });
 
 const viewport = window.visualViewport;
