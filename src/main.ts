@@ -49,6 +49,7 @@ const pollOptions = Array.from(surveyForm.querySelectorAll<HTMLInputElement>('in
 const translated = document.querySelectorAll<HTMLElement>('[data-copy]');
 
 const storageKey = 'voyageurs-preview';
+const introReadingTime = 6500;
 let phase: Phase = 'gate';
 const state: {
   language: Language;
@@ -166,23 +167,18 @@ function openBoarding(focusButton = false) {
   phase = 'boarding';
   renderPhase();
   takeoff.preload();
+  if (focusButton) boardButton.focus({ preventScroll: true });
+  if (reducedMotion.matches) return;
   gsap.fromTo(windowPhoto, { opacity: .5, scale: 1.025 }, {
     opacity: 1, scale: 1, duration: .9, ease: 'sine.out', clearProps: 'opacity,transform',
   });
   gsap.fromTo(boarding, { opacity: 0, y: 28 }, {
-    opacity: 1, y: 0, duration: .76, ease: 'power2.out', clearProps: 'opacity,transform',
+    opacity: 1, y: 0, duration: 1.05, ease: 'power2.out', clearProps: 'opacity,transform',
   });
-  if (focusButton) boardButton.focus({ preventScroll: true });
 }
 
 function prepareBoarding(focusButton = false) {
-  // Even if the cabin photo fails, the ticket remains usable.
-  const reveal = () => openBoarding(focusButton);
-  if ('decode' in windowPhoto) {
-    void windowPhoto.decode().then(reveal, reveal);
-  } else {
-    reveal();
-  }
+  window.setTimeout(() => openBoarding(focusButton), introReadingTime);
 }
 
 function openSurvey() {
