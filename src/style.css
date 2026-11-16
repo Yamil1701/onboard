@@ -31,6 +31,8 @@
 @supports (height: 100dvh) { :root { --view-height: 100dvh; } }
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
+* { scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
 body { margin: 0; background: #050d15; color: var(--paper); }
 button, input { font: inherit; }
 button { cursor: pointer; }
@@ -822,7 +824,6 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 .archive-entry small { margin-top: 3px; color: #ead0b8; font-size: 11px; }
 .wallet :is(.document-entry, summary, .archive-entry):focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 @media (min-width: 650px) {
-  html:has(.journey[data-phase="materials"]) { scrollbar-gutter: stable; }
   .materials { max-width: 704px; margin-inline: auto; padding-inline: 25px; }
   .wallet { padding: 14px; }
   .wallet-cover { inset: 14px; }
