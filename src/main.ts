@@ -49,7 +49,7 @@ const pollOptions = Array.from(surveyForm.querySelectorAll<HTMLInputElement>('in
 const translated = document.querySelectorAll<HTMLElement>('[data-copy]');
 
 const storageKey = 'voyageurs-preview';
-const introReadingTime = 6500;
+const introReadingTime = 2800;
 let phase: Phase = 'gate';
 const state: {
   language: Language;
