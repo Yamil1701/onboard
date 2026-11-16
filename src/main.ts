@@ -314,11 +314,24 @@ renderLanguage(true);
 reader.syncRoute();
 archive.syncRoute();
 
+let languageFades: Animation[] = [];
 for (const button of languageButtons) {
   button.addEventListener('click', () => {
-    state.language = button.dataset.lang as Language;
+    const language = button.dataset.lang as Language;
+    if (language === state.language) return;
+    state.language = language;
     renderLanguage();
     save();
+
+    for (const fade of languageFades) fade.cancel();
+    if (reducedMotion.matches) return;
+    const readerPanel = journey.querySelector('.reader:not([hidden])');
+    const surfaces = readerPanel
+      ? [...readerPanel.querySelectorAll('.reader-header, .reader-controls, figcaption')]
+      : [gate, boarding, survey, materials].filter(surface => !surface.hidden);
+    languageFades = [stageLabel, ...surfaces].map(surface =>
+      surface.animate([{ opacity: .68 }, { opacity: 1 }], { duration: 160, easing: 'ease-out' }),
+    );
   });
 }
 
