@@ -254,6 +254,33 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   text-transform: uppercase;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .gate .board { animation: board-power-on .42s ease-out both; }
+  .flap.is-arriving::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: inherit;
+    transform-origin: center;
+    animation: flap-settle .26s ease-in both;
+    animation-delay: var(--letter-delay);
+  }
+  .gate .board-date time { animation: board-digits .95s .22s both; }
+  .gate .board-date time + time { animation-delay: .36s; }
+}
+@keyframes board-power-on {
+  from { opacity: .3; transform: translateY(7px); }
+}
+@keyframes flap-settle {
+  0%, 30% { opacity: 1; }
+  100% { opacity: 0; transform: scaleY(0); }
+}
+@keyframes board-digits {
+  0%, 21%, 45% { opacity: .28; }
+  12%, 32%, 100% { opacity: 1; }
+}
+
 .boarding {
   align-self: stretch;
   display: flex;

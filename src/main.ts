@@ -95,12 +95,12 @@ function save() {
   }
 }
 
-function renderDestination() {
+function renderDestination(animateIntro: boolean) {
   const rows = copy[state.language].boardRows;
   const columns = Math.max(...rows.map(row => row.length));
   destination.setAttribute('aria-label', rows.join(' '));
   destination.style.setProperty('--flap-columns', String(columns));
-  destination.replaceChildren(...rows.map(row => {
+  destination.replaceChildren(...rows.map((row, rowIndex) => {
     const line = document.createElement('span');
     line.className = 'flap-row';
     line.setAttribute('aria-hidden', 'true');
@@ -108,6 +108,10 @@ function renderDestination() {
       const flap = document.createElement('span');
       flap.className = 'flap';
       if (char !== ' ') flap.textContent = char;
+      if (animateIntro) {
+        flap.classList.add('is-arriving');
+        flap.style.setProperty('--letter-delay', `${rowIndex * 170 + line.children.length * 45}ms`);
+      }
       line.append(flap);
     }
     return line;
@@ -127,7 +131,7 @@ function renderStageLabel() {
   stageLabel.textContent = copy[state.language][key];
 }
 
-function renderLanguage() {
+function renderLanguage(animateIntro = false) {
   const language = copy[state.language];
   document.documentElement.lang = state.language === 'fr' ? 'fr' : 'es-AR';
   document.title = `${language.titleLead} ${language.titleEnd}`;
@@ -140,7 +144,7 @@ function renderLanguage() {
   for (const button of languageButtons) {
     button.setAttribute('aria-pressed', String(button.dataset.lang === state.language));
   }
-  if (phase === 'gate') renderDestination();
+  if (phase === 'gate') renderDestination(animateIntro);
   renderPoll();
   reader.translate(language);
   archive.translate(state.language);
@@ -293,7 +297,7 @@ function restartJourney() {
   for (const option of pollOptions) option.checked = false;
   phase = 'gate';
   renderPhase();
-  renderLanguage();
+  renderLanguage(true);
   save();
   window.scrollTo(0, 0);
   prepareBoarding(true);
@@ -305,7 +309,7 @@ for (const option of pollOptions) {
   option.checked = option.value === state.selected;
 }
 renderPhase();
-renderLanguage();
+renderLanguage(true);
 reader.syncRoute();
 archive.syncRoute();
 
