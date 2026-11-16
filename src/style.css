@@ -800,7 +800,23 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   text-align: left;
 }
 .archive-entry:is(:hover, :active) { background: #69483a; }
-.archive-entry img { width: 50px; height: 36px; padding: 2px; object-fit: contain; background: #ecddc1; border-radius: 2px; }
+.collection-cover {
+  --ink: #61432f;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 48px;
+  padding-inline-start: 3px;
+  border: 3px double currentColor;
+  border-radius: 2px 4px 4px 2px;
+  color: var(--ink);
+  background: var(--slip-paper);
+  box-shadow: inset 4px 0 #a17e4c44, 1px 2px 4px #22151188;
+  font: 600 24px/1 var(--serif);
+}
+.collection-cover:is([data-album="mapas"], [data-album="verduras"]) { --ink: #3e5847; }
+.collection-cover:is([data-album="vino"], [data-album="frutas"]) { --ink: #793d41; }
+.collection-cover:is([data-album="juegos"], [data-album="bebidas"]) { --ink: #395668; }
 .archive-entry strong, .archive-entry small { display: block; line-height: 1.2; }
 .archive-entry strong { font-size: 13px; }
 .archive-entry small { margin-top: 3px; color: #ead0b8; font-size: 11px; }
