@@ -51,7 +51,10 @@ export function createReader(onOpen: () => boolean) {
     minus.disabled = !usable || zoom === 0;
     plus.disabled = !usable || zoom === zoomLevels.length - 1;
     fit.disabled = minus.disabled;
+    const loading = mode === 'loading';
     notice.hidden = mode === 'ready';
+    notice.classList.toggle('is-loading', loading);
+    paper.setAttribute('aria-busy', String(loading));
     retry.hidden = download.hidden = mode !== 'error';
     if (mode !== 'ready' && words) {
       const key: CopyKey = mode === 'error' ? 'errorPdf' : 'loadingPdf';
@@ -63,6 +66,7 @@ export function createReader(onOpen: () => boolean) {
     const id = ++generation;
     renderer?.cancel();
     if (!pdf || element.hidden) return;
+    mode = 'loading';
     controls();
     try {
       const page = await pdf.getPage(number);

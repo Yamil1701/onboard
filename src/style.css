@@ -888,6 +888,23 @@ body:has(.is-reading) { overflow: hidden; }
 .reader-page { width: max-content; min-width: 100%; }
 .reader-page canvas { display: block; background: #fff; margin-inline: auto; }
 .reader-notice { padding: 20px 4px; color: #e7ebdf; font: 16px/1.4 Arial, sans-serif; }
+.reader-notice.is-loading:has(+ .reader-page canvas) {
+  position: absolute;
+  z-index: 1;
+  inset: auto 12px max(12px, env(safe-area-inset-bottom, 0px)) auto;
+  padding: 10px 12px;
+  border: 1px solid #52666a;
+  border-radius: 6px;
+  background: #11232c;
+  pointer-events: none;
+}
+.reader-page[aria-busy="true"]:empty {
+  width: min(100%, 580px);
+  min-width: 0;
+  min-height: min(57dvh, 760px);
+  margin-inline: auto;
+  border-radius: 6px;
+}
 .reader-notice button, .reader-notice a { margin-top: 10px; background: #214550; padding-inline: 10px; }
 
 .archive-controls output { font: 700 13px/1.2 var(--mono); }
@@ -902,14 +919,34 @@ body:has(.is-reading) { overflow: hidden; }
   border-radius: 6px;
   background: #13232e;
 }
-#photo-frame[data-loading] {
-  background: linear-gradient(110deg, #13232e 23%, #203542 49%, #13232e 75%) 100% 0 / 240% 100%;
+#photo-frame[data-loading], .reader-page[aria-busy="true"]:empty {
+  background: linear-gradient(110deg, #192c38 23%, #2c444e 49%, #192c38 75%) 100% 0 / 240% 100%;
 }
+#photo-frame[data-loading]::before, .reader-notice.is-loading::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #e7ebdf40;
+  border-top-color: #e7ebdf;
+  border-radius: 50%;
+  vertical-align: -.22em;
+}
+.reader-notice.is-loading::before { margin-inline-end: 8px; }
 @media (prefers-reduced-motion: no-preference) {
-  #photo-frame[data-loading] { animation: photo-loading 1.7s ease-in-out infinite; }
+  #photo-frame[data-loading], .reader-page[aria-busy="true"]:empty {
+    animation: skeleton-sweep 1.7s ease-in-out infinite;
+  }
+  #photo-frame[data-loading]::before {
+    animation: spinner-in .16s .22s both, spinner-turn 1s linear infinite;
+  }
+  .reader-notice.is-loading::before { animation: spinner-turn 1s linear infinite; }
+  .reader-notice.is-loading:has(+ .reader-page canvas) { animation: spinner-in .16s .25s both; }
   #photo-frame img { animation: photo-reveal .24s ease-out both; }
 }
-@keyframes photo-loading { to { background-position-x: 0%; } }
+@keyframes skeleton-sweep { to { background-position-x: 0%; } }
+@keyframes spinner-turn { to { transform: rotate(360deg); } }
+@keyframes spinner-in { from { opacity: 0; } }
 @keyframes photo-reveal { from { opacity: 0; } }
 .archive-figure img {
   display: block;
