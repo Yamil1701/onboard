@@ -757,7 +757,7 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 .archive-count { display: block; margin-top: 4px; color: #e1bfa9; font: 12px/1.2 Arial, sans-serif; }
 .archive-caret { width: 9px; height: 9px; border: solid #e9bd86; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); margin: -5px 4px 0 0; }
 .wallet-archive[open] .archive-caret { transform: rotate(225deg); margin-top: 5px; }
-.archive-list { display: grid; gap: 5px; padding: 0 7px 7px; }
+.archive-list { display: grid; box-sizing: border-box; align-content: start; overflow: clip; gap: 5px; padding: 0 7px 7px; }
 .archive-entry {
   display: grid;
   grid-template-columns: 50px minmax(0, 1fr);

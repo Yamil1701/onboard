@@ -17,6 +17,9 @@ export function createArchive(canOpen: () => boolean) {
   const progress = find('progress');
   const archive = find<HTMLDetailsElement>('wallet-archive');
   const list = find('archive-list');
+  const summary = archive.querySelector('summary')!;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let listAnimation: Animation | undefined;
   const panel = find('archive-reader');
   const title = find('archive-reader-title');
   const view = find('archive-view');
@@ -152,6 +155,27 @@ export function createArchive(canOpen: () => boolean) {
     list.append(button);
   }
 
+  summary.addEventListener('click', event => {
+    if (reducedMotion.matches || !list.animate) return;
+    event.preventDefault();
+    const startHeight = list.getBoundingClientRect().height;
+    const opening = !archive.open || list.inert;
+    listAnimation?.cancel();
+    archive.open = true;
+    list.inert = !opening;
+    const endHeight = opening ? list.getBoundingClientRect().height : 0;
+    listAnimation = list.animate(
+      [{ height: `${startHeight}px` }, { height: `${endHeight}px` }],
+      { duration: opening ? 460 : 340, easing: 'ease-in-out', fill: 'both' },
+    );
+    listAnimation.onfinish = () => {
+      archive.open = opening;
+      list.inert = false;
+      listAnimation?.cancel();
+      listAnimation = undefined;
+    };
+  });
+
   find('close-archive').addEventListener('click', close);
   prev.addEventListener('click', () => step(-1));
   next.addEventListener('click', () => step(1));
@@ -178,6 +202,9 @@ export function createArchive(canOpen: () => boolean) {
     },
     syncRoute,
     reset() {
+      listAnimation?.cancel();
+      listAnimation = undefined;
+      list.inert = false;
       archive.open = false;
     },
   };
