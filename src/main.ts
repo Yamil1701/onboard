@@ -241,11 +241,11 @@ function openMaterials() {
       wallet.inert = false;
     },
   })
-    .from(wallet, { y: 34, rotation: -2, opacity: 0, duration: .52, ease: 'power2.out', clearProps: 'transform,opacity' })
+    .from(wallet, { y: 34, rotation: -2, opacity: 0, duration: .85, ease: 'sine.out', clearProps: 'transform,opacity' })
     .fromTo(walletCover, { rotationX: 0, opacity: 1 }, {
-      rotationX: 87, opacity: 0, duration: .57, ease: 'power2.inOut', clearProps: 'transform,opacity',
-    }, .27)
-    .from(walletContents, { y: 10, opacity: 0, duration: .40, ease: 'power2.out', clearProps: 'transform,opacity' }, .62);
+      rotationX: 87, opacity: 0, duration: 1.15, ease: 'sine.inOut', clearProps: 'transform,opacity',
+    }, .62)
+    .from(walletContents, { y: 10, opacity: 0, duration: .75, ease: 'sine.out', clearProps: 'transform,opacity' }, 1.30);
 }
 
 function beginFlight() {
