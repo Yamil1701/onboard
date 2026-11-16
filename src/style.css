@@ -841,12 +841,28 @@ body:has(.is-reading) { overflow: hidden; }
 .archive-view { text-align: center; }
 .archive-figure { margin: 0; }
 .archive-figure figcaption { margin: 4px auto 12px; font: 600 17px/1.25 var(--serif); }
+#photo-frame {
+  display: grid;
+  place-items: center;
+  min-height: min(58dvh, 650px);
+  border-radius: 6px;
+  background: #13232e;
+}
+#photo-frame[data-loading] {
+  background: linear-gradient(110deg, #13232e 23%, #203542 49%, #13232e 75%) 100% 0 / 240% 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #photo-frame[data-loading] { animation: photo-loading 1.7s ease-in-out infinite; }
+  #photo-frame img { animation: photo-reveal .24s ease-out both; }
+}
+@keyframes photo-loading { to { background-position-x: 0%; } }
+@keyframes photo-reveal { from { opacity: 0; } }
 .archive-figure img {
   display: block;
   width: auto;
   height: auto;
   max-width: 100%;
-  max-height: min(66dvh, 800px);
+  max-height: min(58dvh, 650px);
   margin: auto;
   border-radius: 3px;
   background: #fff;

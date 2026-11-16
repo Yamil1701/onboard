@@ -31,6 +31,7 @@ export function createArchive(canOpen: () => boolean) {
   let language: Language | undefined;
   let index = 0;
   let originY = 0;
+  let pendingImage: HTMLImageElement | undefined;
 
   function quantity(total: number, lang: Language) {
     return `${total} ${copy[lang][total === 1 ? 'photo' : 'photos']}`;
@@ -46,13 +47,33 @@ export function createArchive(canOpen: () => boolean) {
     position.textContent = `${index + 1} / ${album.photos.length}`;
     if (openImage.getAttribute('href') !== src) {
       const image = new Image();
-      image.src = src;
+      pendingImage = image;
       image.decoding = 'async';
-      frame.replaceChildren(image);
+      image.src = src;
+      frame.replaceChildren();
+      frame.dataset.loading = '';
+      frame.setAttribute('aria-busy', 'true');
       openImage.setAttribute('href', src);
       view.scrollTop = 0;
+
+      void image.decode().then(() => {
+        if (pendingImage !== image || !language) return;
+        image.alt = photo.title[language];
+        frame.replaceChildren(image);
+      }, () => {
+        if (pendingImage !== image || !language) return;
+        frame.textContent = copy[language].photoUnavailable;
+      }).finally(() => {
+        if (pendingImage !== image) return;
+        pendingImage = undefined;
+        delete frame.dataset.loading;
+        frame.removeAttribute('aria-busy');
+      });
+    } else {
+      const image = frame.querySelector('img');
+      if (image) image.alt = photo.title[language];
+      else if (!pendingImage) frame.textContent = copy[language].photoUnavailable;
     }
-    frame.querySelector('img')!.alt = photo.title[language];
     prev.disabled = index === 0;
     next.disabled = index === album.photos.length - 1;
   }
@@ -80,6 +101,9 @@ export function createArchive(canOpen: () => boolean) {
       const trigger = buttons.get(active);
       active = undefined;
       panel.hidden = true;
+      pendingImage = undefined;
+      delete frame.dataset.loading;
+      frame.removeAttribute('aria-busy');
       frame.replaceChildren();
       openImage.removeAttribute('href');
       if (hash !== '#informe') {
