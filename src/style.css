@@ -621,6 +621,8 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   --binding: #4d2d28;
   --thread: #cb956b;
   --lining: #5e3930;
+  --slip-paper: repeating-linear-gradient(0deg, #866e4010 0 1px, transparent 1px 5px),
+    linear-gradient(150deg, #f7edda, #e6d3af);
   position: relative;
   isolation: isolate;
   perspective: 1000px;
@@ -685,24 +687,25 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 
 .document-entry {
   display: grid;
-  grid-template-columns: 24px minmax(0, 1fr) 16px;
+  grid-template-columns: 24px minmax(0, 1fr) 24px;
   align-items: center;
   gap: 9px;
   width: 100%;
   min-height: 68px;
   padding: 9px 10px;
-  border: 1px solid #ddc7a4;
+  border: 1px solid #d0ba98;
   border-radius: 7px;
-  background: linear-gradient(123deg, #fff5df, #f1e2c5);
+  background: var(--slip-paper);
+  box-shadow: 0 3px 5px #25151270;
   color: #163942;
   text-align: left;
-  transition: background .16s;
+  transition: filter .25s;
 }
-.document-entry:hover { background: #fffaec; }
-.document-entry:active { background: #e8dfcf; }
+.document-entry:hover { filter: brightness(1.045); }
+.document-entry:active { filter: brightness(.96); }
 .document-entry > svg { width: 24px; height: 24px; }
-.document-entry > svg:last-child { width: 16px; height: 16px; }
-.document-entry strong { display: block; font: 700 16px/1.2 Arial, sans-serif; }
+.document-entry > svg:last-child { width: 16px; height: 32px; padding-left: 7px; box-sizing: content-box; border-left: 1px dashed #94866d; }
+.document-entry strong { display: block; font: 600 20px/1.15 var(--serif); }
 .document-entry small { display: block; margin-top: 4px; color: #43555d; font: 12px/1.25 Arial, sans-serif; }
 
 .wallet-pockets { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
@@ -714,9 +717,7 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   padding: 12px 10px 0;
   border: 1px solid #d0ba98;
   border-radius: 7px;
-  background:
-    repeating-linear-gradient(0deg, #866e4010 0 1px, transparent 1px 5px),
-    linear-gradient(150deg, #f7edda, #e6d3af);
+  background: var(--slip-paper);
   box-shadow: 0 3px 5px #25151270;
   color: #253c40;
 }
