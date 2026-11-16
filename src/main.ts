@@ -243,8 +243,9 @@ function openMaterials() {
   })
     .from(wallet, { y: 34, rotation: -2, opacity: 0, duration: .85, ease: 'sine.out', clearProps: 'transform,opacity' })
     .fromTo(walletCover, { rotationX: 0, opacity: 1 }, {
-      rotationX: 87, opacity: 0, duration: 1.15, ease: 'sine.inOut', clearProps: 'transform,opacity',
+      rotationX: -104, duration: 1.15, ease: 'sine.inOut', clearProps: 'transform,opacity',
     }, .62)
+    .to(walletCover, { opacity: 0, duration: .28, ease: 'sine.in' }, 1.48)
     .from(walletContents, { y: 10, opacity: 0, duration: .75, ease: 'sine.out', clearProps: 'transform,opacity' }, 1.30);
 }
 

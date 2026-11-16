@@ -679,7 +679,8 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   text-transform: uppercase;
   opacity: 0;
   pointer-events: none;
-  transform-origin: center bottom;
+  transform-origin: center top;
+  backface-visibility: hidden;
 }
 .wallet-seal {
   display: grid;
