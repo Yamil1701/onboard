@@ -31,14 +31,14 @@ vec3 lampRow(vec2 world, float screenY, float z, float spacing, float offset, ve
   float lampY = uCamera.z + .81 * uCamera.y / z;
   float dx = across * uSize.y / z;
   float dy = (screenY - lampY) * uSize.y;
-  float stretch = 1.0 + uCamera.w * 5.0 * (18.0 / z);
+  float stretch = 1.1 + uCamera.w * 6.4 * (18.0 / z);
   float core = exp(-dot(vec2(dx / stretch, dy * 1.55), vec2(dx / stretch, dy * 1.55)) * .39);
-  float glow = exp(-length(vec2(dx / (2.0 + stretch), dy * .72)) * .34);
-  float ripple = .5 + .5 * sin(world.y * 43.1 + world.x * 6.3);
-  float puddle = step(1.0, dy) * exp(-dy / (2.6 + 255.0 / z)) *
-    exp(-abs(dx) * .83) * (.19 + ripple * .57);
-  float range = clamp(22.0 / z, .19, 1.0);
-  return tint * (core * .88 + glow * .20 + puddle * .42) * range;
+  float glow = exp(-length(vec2(dx / (2.6 + stretch), dy * .72)) * .30);
+  float ripple = .5 + .5 * sin(world.y * 27.1 + world.x * 5.1);
+  float puddle = step(1.0, dy) * exp(-dy / (3.9 + 390.0 / z)) *
+    exp(-abs(dx) * .49) * (.24 + ripple * .76);
+  float range = clamp(34.0 / z, .35, 1.0);
+  return tint * (core * 1.10 + glow * .29 + puddle * .65) * range;
 }
 
 void main() {
@@ -50,11 +50,12 @@ void main() {
   float x = uCamera.x + (uv.x - .5) * (uSize.x / uSize.y) * z;
   vec2 world = vec2(x, z);
   float aa = clamp(.0018 * z * z / uCamera.y, .06, 3.0);
-  vec3 road = texture2D(uAsphalt, world * .135).rgb;
-  float broad = texture2D(uAsphalt, world * .024 + vec2(.19, .48)).r;
+  vec3 road = texture2D(uAsphalt, world * .092).rgb;
+  float broad = texture2D(uAsphalt, world * vec2(.035, .062) + vec2(.19, .48)).r;
   float surface = smoothstep(6.0, 8.0, z) * (1.0 - smoothstep(60.0, 64.0, z));
   vec3 grass = vec3(.024, .055, .064) * (.78 + broad);
-  vec3 pavement = vec3(.034, .075, .11) + road * .17 + broad * vec3(.023, .055, .064);
+  float wetness = smoothstep(.085, .20, broad);
+  vec3 pavement = vec3(.025, .052, .077) + road * .43 + wetness * vec3(.027, .053, .071);
   vec3 color = mix(grass, pavement, surface);
 
   float verge = max(ridge(z - 11.3, .095, aa), ridge(z - 57.3, .095, aa));
@@ -65,9 +66,10 @@ void main() {
   color += center * vec3(.28, .33, .32) * illuminated;
   color += ridge(z - 7.7, .10, aa) * vec3(.25, .13, .039);
 
-  color += lampRow(world, y, 14.0, 20.0, 9.0, vec3(.32, .87, 1.0));
-  color += lampRow(world, y, 55.2, 26.0, 2.0, vec3(.33, .76, 1.0));
-  color += lampRow(world, y, 82.0, 32.0, 12.0, vec3(1.0, .67, .28));
+  color += lampRow(world, y, 15.2, 12.0, 3.0, vec3(.27, .90, 1.0));
+  color += lampRow(world, y, 29.4, 17.0, 7.0, vec3(.37, .86, 1.0));
+  color += lampRow(world, y, 55.2, 20.0, 2.0, vec3(.31, .72, 1.0));
+  color += lampRow(world, y, 75.0, 26.0, 12.0, vec3(1.0, .71, .35));
 
   float haze = smoothstep(48.0, 470.0, z);
   color = mix(color, vec3(.023, .077, .11), haze * .82);

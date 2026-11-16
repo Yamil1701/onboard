@@ -158,7 +158,7 @@ svg { display: block; width: 1em; height: 1em; }
   transform-origin: 50% 42%;
   clip-path: url(#flight-glass);
 }
-.flight-distant { mask-image: linear-gradient(#000 37%, transparent 42%); }
+.flight-distant { mask-image: linear-gradient(#000 37%, transparent 40.3%); }
 .flight-scene[data-renderer="webgl"] .flight-fallback,
 .flight-scene[data-renderer="photo"] :is(.flight-runway, .flight-distant, .flight-wing) { display: none; }
 .flight-wing {
