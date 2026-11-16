@@ -111,22 +111,49 @@
           <h2 id="response-title" data-copy="responseTitle" tabindex="-1">Respuesta guardada</h2>
           <p data-copy="received">Tu respuesta de prueba quedó en este navegador.</p>
           <p class="chosen-answer"><svg aria-hidden="true"><use href="#check"/></svg><span id="chosen-answer"></span></p>
-          <button type="button" class="primary" id="continue-journey"><span data-copy="continue">Continuar</span><svg aria-hidden="true"><use href="#arrow"/></svg></button>
+          <button type="button" class="primary" id="continue-journey"><span data-copy="takeFlight">Despegar</span><svg aria-hidden="true"><use href="#arrow"/></svg></button>
         </section>
         </div>
       </section>
 
       <section class="materials" id="materials" aria-labelledby="materials-title" hidden>
         <h1 id="materials-title" tabindex="-1" data-copy="materials">Pasaporte y materiales</h1>
-        <div class="folio" id="folio">
-          <div class="folio-cover" aria-hidden="true"><svg><use href="#plane"/></svg></div>
-          <div class="folio-sheet" id="folio-sheet">
-            <p class="folio-title" data-copy="materialIndex">Índice de materiales</p>
+        <div class="wallet" id="wallet">
+          <div class="wallet-cover" id="wallet-cover" aria-hidden="true">
+            <span class="wallet-seal"><svg><use href="#plane"/></svg></span>
+            <span data-copy="walletLabel">Portadocumentos de viaje</span>
+          </div>
+          <div class="wallet-contents" id="wallet-contents">
+            <div class="wallet-header">
+              <span><svg aria-hidden="true"><use href="#plane"/></svg><span data-copy="walletLabel">Portadocumentos de viaje</span></span>
+              <span class="wallet-code">FR 101</span>
+            </div>
             <button class="document-entry" type="button" id="open-passport">
               <svg aria-hidden="true"><use href="#file"/></svg>
               <span><strong data-copy="reportTitle">Informe de práctica</strong><small data-copy="reportDetails">Estaciones 1 y 4 · PDF en español</small></span>
               <svg aria-hidden="true"><use href="#arrow"/></svg>
             </button>
+            <div class="wallet-pockets">
+              <article class="wallet-slip">
+                <p class="slip-stop" data-copy="stationOne">Estación 1</p>
+                <h2>BSPA</h2>
+                <p class="slip-topic" lang="fr">Mon frigo idéal</p>
+                <p class="slip-status" data-copy="pendingMaterials">Materiales definitivos pendientes</p>
+              </article>
+              <article class="wallet-slip">
+                <p class="slip-stop" data-copy="stationFour">Estación 4</p>
+                <h2 data-copy="tourism">Turismo</h2>
+                <p class="slip-topic" data-copy="wineRoute">La ruta del vino</p>
+                <p class="slip-status" data-copy="pendingMaterials">Materiales definitivos pendientes</p>
+              </article>
+            </div>
+            <details class="wallet-archive" id="wallet-archive">
+              <summary>
+                <span><span class="archive-title" data-copy="archiveTitle">Archivo de trabajos</span><span class="archive-count" id="archive-count"></span></span>
+                <span class="archive-caret" aria-hidden="true"></span>
+              </summary>
+              <div class="archive-list" id="archive-list"></div>
+            </details>
           </div>
         </div>
       </section>
@@ -166,6 +193,24 @@
           <a id="download-report" target="_blank" rel="noopener" data-copy="openPdf" hidden>Abrir PDF</a>
         </div>
         <div class="reader-page" id="reader-paper"></div>
+      </div>
+    </section>
+    <section class="reader archive-reader" id="archive-reader" aria-labelledby="archive-reader-title" hidden>
+      <header class="reader-header">
+        <button type="button" id="close-archive"><span aria-hidden="true">‹</span> <span data-copy="backMaterials">Volver</span></button>
+        <h2 id="archive-reader-title" tabindex="-1"></h2>
+      </header>
+      <div class="reader-controls archive-controls">
+        <button type="button" id="previous-photo" data-copy="previousPhoto">Anterior</button>
+        <output id="photo-position" aria-live="polite"></output>
+        <button type="button" id="next-photo" data-copy="nextPhoto">Siguiente</button>
+      </div>
+      <div class="reader-view archive-view" id="archive-view" tabindex="0" role="region" aria-labelledby="archive-reader-title">
+        <figure class="archive-figure">
+          <figcaption id="photo-caption"></figcaption>
+          <div id="photo-frame"></div>
+          <a id="photo-original" target="_blank" rel="noopener" data-copy="openPhoto">Abrir imagen</a>
+        </figure>
       </div>
     </section>
   </div>

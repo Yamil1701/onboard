@@ -1,0 +1,535 @@
+{
+  "mapas": {
+    "title": {
+      "ar": "Mapas de las rutas del vino",
+      "fr": "Cartes des routes des vins"
+    },
+    "photos": [
+      {
+        "image": "mapas/01.webp",
+        "title": {
+          "ar": "Ruta de los vinos de altura de Salta",
+          "fr": "Route des vins d’altitude de Salta"
+        }
+      },
+      {
+        "image": "mapas/02.webp",
+        "title": {
+          "ar": "Recorrido vitivinícola de los Valles Calchaquíes",
+          "fr": "Parcours viticole des vallées Calchaquíes"
+        }
+      },
+      {
+        "image": "mapas/03.webp",
+        "title": {
+          "ar": "Mapa vitivinícola de Salta y Jujuy",
+          "fr": "Carte viticole de Salta et Jujuy"
+        }
+      },
+      {
+        "image": "mapas/04.webp",
+        "title": {
+          "ar": "Principales regiones vitivinícolas de Francia",
+          "fr": "Principales régions viticoles de France"
+        }
+      },
+      {
+        "image": "mapas/05.webp",
+        "title": {
+          "ar": "Mapa esquemático de las regiones vitivinícolas de Francia",
+          "fr": "Carte simplifiée des régions viticoles de France"
+        }
+      }
+    ]
+  },
+  "vino": {
+    "title": {
+      "ar": "Vino, degustación y maridaje",
+      "fr": "Vin, dégustation et accords"
+    },
+    "photos": [
+      {
+        "image": "vino/01.webp",
+        "title": {
+          "ar": "Viñeta de degustación: vista, nariz y boca",
+          "fr": "Bande dessinée de dégustation : robe, nez et bouche"
+        }
+      },
+      {
+        "image": "vino/02.webp",
+        "title": {
+          "ar": "Ficha de Malbec",
+          "fr": "Fiche sur le Malbec"
+        }
+      },
+      {
+        "image": "vino/03.webp",
+        "title": {
+          "ar": "Ficha de Torrontés",
+          "fr": "Fiche sur le Torrontés"
+        }
+      },
+      {
+        "image": "vino/04.webp",
+        "title": {
+          "ar": "Tarjetas con las etapas del vino",
+          "fr": "Cartes des étapes de la vinification"
+        }
+      },
+      {
+        "image": "vino/05.webp",
+        "title": {
+          "ar": "Tarjetas con las definiciones de las etapas",
+          "fr": "Cartes de définition des étapes"
+        }
+      },
+      {
+        "image": "vino/06.webp",
+        "title": {
+          "ar": "Ficha de maridajes",
+          "fr": "Fiche des accords mets et vins"
+        }
+      },
+      {
+        "image": "vino/07.webp",
+        "title": {
+          "ar": "Expresiones para describir un maridaje",
+          "fr": "Expressions pour décrire un accord"
+        }
+      },
+      {
+        "image": "vino/08.webp",
+        "title": {
+          "ar": "Sopa de letras de maridajes, con respuestas",
+          "fr": "Mots mêlés des accords, corrigé"
+        }
+      }
+    ]
+  },
+  "juegos": {
+    "title": {
+      "ar": "Juegos y apoyos de clase",
+      "fr": "Jeux et supports de classe"
+    },
+    "photos": [
+      {
+        "image": "juegos/01.webp",
+        "title": {
+          "ar": "Tablero del juego de la oca: frutas",
+          "fr": "Plateau du jeu de l’oie : les fruits"
+        }
+      },
+      {
+        "image": "juegos/02.webp",
+        "title": {
+          "ar": "Reglas del juego de la oca: frutas",
+          "fr": "Règles du jeu de l’oie : les fruits"
+        }
+      },
+      {
+        "image": "juegos/03.webp",
+        "title": {
+          "ar": "Tablero del juego de la oca: verduras",
+          "fr": "Plateau du jeu de l’oie : les légumes"
+        }
+      },
+      {
+        "image": "juegos/04.webp",
+        "title": {
+          "ar": "Reglas del juego de la oca: verduras",
+          "fr": "Règles du jeu de l’oie : les légumes"
+        }
+      },
+      {
+        "image": "juegos/05.webp",
+        "title": {
+          "ar": "Mon frigo: comparación de dos heladeras",
+          "fr": "Mon frigo : comparaison de deux réfrigérateurs"
+        }
+      },
+      {
+        "image": "juegos/06.webp",
+        "title": {
+          "ar": "Ilustración de una canasta de picnic",
+          "fr": "Illustration d’un panier de pique-nique"
+        }
+      },
+      {
+        "image": "juegos/07.webp",
+        "title": {
+          "ar": "Sopa de letras de alimentos, con respuestas",
+          "fr": "Mots mêlés des aliments, corrigé"
+        }
+      }
+    ]
+  },
+  "vocabulario": {
+    "title": {
+      "ar": "Vocabulario ilustrado",
+      "fr": "Vocabulaire illustré"
+    },
+    "photos": [
+      {
+        "image": "vocabulario/01.webp",
+        "title": {
+          "ar": "Panadería y pastelería",
+          "fr": "Boulangerie et pâtisserie"
+        }
+      },
+      {
+        "image": "vocabulario/02.webp",
+        "title": {
+          "ar": "Carnes y carnicería",
+          "fr": "Viandes et boucherie"
+        }
+      },
+      {
+        "image": "vocabulario/03.webp",
+        "title": {
+          "ar": "Condimentos y almacén",
+          "fr": "Condiments et épicerie"
+        }
+      },
+      {
+        "image": "vocabulario/04.webp",
+        "title": {
+          "ar": "Productos lácteos",
+          "fr": "Produits laitiers"
+        }
+      }
+    ]
+  },
+  "memoria": {
+    "title": {
+      "ar": "Juegos de memoria",
+      "fr": "Jeux de mémoire"
+    },
+    "photos": [
+      {
+        "image": "memoria/01.webp",
+        "title": {
+          "ar": "Memoria de panadería",
+          "fr": "Mémoire de la boulangerie"
+        }
+      },
+      {
+        "image": "memoria/02.webp",
+        "title": {
+          "ar": "Memoria de almacén y condimentos",
+          "fr": "Mémoire de l’épicerie et des condiments"
+        }
+      },
+      {
+        "image": "memoria/03.webp",
+        "title": {
+          "ar": "Memoria de carnes",
+          "fr": "Mémoire des viandes"
+        }
+      },
+      {
+        "image": "memoria/04.webp",
+        "title": {
+          "ar": "Memoria de productos lácteos",
+          "fr": "Mémoire des produits laitiers"
+        }
+      },
+      {
+        "image": "memoria/05.webp",
+        "title": {
+          "ar": "Memoria mixta: serie 1",
+          "fr": "Mémoire mixte : série 1"
+        }
+      },
+      {
+        "image": "memoria/06.webp",
+        "title": {
+          "ar": "Memoria mixta: serie 2",
+          "fr": "Mémoire mixte : série 2"
+        }
+      },
+      {
+        "image": "memoria/07.webp",
+        "title": {
+          "ar": "Memoria mixta: frutas y verduras",
+          "fr": "Mémoire mixte : fruits et légumes"
+        }
+      },
+      {
+        "image": "memoria/08.webp",
+        "title": {
+          "ar": "Memoria mixta: frutas, verduras, bebidas y más",
+          "fr": "Mémoire mixte : fruits, légumes, boissons et autres aliments"
+        }
+      },
+      {
+        "image": "memoria/09.webp",
+        "title": {
+          "ar": "Memoria mixta: alimentos de la mesa",
+          "fr": "Mémoire mixte : aliments de la table"
+        }
+      },
+      {
+        "image": "memoria/10.webp",
+        "title": {
+          "ar": "Memoria mixta: frutas, carnes, verduras y lácteos",
+          "fr": "Mémoire mixte : fruits, viandes, légumes et laitages"
+        }
+      },
+      {
+        "image": "memoria/11.webp",
+        "title": {
+          "ar": "Memoria mixta: frutas y hortalizas",
+          "fr": "Mémoire mixte : fruits et légumes du potager"
+        }
+      },
+      {
+        "image": "memoria/12.webp",
+        "title": {
+          "ar": "Memoria de verduras: serie 1",
+          "fr": "Mémoire des légumes : série 1"
+        }
+      },
+      {
+        "image": "memoria/13.webp",
+        "title": {
+          "ar": "Memoria de verduras: serie 2",
+          "fr": "Mémoire des légumes : série 2"
+        }
+      },
+      {
+        "image": "memoria/14.webp",
+        "title": {
+          "ar": "Memoria de verduras: anexo de la serie 2",
+          "fr": "Mémoire des légumes : annexe de la série 2"
+        }
+      },
+      {
+        "image": "memoria/15.webp",
+        "title": {
+          "ar": "Memoria de frutas: serie 1",
+          "fr": "Mémoire des fruits : série 1"
+        }
+      },
+      {
+        "image": "memoria/16.webp",
+        "title": {
+          "ar": "Memoria de frutas: anexo de la serie 1",
+          "fr": "Mémoire des fruits : annexe de la série 1"
+        }
+      },
+      {
+        "image": "memoria/17.webp",
+        "title": {
+          "ar": "Memoria de frutas: serie 2",
+          "fr": "Mémoire des fruits : série 2"
+        }
+      },
+      {
+        "image": "memoria/18.webp",
+        "title": {
+          "ar": "Memoria de frutas: anexo de la serie 2",
+          "fr": "Mémoire des fruits : annexe de la série 2"
+        }
+      },
+      {
+        "image": "memoria/19.webp",
+        "title": {
+          "ar": "Memoria de bebidas",
+          "fr": "Mémoire des boissons"
+        }
+      }
+    ]
+  },
+  "frutas": {
+    "title": {
+      "ar": "Tarjetas de frutas",
+      "fr": "Cartes : fruits"
+    },
+    "photos": [
+      {
+        "image": "frutas/01.webp",
+        "title": {
+          "ar": "Serie 1 · imágenes",
+          "fr": "Série 1 · images"
+        }
+      },
+      {
+        "image": "frutas/02.webp",
+        "title": {
+          "ar": "Serie 1 · palabras",
+          "fr": "Série 1 · mots"
+        }
+      },
+      {
+        "image": "frutas/03.webp",
+        "title": {
+          "ar": "Serie 2 · imágenes",
+          "fr": "Série 2 · images"
+        }
+      },
+      {
+        "image": "frutas/04.webp",
+        "title": {
+          "ar": "Serie 2 · palabras",
+          "fr": "Série 2 · mots"
+        }
+      },
+      {
+        "image": "frutas/05.webp",
+        "title": {
+          "ar": "Serie 3 · imágenes",
+          "fr": "Série 3 · images"
+        }
+      },
+      {
+        "image": "frutas/06.webp",
+        "title": {
+          "ar": "Serie 3 · palabras",
+          "fr": "Série 3 · mots"
+        }
+      },
+      {
+        "image": "frutas/07.webp",
+        "title": {
+          "ar": "Serie 4 · imágenes",
+          "fr": "Série 4 · images"
+        }
+      },
+      {
+        "image": "frutas/08.webp",
+        "title": {
+          "ar": "Serie 4 · palabras",
+          "fr": "Série 4 · mots"
+        }
+      }
+    ]
+  },
+  "verduras": {
+    "title": {
+      "ar": "Tarjetas de verduras y otros alimentos",
+      "fr": "Cartes : légumes et autres aliments"
+    },
+    "photos": [
+      {
+        "image": "verduras/01.webp",
+        "title": {
+          "ar": "Serie 1 · imágenes",
+          "fr": "Série 1 · images"
+        }
+      },
+      {
+        "image": "verduras/02.webp",
+        "title": {
+          "ar": "Serie 1 · palabras",
+          "fr": "Série 1 · mots"
+        }
+      },
+      {
+        "image": "verduras/03.webp",
+        "title": {
+          "ar": "Serie 2 · imágenes",
+          "fr": "Série 2 · images"
+        }
+      },
+      {
+        "image": "verduras/04.webp",
+        "title": {
+          "ar": "Serie 2 · palabras",
+          "fr": "Série 2 · mots"
+        }
+      },
+      {
+        "image": "verduras/05.webp",
+        "title": {
+          "ar": "Serie 3 · imágenes",
+          "fr": "Série 3 · images"
+        }
+      },
+      {
+        "image": "verduras/06.webp",
+        "title": {
+          "ar": "Serie 3 · palabras",
+          "fr": "Série 3 · mots"
+        }
+      },
+      {
+        "image": "verduras/07.webp",
+        "title": {
+          "ar": "Serie 4 · imágenes",
+          "fr": "Série 4 · images"
+        }
+      },
+      {
+        "image": "verduras/08.webp",
+        "title": {
+          "ar": "Serie 4 · palabras",
+          "fr": "Série 4 · mots"
+        }
+      }
+    ]
+  },
+  "bebidas": {
+    "title": {
+      "ar": "Tarjetas de bebidas",
+      "fr": "Cartes : boissons"
+    },
+    "photos": [
+      {
+        "image": "bebidas/01.webp",
+        "title": {
+          "ar": "Serie 1 · imágenes",
+          "fr": "Série 1 · images"
+        }
+      },
+      {
+        "image": "bebidas/02.webp",
+        "title": {
+          "ar": "Serie 1 · palabras",
+          "fr": "Série 1 · mots"
+        }
+      },
+      {
+        "image": "bebidas/03.webp",
+        "title": {
+          "ar": "Serie 2 · imágenes",
+          "fr": "Série 2 · images"
+        }
+      },
+      {
+        "image": "bebidas/04.webp",
+        "title": {
+          "ar": "Serie 2 · palabras",
+          "fr": "Série 2 · mots"
+        }
+      },
+      {
+        "image": "bebidas/05.webp",
+        "title": {
+          "ar": "Serie 3 · imágenes",
+          "fr": "Série 3 · images"
+        }
+      },
+      {
+        "image": "bebidas/06.webp",
+        "title": {
+          "ar": "Serie 3 · palabras",
+          "fr": "Série 3 · mots"
+        }
+      },
+      {
+        "image": "bebidas/07.webp",
+        "title": {
+          "ar": "Serie 4 · imágenes",
+          "fr": "Série 4 · images"
+        }
+      },
+      {
+        "image": "bebidas/08.webp",
+        "title": {
+          "ar": "Serie 4 · palabras",
+          "fr": "Série 4 · mots"
+        }
+      }
+    ]
+  }
+}

@@ -12,7 +12,7 @@ La experiencia se abre desde un QR y se diseña primero para celular. Las seis p
 |---|---|
 | Bienvenida | Un panel de aeropuerto introduce el destino mientras se prepara la primera escena. Ventanilla, pista nocturna, pase de embarque y sello al tocar Embarcar. La carga inicial termina cuando la escena puede mostrarse. Los documentos y videos se cargan al abrirlos. |
 | Antes de despegar | Encuesta real de expectativas, dentro de la web. Una pregunta con tres opciones: adaptar una clase, participar del juego o llevarse ideas para la futura Práctica IV. |
-| Pasaporte y materiales | Una carpeta de viaje abre el índice, el informe y los materiales de BSPA, Turismo y las demás exposiciones según estén disponibles. Vista de lectura tranquila dentro del sitio. Cerrar o usar Atrás devuelve al punto exacto. |
+| Pasaporte y materiales | Un portadocumentos de viaje reúne el informe en PDF, las fichas de BSPA y Turismo y el archivo de trabajos. El informe y las galerías se abren dentro del sitio. Cerrar o usar Atrás devuelve al punto de partida. |
 | ¿Confirmás o verificás? | Una decisión ante una duda en el aula revela la anécdota del litchi y lo que se aprendió al verificar. |
 | Última estación | Cinco preguntas sobre expectativas, presentaciones, materiales, aplicación a la futura práctica y aprendizaje personal. Avance visible, revisión y envío dentro del recorrido. |
 | Llegada | Regreso a la ventanilla, sello final y pausa antes de ofrecer el recuerdo, la bitácora y el canal de WhatsApp posterior a la experiencia. El cierre visual se afina después de probar el resto. |
@@ -38,7 +38,7 @@ Los formularios propios son las preguntas y opciones dibujadas como parte de la 
 
 ## Vista previa móvil
 
-Incluye la bienvenida y la encuesta inicial. El nombre y la respuesta de prueba se conservan en la sesión del navegador. El envío usa almacenamiento de sesión y no tiene un servidor de encuestas conectado. El control «Reiniciar» en el indicador del recorrido vuelve al boleto y limpia el nombre y la respuesta de prueba de esta sesión, conservando el idioma.
+El pase lleva a «Antes de despegar». Al guardar la respuesta aparece «Despegar», que inicia el vuelo y abre «Pasaporte y materiales». Se puede leer el informe y recorrer el archivo bilingüe de trabajos. Las estaciones 4 a 6 del recorrido web siguen previstas. El nombre y la respuesta de prueba se conservan en la sesión del navegador. El envío usa almacenamiento de sesión y no tiene un servidor de encuestas conectado. El control «Reiniciar» en el indicador del recorrido vuelve al boleto y limpia el nombre y la respuesta de prueba de esta sesión, conservando el idioma.
 
 ```sh
 npm ci
@@ -47,3 +47,9 @@ npm run build
 ```
 
 Usá Node.js 24. GitHub Actions compila y publica en [GitHub Pages](https://yamil1701.github.io/onboard/) al incorporar cambios a `main`.
+
+## Archivo de trabajos
+
+Cada colección vive en `src/archive-data.json`. Tiene un título por idioma y una lista ordenada de imágenes con sus leyendas. Las imágenes WebP van en `public/materiales/archivo/<colección>/`. El resumen y el paginador calculan sus totales a partir de la lista. Para agregar una colección se usa un identificador breve en minúsculas y se agrega su imagen `portada.webp` junto a los demás archivos de la colección.
+
+Las 67 láminas recibidas están en el archivo temático. Los espacios de BSPA y Turismo esperan las versiones definitivas de sus materiales de presentación.

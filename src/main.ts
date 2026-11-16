@@ -1,7 +1,8 @@
 import { gsap } from 'gsap';
 import { copy, type CopyKey, type Language } from './copy';
-import { createTakeoff, surveyEntry } from './takeoff';
+import { createTakeoff, flightExit } from './takeoff';
 import { createReader } from './reader';
+import { createArchive } from './archive';
 import './style.css';
 
 type Phase = 'gate' | 'boarding' | 'takeoff' | 'survey' | 'materials';
@@ -37,9 +38,10 @@ const confirmationStamp = result.querySelector('.confirmation-stamp')!;
 const continueJourney = find('continue-journey');
 const materials = find('materials');
 const materialsTitle = find('materials-title');
-const folio = find('folio');
-const folioSheet = find('folio-sheet');
-const folioCover = folio.querySelector('.folio-cover')!;
+const wallet = find('wallet');
+const walletContents = find('wallet-contents');
+const walletCover = find('wallet-cover');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const progress = find('progress');
 const progressValue = find('progress-value');
 const restart = find<HTMLButtonElement>('restart-journey');
@@ -57,8 +59,9 @@ const state: {
 let storageBlock = false;
 let flight: gsap.core.Timeline | undefined;
 let flightBeat: 'runway' | 'climb' | null = null;
-let folderOpening: gsap.core.Timeline | undefined;
+let walletOpening: gsap.core.Timeline | undefined;
 const reader = createReader(() => phase === 'materials');
+const archive = createArchive(() => phase === 'materials');
 
 function isExpectation(value: unknown): value is Expectation {
   return value === 'adapt' || value === 'play' || value === 'ideas';
@@ -128,7 +131,7 @@ function renderLanguage() {
   document.documentElement.lang = state.language === 'fr' ? 'fr' : 'es-AR';
   document.title = `${language.titleLead} ${language.titleEnd}`;
   renderStageLabel();
-  boardAction.dataset.copy = phase === 'takeoff' ? 'boardingAction' : 'board';
+  boardAction.dataset.copy = boardButton.disabled ? 'boardingAction' : 'board';
   for (const element of translated) {
     element.textContent = language[element.dataset.copy as CopyKey];
   }
@@ -139,16 +142,17 @@ function renderLanguage() {
   if (phase === 'gate') renderDestination();
   renderPoll();
   reader.translate(language);
+  archive.translate(state.language);
 }
 
 function currentStop() {
-  return phase === 'materials' ? 3 : phase === 'survey' ? 2 : 1;
+  return phase === 'materials' ? 3 : phase === 'survey' || phase === 'takeoff' ? 2 : 1;
 }
 
 function renderPhase() {
   journey.dataset.phase = phase;
   gate.hidden = phase !== 'gate';
-  boarding.hidden = phase !== 'boarding' && phase !== 'takeoff';
+  boarding.hidden = phase !== 'boarding';
   survey.hidden = phase !== 'survey';
   materials.hidden = phase !== 'materials';
   progress.hidden = phase === 'gate';
@@ -181,72 +185,106 @@ function prepareBoarding(focusButton = false) {
   }
 }
 
-function beginFlight() {
-  if (phase !== 'boarding') return;
+function openSurvey() {
+  flight = undefined;
+  phase = 'survey';
+  renderPhase();
+  renderLanguage();
+  save();
+  window.scrollTo(0, 0);
+  (state.submitted ? answerTitle : surveyTitle).focus({ preventScroll: true });
+  if (!reducedMotion.matches) {
+    gsap.from(survey, { opacity: 0, y: 19, duration: .45, ease: 'power2.out', clearProps: 'opacity,transform' });
+  }
+}
+
+function boardJourney() {
+  if (phase !== 'boarding' || boardButton.disabled) return;
   state.name = nameInput.value;
   save();
   nameInput.blur();
   gsap.killTweensOf([boarding, windowPhoto]);
   gsap.set([boarding, windowPhoto], { clearProps: 'opacity,transform' });
-  phase = 'takeoff';
-  renderPhase();
-  renderLanguage();
   boardButton.disabled = true;
   nameInput.readOnly = true;
   stamp.hidden = false;
+  renderLanguage();
+  if (reducedMotion.matches) {
+    openSurvey();
+    return;
+  }
 
-  const timeline = gsap.timeline({
-    onComplete() {
-      flight = undefined;
-      flightBeat = null;
-      phase = 'survey';
-      survey.inert = false;
-      renderPhase();
-      renderLanguage();
-      takeoff.clear();
-      save();
-      window.scrollTo(0, 0);
-      (state.submitted ? answerTitle : surveyTitle).focus({ preventScroll: true });
-    },
-  });
-  flight = timeline;
-  timeline
+  flight = gsap.timeline({ onComplete: openSurvey })
     .fromTo(stamp, { opacity: 0, scale: 1.55, y: -51, rotation: -21 }, {
       opacity: 1, scale: 1, y: 0, rotation: -8, duration: .43, ease: 'power2.in',
     })
     .to(ticket, { y: 3, scaleY: .989, duration: .07, ease: 'power2.out' }, .40)
     .to(ticket, { y: 0, scaleY: 1, duration: .20, ease: 'power2.out' }, .47)
-    .to(boarding, { y: 112, opacity: 0, duration: .76, ease: 'power2.inOut' }, 1.1);
-  takeoff.addTo(timeline, () => {
+    .to(boarding, { y: 24, opacity: 0, duration: .3, ease: 'power2.in' }, .77);
+}
+
+function openMaterials() {
+  flight = undefined;
+  flightBeat = null;
+  phase = 'materials';
+  renderPhase();
+  renderLanguage();
+  takeoff.clear();
+  save();
+  window.scrollTo(0, 0);
+  materialsTitle.focus({ preventScroll: true });
+  if (reducedMotion.matches) return;
+  wallet.inert = true;
+  walletOpening = gsap.timeline({
+    onComplete() {
+      walletOpening = undefined;
+      wallet.inert = false;
+    },
+  })
+    .from(wallet, { y: 34, rotation: -2, opacity: 0, duration: .52, ease: 'power2.out', clearProps: 'transform,opacity' })
+    .fromTo(walletCover, { rotationX: 0, opacity: 1 }, {
+      rotationX: 87, opacity: 0, duration: .57, ease: 'power2.inOut', clearProps: 'transform,opacity',
+    }, .27)
+    .from(walletContents, { y: 10, opacity: 0, duration: .40, ease: 'power2.out', clearProps: 'transform,opacity' }, .62);
+}
+
+function beginFlight() {
+  if (phase !== 'survey' || state.submitted === null) return;
+  if (reducedMotion.matches) {
+    openMaterials();
+    return;
+  }
+  phase = 'takeoff';
+  flightBeat = 'runway';
+  renderPhase();
+  renderLanguage();
+  window.scrollTo(0, 0);
+  // Restore the last safe stop if the page is reloaded mid-flight.
+  save();
+  flight = gsap.timeline({ onComplete: openMaterials });
+  takeoff.addTo(flight, () => {
     flightBeat = 'runway';
     renderStageLabel();
   }, () => {
     flightBeat = 'climb';
     renderStageLabel();
   });
-  timeline
-    .call(() => {
-      boarding.hidden = true;
-      survey.inert = true;
-      survey.hidden = false;
-    }, [], surveyEntry)
-    .fromTo(survey, { opacity: 0, y: 32 }, {
-      opacity: 1, y: 0, duration: .86, ease: 'power2.out', clearProps: 'opacity,transform',
-    }, surveyEntry);
+  flight.to(find('flight-scene'), { opacity: 0, duration: .40, ease: 'sine.inOut' }, flightExit);
 }
 
 function restartJourney() {
   flight?.kill();
   flight = undefined;
-  folderOpening?.kill();
-  folderOpening = undefined;
-  folio.inert = false;
-  gsap.set([folio, folioCover, folioSheet], { clearProps: 'transform,opacity' });
+  walletOpening?.kill();
+  walletOpening = undefined;
+  wallet.inert = false;
+  gsap.set([wallet, walletCover, walletContents], { clearProps: 'transform,opacity' });
   reader.reset();
+  archive.reset();
   flightBeat = null;
   takeoff.clear();
-  gsap.killTweensOf([boarding, windowPhoto]);
-  gsap.set([boarding, survey, ticket, stamp, windowPhoto], {
+  gsap.killTweensOf([boarding, survey, result, confirmationStamp, windowPhoto]);
+  gsap.set([boarding, survey, result, confirmationStamp, ticket, stamp, windowPhoto], {
     clearProps: 'opacity,transform',
   });
   state.name = '';
@@ -256,7 +294,6 @@ function restartJourney() {
   nameInput.readOnly = false;
   boardButton.disabled = false;
   stamp.hidden = true;
-  survey.inert = false;
   for (const option of pollOptions) option.checked = false;
   phase = 'gate';
   renderPhase();
@@ -274,6 +311,7 @@ for (const option of pollOptions) {
 renderPhase();
 renderLanguage();
 reader.syncRoute();
+archive.syncRoute();
 
 for (const button of languageButtons) {
   button.addEventListener('click', () => {
@@ -295,7 +333,7 @@ nameInput.addEventListener('keydown', event => {
 });
 ticketForm.addEventListener('submit', event => {
   event.preventDefault();
-  beginFlight();
+  boardJourney();
 });
 restart.addEventListener('click', restartJourney);
 
@@ -312,31 +350,12 @@ surveyForm.addEventListener('submit', event => {
   save();
   renderPoll();
   answerTitle.focus({ preventScroll: true });
+  if (reducedMotion.matches) return;
   gsap.from(result, { y: 14, opacity: 0, duration: .45, ease: 'power2.out', clearProps: 'transform,opacity' });
   gsap.from(confirmationStamp, { scale: .62, rotation: -9, duration: .50, ease: 'back.out(1.35)', clearProps: 'transform' });
 });
 
-continueJourney.addEventListener('click', () => {
-  if (phase !== 'survey' || state.submitted === null) return;
-  phase = 'materials';
-  renderPhase();
-  renderLanguage();
-  save();
-  window.scrollTo(0, 0);
-  materialsTitle.focus({ preventScroll: true });
-  folio.inert = true;
-  folderOpening = gsap.timeline({
-    onComplete() {
-      folderOpening = undefined;
-      folio.inert = false;
-    },
-  })
-    .from(folio, { y: 59, rotation: -4, opacity: 0, duration: .77, ease: 'power2.out', clearProps: 'transform,opacity' })
-    .fromTo(folioCover, { rotationX: 0, opacity: 1 }, {
-      rotationX: -99, opacity: 0, duration: .70, ease: 'power2.inOut', clearProps: 'transform,opacity',
-    }, .54)
-    .from(folioSheet, { y: 13, opacity: 0, duration: .54, ease: 'power2.out', clearProps: 'transform,opacity' }, .99);
-});
+continueJourney.addEventListener('click', beginFlight);
 
 const viewport = window.visualViewport;
 if (viewport) {

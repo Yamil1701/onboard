@@ -598,82 +598,195 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 .chosen-answer svg { flex: none; }
 .survey-confirmation .primary { margin-top: 2px; }
 
-.materials { width: 100%; padding: clamp(62px, 17dvh, 145px) 20px 42px; align-self: stretch; }
+/* The same paper and brass tones from the boarding pass carry into the wallet. */
+.journey[data-phase="materials"] { max-width: 800px; }
+.materials { width: 100%; padding: clamp(44px, 9dvh, 78px) 18px 38px; align-self: stretch; }
 .materials::before {
   content: '';
   position: absolute;
   inset: 0 0 auto;
-  height: 360px;
+  height: 390px;
   z-index: -1;
-  background: linear-gradient(transparent, var(--night)), url('./assets/cabin-sky.webp') center top / cover;
+  background: linear-gradient(transparent, var(--night)), url('./assets/cabin-sky.webp') center 32% / cover;
 }
 .materials h1 {
-  max-width: 8em;
-  margin: 0 7px 28px;
+  max-width: 10em;
+  margin: 0 4px 25px;
   color: #f7f0dd;
-  font: 600 clamp(33px, 11vw, 48px)/1.06 var(--serif);
+  font: 600 clamp(33px, 9vw, 53px)/1.03 var(--serif);
 }
 .materials h1:focus, .survey-confirmation h2:focus, .reader h2:focus { outline: none; }
-.folio {
+
+.wallet {
+  --binding: #4d2d28;
+  --thread: #cb956b;
+  --lining: #5e3930;
   position: relative;
-  perspective: 900px;
-  padding: 13px 10px 11px;
-  border-radius: 4px 14px 14px 14px;
-  background: #c69e63;
-  box-shadow: inset 0 0 0 1px #e5b775, 0 16px 25px #0007;
+  isolation: isolate;
+  perspective: 1000px;
+  padding: 10px;
+  border: 1px solid #987052;
+  border-radius: 17px 17px 23px 23px;
+  background:
+    repeating-linear-gradient(115deg, #ffffff05 0 1px, transparent 1px 4px),
+    linear-gradient(130deg, #794e3d, #4b2d27 66%, #653b30);
+  box-shadow: inset 0 0 0 2px #26140f9e, 0 18px 42px #0008;
 }
-.folio::before {
-  content: '';
+.wallet-cover, .wallet-contents { border: 1px dashed var(--thread); border-radius: 10px 10px 16px 16px; }
+.wallet-cover {
   position: absolute;
-  top: -12px;
-  left: 0;
-  width: 104px;
-  height: 20px;
-  border-radius: 9px 16px 0 0;
-  background: #c69e63;
-}
-.folio-cover {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
+  z-index: 2;
+  inset: 10px;
   display: grid;
-  place-items: center;
-  border-radius: inherit;
-  background: linear-gradient(143deg, #e3bb7e, #a77d45);
-  color: #5f4529;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  padding: 20px;
+  background: linear-gradient(145deg, #805742, #472420);
+  color: var(--gold);
+  text-align: center;
+  font: 700 11px/1.3 var(--mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
   opacity: 0;
   pointer-events: none;
   transform-origin: center bottom;
 }
-.folio-cover svg { width: 30px; height: 30px; }
-.folio-sheet {
-  position: relative;
-  padding: 19px 12px 14px;
-  border-radius: 7px;
-  background: #f5edda;
-  color: #142632;
+.wallet-seal {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: 3px double currentColor;
+  border-radius: 50%;
+  font-size: 26px;
 }
-.folio-title { margin: 0 5px 13px; color: #405259; font: 700 13px/1.25 Arial, sans-serif; }
+.wallet-contents {
+  display: grid;
+  gap: 12px;
+  padding: 11px;
+  background: linear-gradient(140deg, #654235, var(--lining) 65%, var(--binding));
+}
+.wallet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 9px;
+  min-height: 29px;
+  padding-inline: 1px;
+  color: #f4d5a3;
+  font: 700 10px/1.3 var(--mono);
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.wallet-header > :first-child { display: flex; align-items: center; gap: 7px; }
+.wallet-header svg { flex: none; font-size: 14px; }
+.wallet-code { flex: none; white-space: nowrap; }
+
 .document-entry {
   display: grid;
-  grid-template-columns: 27px 1fr 18px;
+  grid-template-columns: 24px minmax(0, 1fr) 16px;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   width: 100%;
   min-height: 68px;
-  padding: 10px;
-  border: 1px solid #a9a38d;
+  padding: 9px 10px;
+  border: 1px solid #ddc7a4;
   border-radius: 7px;
-  background: #fcf7e9;
+  background: linear-gradient(123deg, #fff5df, #f1e2c5);
   color: #163942;
   text-align: left;
-  transition: transform .16s, background .16s, border-color .16s;
+  transition: background .16s;
 }
-.document-entry:hover { border-color: #396c70; }
-.document-entry:active { transform: scale(.983); background: #ecebdc; }
-.document-entry > svg { width: 100%; height: auto; }
-.document-entry strong { display: block; font: 700 17px/1.2 Arial, sans-serif; }
-.document-entry small { display: block; margin-top: 5px; color: #43555d; font: 13px/1.2 Arial, sans-serif; }
+.document-entry:hover { background: #fffaec; }
+.document-entry:active { background: #e8dfcf; }
+.document-entry > svg { width: 24px; height: 24px; }
+.document-entry > svg:last-child { width: 16px; height: 16px; }
+.document-entry strong { display: block; font: 700 16px/1.2 Arial, sans-serif; }
+.document-entry small { display: block; margin-top: 4px; color: #43555d; font: 12px/1.25 Arial, sans-serif; }
+
+.wallet-pockets { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+.wallet-slip {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  align-items: start;
+  padding: 12px 10px 0;
+  border: 1px solid #d0ba98;
+  border-radius: 7px;
+  background:
+    repeating-linear-gradient(0deg, #866e4010 0 1px, transparent 1px 5px),
+    linear-gradient(150deg, #f7edda, #e6d3af);
+  box-shadow: 0 3px 5px #25151270;
+  color: #253c40;
+}
+.wallet-slip:nth-child(2) { color: #672f31; }
+.slip-stop { font: 700 10px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.wallet-slip h2 { margin: 8px 0 2px; font: 600 clamp(20px, 5.9vw, 31px)/1 var(--serif); }
+.slip-topic { margin-bottom: 11px; font: italic 600 clamp(13px, 4vw, 17px)/1.14 var(--serif); }
+.slip-status {
+  position: relative;
+  min-height: 46px;
+  margin-inline: -10px;
+  padding: 8px 10px;
+  border-top: 1px dashed #94866d;
+  background:
+    radial-gradient(circle at left top, var(--lining) 0 4px, transparent 5px),
+    radial-gradient(circle at right top, var(--lining) 0 4px, transparent 5px);
+  color: #4e4037;
+  font: 700 11px/1.25 Arial, sans-serif;
+}
+
+.wallet-archive { border: 1px solid #be947b; border-radius: 8px; background: #39231f; }
+.wallet-archive summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 61px;
+  padding: 8px 12px;
+  border-radius: 7px;
+  color: #f8e9ca;
+  list-style: none;
+  cursor: pointer;
+}
+.wallet-archive summary::-webkit-details-marker { display: none; }
+.wallet-archive summary:is(:hover, :active) { background: #53352c; }
+.archive-title { display: block; font: 600 19px/1.16 var(--serif); }
+.archive-count { display: block; margin-top: 4px; color: #e1bfa9; font: 12px/1.2 Arial, sans-serif; }
+.archive-caret { width: 9px; height: 9px; border: solid #e9bd86; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); margin: -5px 4px 0 0; }
+.wallet-archive[open] .archive-caret { transform: rotate(225deg); margin-top: 5px; }
+.archive-list { display: grid; gap: 5px; padding: 0 7px 7px; }
+.archive-entry {
+  display: grid;
+  grid-template-columns: 50px minmax(0, 1fr);
+  gap: 9px;
+  align-items: center;
+  min-height: 49px;
+  padding: 5px 7px;
+  border: 1px solid #997766;
+  border-radius: 5px;
+  color: #fff2d9;
+  background: #53382f;
+  text-align: left;
+}
+.archive-entry:is(:hover, :active) { background: #69483a; }
+.archive-entry img { width: 50px; height: 36px; padding: 2px; object-fit: contain; background: #ecddc1; border-radius: 2px; }
+.archive-entry strong, .archive-entry small { display: block; line-height: 1.2; }
+.archive-entry strong { font-size: 13px; }
+.archive-entry small { margin-top: 3px; color: #ead0b8; font-size: 11px; }
+.wallet :is(.document-entry, summary, .archive-entry):focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+@media (min-width: 650px) {
+  html:has(.journey[data-phase="materials"]) { scrollbar-gutter: stable; }
+  .materials { max-width: 704px; margin-inline: auto; padding-inline: 25px; }
+  .wallet { padding: 14px; }
+  .wallet-cover { inset: 14px; }
+  .wallet-contents { gap: 14px; padding: 16px; }
+  .wallet-pockets { gap: 12px; }
+  .wallet-slip { padding-inline: 15px; }
+  .slip-status { min-height: 37px; margin-inline: -15px; padding-inline: 15px; }
+  .archive-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 
 .is-reading .topbar { z-index: 12; }
 .reader {
@@ -685,7 +798,7 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   left: 0;
   display: grid;
   grid-template-rows: auto auto minmax(0,1fr);
-  width: min(100%, 480px);
+  width: min(100%, 800px);
   margin-inline: auto;
   background: #12212b;
   color: #f5edda;
@@ -721,3 +834,21 @@ body:has(.is-reading) { overflow: hidden; }
 .reader-page canvas { display: block; background: #fff; margin-inline: auto; }
 .reader-notice { padding: 20px 4px; color: #e7ebdf; font: 16px/1.4 Arial, sans-serif; }
 .reader-notice button, .reader-notice a { margin-top: 10px; background: #214550; padding-inline: 10px; }
+
+.archive-controls output { font: 700 13px/1.2 var(--mono); }
+.archive-controls button { padding-inline: 10px; }
+.archive-view { text-align: center; }
+.archive-figure { margin: 0; }
+.archive-figure figcaption { margin: 4px auto 12px; font: 600 17px/1.25 var(--serif); }
+.archive-figure img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(66dvh, 800px);
+  margin: auto;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0 5px 20px #0006;
+}
+.archive-figure a { display: inline-block; margin-top: 12px; padding: 12px; color: var(--teal); font-size: 14px; }
