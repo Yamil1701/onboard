@@ -140,7 +140,7 @@ svg { display: block; width: 1em; height: 1em; }
   aspect-ratio: 840 / 1132;
   transform-origin: 50% 39%;
 }
-.flight-window :where(img), .flight-glass, .flight-lights, .flight-glint {
+.flight-window :where(img), .flight-glass, .flight-runway, .flight-glint {
   display: block;
   position: absolute;
   inset: 0;
@@ -154,17 +154,13 @@ svg { display: block; width: 1em; height: 1em; }
   background: #0a2031 url('./assets/cabin-sky.webp') center top / cover no-repeat;
   transform-origin: 50% 40%;
 }
-.flight-ground, .flight-distant {
-  background: url('./assets/runway.webp') center / 100% 100% no-repeat;
+.flight-distant, .flight-fallback {
   transform-origin: 50% 42%;
   clip-path: url(#flight-glass);
 }
-.flight-ground {
-  --terrain-cut: -8%;
-  mask-image: linear-gradient(transparent var(--terrain-cut), #000 calc(var(--terrain-cut) + 8%));
-}
-.flight-distant { mask-image: linear-gradient(transparent 4%, #000 14% 33%, transparent 40%); }
-.flight-lights { mix-blend-mode: screen; }
+.flight-distant { mask-image: linear-gradient(#000 37%, transparent 42%); }
+.flight-scene[data-renderer="webgl"] .flight-fallback,
+.flight-scene[data-renderer="photo"] :is(.flight-runway, .flight-distant, .flight-wing) { display: none; }
 .flight-wing {
   clip-path: url(#flight-wing);
   transform-origin: 92% 44%;

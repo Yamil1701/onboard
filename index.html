@@ -16,7 +16,7 @@
         <path d="M.207 .095C.31 .118 .688 .118 .793 .095C.874 .119 .912 .213 .913 .394C.913 .519 .885 .602 .787 .636C.743 .654 .699 .657 .641 .657H.359C.266 .657 .204 .642 .162 .609C.104 .565 .092 .494 .092 .396C.092 .225 .122 .136 .207 .095Z"/>
       </clipPath>
       <clipPath id="flight-wing" clipPathUnits="objectBoundingBox">
-        <path d="M.526 .345C.543 .344 .552 .347 .564 .357L.615 .398C.635 .41 .681 .414 .714 .417L.918 .435V.63L.801 .586L.777 .574L.704 .567L.698 .552L.7 .541L.776 .522L.619 .505L.617 .49L.685 .475L.606 .439L.554 .411Z"/>
+        <path d="M.306 .402C.328 .402 .348 .408 .363 .417C.413 .433 .462 .438 .546 .449C.656 .466 .78 .483 .902 .498L.93 .5V.662H.637L.686 .638L.696 .627L.691 .598L.643 .571L.543 .56L.488 .554L.484 .545L.486 .539L.549 .523L.443 .515L.426 .508L.425 .499L.479 .488L.416 .483L.398 .479L.397 .472L.437 .465L.402 .45L.371 .438L.346 .423L.329 .412Z"/>
       </clipPath>
     </defs>
     <symbol id="plane" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.4c1 0 1.7.9 1.7 2v6.5l8.2 5v2.3l-8.2-2.7v5.2l2.8 1.9v1.5L12 22l-4.5 1.1v-1.5l2.8-1.9v-5.2l-8.2 2.7v-2.3l8.2-5V3.4c0-1.1.7-2 1.7-2Z"/></symbol>
@@ -42,9 +42,9 @@
           <img class="flight-frame" src="./src/assets/runway.webp" alt="" width="840" height="1132" decoding="async">
           <div class="flight-glass">
             <img class="flight-air" id="flight-air" alt="" decoding="async" fetchpriority="low">
-            <img class="flight-ground" id="flight-ground" alt="" decoding="async" fetchpriority="low">
-            <img class="flight-distant" id="flight-distant" alt="" decoding="async" fetchpriority="low">
-            <canvas class="flight-lights" id="flight-lights" width="540" height="728"></canvas>
+            <img class="flight-fallback" src="./src/assets/runway.webp" alt="" decoding="async">
+            <img class="flight-distant" src="./src/assets/runway.webp" alt="" decoding="async">
+            <canvas class="flight-runway" width="480" height="648"></canvas>
             <img class="flight-wing" id="flight-wing-photo" src="./src/assets/runway.webp" alt="" width="840" height="1132" decoding="async">
             <div class="flight-glint" id="flight-glint"></div>
           </div>
