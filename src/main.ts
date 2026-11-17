@@ -223,30 +223,57 @@ function boardJourney() {
     .to(boarding, { y: 24, opacity: 0, duration: .3, ease: 'power2.in' }, .77);
 }
 
-function openMaterials() {
+function openMaterials(fromFlight = false) {
   flight = undefined;
   flightBeat = null;
+  const scene = find('flight-scene');
+  if (fromFlight) {
+    // Keep the last flight frame in place while the wider materials page appears.
+    gsap.set(scene, {
+      width: scene.offsetWidth,
+      height: scene.offsetHeight,
+      left: '50%',
+      xPercent: -50,
+      zIndex: 2,
+    });
+  }
   phase = 'materials';
   renderPhase();
   renderLanguage();
-  takeoff.clear();
+  if (!fromFlight) takeoff.clear();
   save();
   window.scrollTo(0, 0);
   materialsTitle.focus({ preventScroll: true });
-  if (reducedMotion.matches) return;
+  if (reducedMotion.matches) {
+    takeoff.clear();
+    return;
+  }
+  materials.inert = true;
   wallet.inert = true;
   walletOpening = gsap.timeline({
     onComplete() {
       walletOpening = undefined;
       wallet.inert = false;
+      materials.inert = false;
     },
-  })
-    .from(wallet, { y: 34, rotation: -2, opacity: 0, duration: .85, ease: 'sine.out', clearProps: 'transform,opacity' })
-    .fromTo(walletCover, { rotationX: 0, opacity: 1 }, {
-      rotationX: -104, duration: 1.15, ease: 'sine.inOut', clearProps: 'transform,opacity',
-    }, .62)
-    .to(walletCover, { opacity: 0, duration: .28, ease: 'sine.in' }, 1.48)
-    .from(walletContents, { y: 10, opacity: 0, duration: .75, ease: 'sine.out', clearProps: 'transform,opacity' }, 1.30);
+  });
+  if (fromFlight) {
+    walletOpening
+      .fromTo(materials, { opacity: 0 }, {
+        opacity: 1, duration: .85, ease: 'sine.inOut', clearProps: 'opacity',
+      }, 0)
+      .to(scene, {
+        opacity: 0, duration: .85, ease: 'sine.inOut', onComplete: takeoff.clear,
+      }, 0);
+  }
+  const arrival = fromFlight ? .5 : 0;
+  walletOpening
+    .from(wallet, { y: 24, opacity: 0, duration: .85, ease: 'sine.out', clearProps: 'transform,opacity' }, arrival)
+    .fromTo(walletCover, { rotationY: 0, opacity: 1 }, {
+      rotationY: -168, duration: 1.75, ease: 'sine.inOut', clearProps: 'transform,opacity',
+    }, arrival + .65)
+    .to(walletCover, { opacity: 0, duration: .32, ease: 'sine.in' }, arrival + 2.05)
+    .from(walletContents, { opacity: 0, duration: .8, ease: 'sine.out', clearProps: 'opacity' }, arrival + 1.1);
 }
 
 function beginFlight() {
@@ -262,7 +289,7 @@ function beginFlight() {
   window.scrollTo(0, 0);
   // Restore the last safe stop if the page is reloaded mid-flight.
   save();
-  flight = gsap.timeline({ onComplete: openMaterials });
+  flight = gsap.timeline();
   takeoff.addTo(flight, () => {
     flightBeat = 'runway';
     renderStageLabel();
@@ -270,7 +297,7 @@ function beginFlight() {
     flightBeat = 'climb';
     renderStageLabel();
   });
-  flight.to(find('flight-scene'), { opacity: 0, duration: .40, ease: 'sine.inOut' }, flightExit);
+  flight.call(() => openMaterials(true), [], flightExit);
 }
 
 function restartJourney() {
@@ -279,6 +306,8 @@ function restartJourney() {
   walletOpening?.kill();
   walletOpening = undefined;
   wallet.inert = false;
+  materials.inert = false;
+  gsap.set(materials, { clearProps: 'opacity' });
   gsap.set([wallet, walletCover, walletContents], { clearProps: 'transform,opacity' });
   reader.reset();
   archive.reset();

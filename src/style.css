@@ -654,7 +654,8 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
     linear-gradient(150deg, #f7edda, #e6d3af);
   position: relative;
   isolation: isolate;
-  perspective: 1000px;
+  perspective: 1400px;
+  perspective-origin: left center;
   padding: 10px;
   border: 1px solid #987052;
   border-radius: 17px 17px 23px 23px;
@@ -681,7 +682,8 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   text-transform: uppercase;
   opacity: 0;
   pointer-events: none;
-  transform-origin: center top;
+  transform-origin: left center;
+  box-shadow: inset 8px 0 12px #22151055, 5px 3px 15px #160c0955;
   backface-visibility: hidden;
 }
 .wallet-seal {

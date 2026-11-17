@@ -36,7 +36,7 @@ export const copy = {
     tourism: 'Turismo',
     wineRoute: 'La ruta del vino',
     pendingMaterials: 'Materiales definitivos pendientes',
-    archiveTitle: 'Archivo de trabajos',
+    archiveTitle: 'Archivos de trabajo',
     photo: 'imagen',
     photos: 'imágenes',
     previousPhoto: 'Anterior',

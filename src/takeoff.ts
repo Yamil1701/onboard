@@ -5,7 +5,8 @@ import { createRunway, type RunwayCamera } from './runway';
 
 const runwayStart = 1.8;
 const wheelsUp = 4.65;
-export const flightExit = 8.05;
+const climbDuration = 3.75;
+export const flightExit = wheelsUp + climbDuration;
 
 const eyeLevel: RunwayCamera = { travel: 0, height: 3.3, horizon: .407, speed: 0 };
 
@@ -60,7 +61,7 @@ export function createTakeoff(scene: HTMLElement) {
       .to(fallback, { xPercent: -9.2, yPercent: 18, opacity: 0, duration: 2.32, ease: 'sine.inOut' }, wheelsUp)
       .to(canvas, { opacity: 0, duration: 1.36, ease: 'sine.inOut' }, 5.78)
       .fromTo(air, { scale: 1.14, xPercent: 2.8, yPercent: -3 }, {
-        scale: 1.065, xPercent: -4.1, yPercent: 2, duration: 3.75, ease: 'sine.out',
+        scale: 1.065, xPercent: -4.1, yPercent: 2, duration: climbDuration, ease: 'sine.out',
       }, wheelsUp)
       .to(wing, { rotation: 1.6, yPercent: -.8, duration: 1.19, ease: 'sine.inOut' }, wheelsUp)
       .to(wing, { rotation: .75, yPercent: -.45, duration: 1.34, ease: 'sine.inOut' }, wheelsUp + 1.19)
@@ -71,6 +72,7 @@ export function createTakeoff(scene: HTMLElement) {
     scene.hidden = true;
     Object.assign(camera, eyeLevel);
     gsap.set([scene, frame, distant, fallback, canvas, air, wing, glint], { clearProps: 'transform,opacity' });
+    gsap.set(scene, { clearProps: 'width,height,left,zIndex' });
   }
 
   return { preload, addTo, clear };
