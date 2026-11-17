@@ -65,7 +65,9 @@
 *::-webkit-scrollbar { display: none; }
 body { margin: 0; background: #050d15; color: var(--paper); }
 button, input { font: inherit; }
+button, summary, a, label { -webkit-tap-highlight-color: transparent; }
 button { cursor: pointer; }
+button:focus:not(:focus-visible) { outline: none; }
 button:disabled { cursor: default; }
 button:focus-visible, input:focus-visible {
   outline: 2px solid var(--gold);
@@ -387,7 +389,10 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   border-radius: 9px 15px 15px 9px;
   background: #15253a;
   box-shadow: 4px 3px 0 #d8cbae, 6px 5px 0 #162a3d, 0 18px 35px #0008;
+  -webkit-tap-highlight-color: transparent;
 }
+.passport-cover { -webkit-user-select: none; user-select: none; }
+.passport-cover img { -webkit-user-drag: none; pointer-events: none; }
 .passport-cover {
   position: absolute;
   z-index: 2;
@@ -754,7 +759,7 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 
 /* The same paper and brass tones from the boarding pass carry into the wallet. */
 .journey:is([data-phase="materials"], [data-phase="workshop"]) { max-width: 800px; }
-.materials { width: 100%; padding: clamp(44px, 9dvh, 78px) 18px 38px; align-self: stretch; }
+.materials { width: 100%; padding: clamp(34px, 7dvh, 62px) 18px 38px; align-self: stretch; }
 .materials::before {
   content: '';
   position: absolute;
@@ -765,7 +770,7 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 }
 .materials h1 {
   max-width: 10em;
-  margin: 0 4px 25px;
+  margin: 0 4px 19px;
   color: #f7f0dd;
   font: 600 clamp(33px, 9vw, 53px)/1.03 var(--serif);
 }

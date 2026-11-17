@@ -16,6 +16,7 @@ export function createMemoryTransition() {
   let onComplete: (() => void) | undefined;
   let language: Language = 'ar';
   let returning = false;
+  let lockedScroll: number | undefined;
 
   function renderCaption() {
     root.setAttribute('aria-label', copy[language].workshop);
@@ -31,6 +32,11 @@ export function createMemoryTransition() {
     stage.inert = false;
     journey.classList.remove('is-recalling');
     gsap.set([root, book, flap, room, photo, caption], { clearProps: 'opacity,transform' });
+    if (lockedScroll !== undefined) {
+      document.documentElement.classList.remove('is-memory-transition');
+      window.scrollTo({ top: lockedScroll, behavior: 'instant' });
+      lockedScroll = undefined;
+    }
   }
 
   function finish() {
@@ -54,6 +60,8 @@ export function createMemoryTransition() {
       root.hidden = false;
       stage.inert = true;
       journey.classList.add('is-recalling');
+      lockedScroll = window.scrollY;
+      document.documentElement.classList.add('is-memory-transition');
       skip.focus({ preventScroll: true });
       gsap.set(root, { opacity: 1 });
       gsap.set(room, { opacity: 0 });

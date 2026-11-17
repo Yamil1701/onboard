@@ -53,6 +53,10 @@
 .memory-caption { position: absolute; z-index: 3; right: 23px; bottom: max(118px, 16%); left: 23px; color: #fff0cf; text-align: center; font: 22px/1.5 var(--reading); text-shadow: 0 2px 9px #000; }
 #skip-memory { position: absolute; z-index: 4; bottom: max(35px, env(safe-area-inset-bottom, 0px)); min-height: 44px; padding: 9px 19px; border: 1px solid #bca67a99; border-radius: 4px; color: #f4e8c9; background: #132831aa; font: 14px/1.4 var(--reading); }
 .is-recalling .progress { opacity: 0; }
+/* The fixed cinematic must not let the longer notebook scroll underneath it. */
+html.is-memory-transition { overflow: hidden; overscroll-behavior: none; }
+.is-memory-transition body { position: fixed; inset: 0; width: 100%; overflow: hidden; }
+.memory-transition { touch-action: none; overscroll-behavior: none; }
 
 .reader-view[data-page-swipe] { touch-action: pan-y pinch-zoom; }
 .reader-gesture-hint { display: none; flex-basis: 100%; color: #abc2c2; text-align: center; font: 11px/1.4 var(--reading); padding: 4px 0 3px; }
