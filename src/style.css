@@ -286,9 +286,11 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 .boarding {
   align-self: stretch;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding: clamp(54px, calc(var(--view-height) - 525px), 228px) 21px 7px;
+  gap: 22px;
+  padding: 30px 21px 24px;
 }
 .ticket, .survey-card {
   color-scheme: light;
@@ -301,55 +303,116 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   box-shadow: 0 10px 25px #0007;
 }
 .ticket {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 6px;
+  border: 6px solid #172b41;
+  border-radius: 8px 13px 13px 8px;
   background-image: linear-gradient(124deg, #fffdf73b, transparent 37%, #9571400b),
     repeating-linear-gradient(0deg, transparent 0 3px, #a3824e08 3px 4px);
-  box-shadow: inset 0 0 0 1px #d6c4a4, 0 10px 24px #0009;
+  box-shadow: inset 4px 0 10px #95714025, inset 0 0 0 1px #d6c4a4, 0 10px 24px #0009;
 }
-.ticket-head { padding: 17px 19px 14px; }
+.passport-book {
+  position: relative;
+  width: min(100%, 320px);
+  aspect-ratio: 2 / 3;
+  min-height: 480px;
+  perspective: 1400px;
+  perspective-origin: left center;
+  border-radius: 9px 15px 15px 9px;
+  background: #15253a;
+  box-shadow: 4px 3px 0 #d8cbae, 6px 5px 0 #162a3d, 0 18px 35px #0008;
+}
+.passport-cover {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid #34485b;
+  border-radius: inherit;
+  background: #142439;
+  transform-origin: left center;
+  backface-visibility: hidden;
+  box-shadow: 6px 2px 16px #0005;
+}
+.passport-cover img {
+  position: absolute;
+  top: -2.5%;
+  left: -5.5%;
+  width: 111%;
+  height: 105%;
+  object-fit: fill;
+}
+.passport-cover > span {
+  position: absolute;
+  bottom: 11%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 90%;
+  padding: 11px 16px;
+  border: 1px solid #bd9b60;
+  border-radius: 4px;
+  background: #102034ee;
+  color: var(--gold);
+  font: 600 12px/1.2 var(--mono);
+  letter-spacing: .025em;
+}
+.passport-cover:hover > span { background: #23384b; }
+.passport-cover:focus-visible { outline-offset: 5px; }
+.ticket-head { padding: 17px 19px 14px; text-align: center; }
 .ticket-label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   color: #765328;
-  font: 700 10px/1.4 var(--mono);
+  font: 700 9px/1.4 var(--mono);
   letter-spacing: .13em;
   text-transform: uppercase;
 }
-.ticket-label svg { color: #32525a; font-size: 17px; }
 .journey-title {
-  margin-top: 10px;
-  font: 600 clamp(29px, 10.3vw, 44px)/1.08 var(--serif);
+  align-self: stretch;
+  margin: 0;
+  text-align: center;
+  font: 600 clamp(28px, 8vw, 36px)/1.08 var(--serif);
   letter-spacing: -.024em;
 }
 .journey-title em, .survey-title em { font-weight: inherit; }
-.ticket-date {
-  margin-top: 15px;
-  font: 700 11px/1.3 var(--mono);
-  letter-spacing: .042em;
+.journey-title em { color: var(--gold); }
+#passport-page-title {
+  margin: 12px 0 8px;
+  font: 600 27px/1.02 var(--serif);
   text-transform: uppercase;
 }
-.venue { margin-top: 9px; font-size: 12px; font-weight: 500; line-height: 1.4; }
+#passport-page-title:focus { outline: none; }
+.passport-course { font: 12px/1.45 var(--serif); color: #43555e; }
+.passport-date { font: 9px/1.4 var(--mono); text-align: center; }
+.passport-specimen {
+  margin: 9px 0 8px;
+  color: #53616b;
+  font: 8px/1.4 var(--mono);
+  text-align: center;
+  text-transform: uppercase;
+}
+.boarding .venue { max-width: 28em; color: #c4d0d3; text-align: center; font-size: 11px; line-height: 1.4; }
 
 .ticket-stub {
   position: relative;
   display: grid;
-  gap: 16px;
+  flex: 1;
+  grid-template-rows: auto minmax(100px, 1fr) auto;
+  gap: 14px;
   margin-inline: 19px;
-  padding: 14px 0 18px;
-  border-top: 1px dashed #a79c85;
+  padding: 0 0 16px;
 }
-.ticket-stub::before, .ticket-stub::after {
-  position: absolute;
-  top: -7px;
-  width: 14px;
-  height: 14px;
-  background: var(--night);
-  border-radius: 50%;
-  content: '';
-  pointer-events: none;
+.passport-stamp-area {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100px;
+  padding: 18px 8px 8px;
+  border: 1px dotted #7e898d;
 }
-.ticket-stub::before { left: -26px; }
-.ticket-stub::after { right: -26px; }
+.passport-stamp-label { position: absolute; top: 7px; color: #59676c; font: 8px/1.3 var(--mono); text-transform: uppercase; }
 .name-row { min-width: 0; }
 .name-label {
   display: flex;
@@ -413,17 +476,15 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 .primary svg { position: absolute; right: 17px; font-size: 19px; }
 
 .stamp {
-  position: absolute;
-  top: 6px;
-  right: 17px;
+  position: relative;
   z-index: 2;
   display: grid;
   gap: 4px;
-  width: 104px;
-  padding: 7px 10px;
+  width: 145px;
+  padding: 10px 13px;
   border: 2px solid var(--stamp-ink);
   border-radius: 8px;
-  background: #f7edda;
+  background: transparent;
   color: var(--stamp-ink);
   font: 800 14px/1 var(--mono);
   text-align: center;
@@ -561,12 +622,11 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 .restart svg { font-size: 13px; }
 .restart:active { color: var(--gold); }
 
-.is-keyboard-open .boarding { padding-block: clamp(0px, calc(var(--view-height) - 375px), 136px) 12px; }
+.is-keyboard-open .boarding { justify-content: start; gap: 14px; padding-block: 14px; }
 .is-keyboard-open :is(.window, .flight-window) { top: -86px; }
 .is-keyboard-open .ticket-head { padding-bottom: 10px; }
 .is-keyboard-open .journey-title { font-size: clamp(19px, 6vw, 28px); }
-.is-keyboard-open .ticket-break { display: none; }
-.is-keyboard-open .ticket-date { margin-top: 11px; }
+.is-keyboard-open .passport-book { width: min(100%, 300px); }
 .is-keyboard-open .ticket-stub { gap: 10px; padding-block: 10px 12px; }
 .is-keyboard-open .progress { display: none; }
 
@@ -575,7 +635,6 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 }
 @media (max-height: 700px) {
   .ticket-head { padding-top: 13px; padding-bottom: 11px; }
-  .ticket-date { margin-top: 12px; }
   .ticket-stub { gap: 12px; padding-block: 12px 13px; }
   .survey-title-wrap { padding-top: 35px; }
 }

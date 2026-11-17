@@ -21,6 +21,8 @@ const gate = find('gate');
 const windowPhoto = find<HTMLImageElement>('window-photo');
 const boarding = find('boarding');
 const ticket = find('ticket');
+const passportCover = find<HTMLButtonElement>('open-passport-cover');
+const passportTitle = find('passport-page-title');
 const ticketForm = find<HTMLFormElement>('ticket-form');
 const boardButton = ticketForm.querySelector<HTMLButtonElement>('button')!;
 const boardAction = boardButton.querySelector<HTMLElement>('[data-copy]')!;
@@ -50,6 +52,7 @@ const translated = document.querySelectorAll<HTMLElement>('[data-copy]');
 
 const storageKey = 'voyageurs-preview';
 const introReadingTime = 2800;
+const stampExtraTime = 1.5;
 let phase: Phase = 'gate';
 const state: {
   language: Language;
@@ -61,6 +64,8 @@ let storageBlock = false;
 let flight: gsap.core.Timeline | undefined;
 let flightBeat: 'runway' | 'climb' | null = null;
 let walletOpening: gsap.core.Timeline | undefined;
+let passportOpening: gsap.core.Timeline | undefined;
+let passportOpened = false;
 const reader = createReader(() => phase === 'materials');
 const archive = createArchive(() => phase === 'materials');
 
@@ -171,7 +176,7 @@ function openBoarding(focusButton = false) {
   phase = 'boarding';
   renderPhase();
   takeoff.preload();
-  if (focusButton) boardButton.focus({ preventScroll: true });
+  if (focusButton) passportCover.focus({ preventScroll: true });
   if (reducedMotion.matches) return;
   gsap.fromTo(windowPhoto, { opacity: .5, scale: 1.025 }, {
     opacity: 1, scale: 1, duration: .9, ease: 'sine.out', clearProps: 'opacity,transform',
@@ -183,6 +188,32 @@ function openBoarding(focusButton = false) {
 
 function prepareBoarding(focusButton = false) {
   window.setTimeout(() => openBoarding(focusButton), introReadingTime);
+}
+
+function openPassport() {
+  if (phase !== 'boarding' || passportOpened || passportOpening) return;
+  passportCover.disabled = true;
+  passportCover.setAttribute('aria-expanded', 'true');
+  ticket.hidden = false;
+  const finishOpening = () => {
+    passportOpening = undefined;
+    passportOpened = true;
+    passportCover.hidden = true;
+    ticket.inert = false;
+    passportTitle.focus({ preventScroll: true });
+  };
+  if (reducedMotion.matches) {
+    finishOpening();
+    return;
+  }
+  passportOpening = gsap.timeline({ onComplete: finishOpening })
+    .fromTo(passportCover, { rotationY: 0 }, {
+      rotationY: -164, duration: 1.6, ease: 'sine.inOut', clearProps: 'transform',
+    }, 0)
+    .to(passportCover, { opacity: 0, duration: .3, clearProps: 'opacity' }, 1.26)
+    .fromTo(ticket, { opacity: .25 }, {
+      opacity: 1, duration: 1, ease: 'sine.inOut', clearProps: 'opacity',
+    }, .4);
 }
 
 function openSurvey() {
@@ -199,7 +230,7 @@ function openSurvey() {
 }
 
 function boardJourney() {
-  if (phase !== 'boarding' || boardButton.disabled) return;
+  if (phase !== 'boarding' || !passportOpened || boardButton.disabled) return;
   state.name = nameInput.value;
   save();
   nameInput.blur();
@@ -210,7 +241,9 @@ function boardJourney() {
   stamp.hidden = false;
   renderLanguage();
   if (reducedMotion.matches) {
-    openSurvey();
+    flight = gsap.timeline({ onComplete: openSurvey })
+      .set(stamp, { opacity: 1, rotation: -8 })
+      .to(stamp, { duration: stampExtraTime });
     return;
   }
 
@@ -220,7 +253,9 @@ function boardJourney() {
     })
     .to(ticket, { y: 3, scaleY: .989, duration: .07, ease: 'power2.out' }, .40)
     .to(ticket, { y: 0, scaleY: 1, duration: .20, ease: 'power2.out' }, .47)
-    .to(boarding, { y: 24, opacity: 0, duration: .3, ease: 'power2.in' }, .77);
+    .to(stamp, { y: -6, scale: 1.035, rotation: -10, duration: .14, ease: 'sine.out' }, .43)
+    .to(stamp, { y: 0, scale: 1, rotation: -8, duration: .22, ease: 'sine.in' }, .57)
+    .to(boarding, { y: 24, opacity: 0, duration: .3, ease: 'power2.in' }, .77 + stampExtraTime);
 }
 
 function openMaterials(fromFlight = false) {
@@ -303,6 +338,15 @@ function beginFlight() {
 function restartJourney() {
   flight?.kill();
   flight = undefined;
+  passportOpening?.kill();
+  passportOpening = undefined;
+  passportOpened = false;
+  passportCover.hidden = false;
+  passportCover.disabled = false;
+  passportCover.setAttribute('aria-expanded', 'false');
+  ticket.hidden = true;
+  ticket.inert = true;
+  gsap.set(passportCover, { clearProps: 'opacity,transform' });
   walletOpening?.kill();
   walletOpening = undefined;
   wallet.inert = false;
@@ -378,6 +422,7 @@ ticketForm.addEventListener('submit', event => {
   event.preventDefault();
   boardJourney();
 });
+passportCover.addEventListener('click', openPassport);
 restart.addEventListener('click', restartJourney);
 
 surveyForm.addEventListener('change', event => {

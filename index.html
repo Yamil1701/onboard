@@ -66,30 +66,42 @@
       </section>
 
       <section class="boarding" id="boarding" aria-labelledby="journey-title" hidden>
-        <div class="ticket" id="ticket">
-          <div class="ticket-head">
-            <p class="ticket-label"><span data-copy="boardingPass">Pase de embarque</span><svg aria-hidden="true"><use href="#plane"/></svg></p>
-            <h1 class="journey-title" id="journey-title"><span data-copy="titleLead">Viajeros,</span><br class="ticket-break"> <em data-copy="titleEnd">¡todos a bordo!</em></h1>
-            <p class="ticket-date"><time datetime="2026-11-30T20:00:00-03:00" data-copy="longDate">30 noviembre 2026 · 20 h</time></p>
-            <p class="venue">Profesorado Superior de Lenguas Vivas N.º 6007</p>
-          </div>
-          <form class="ticket-stub" id="ticket-form">
-            <div class="name-row">
-              <label for="passenger" class="name-label">
-                <strong data-copy="name">Nombre y apellido</strong><span data-copy="optional">Opcional</span>
-              </label>
-              <div class="name-line">
-                <input id="passenger" name="name" type="text" autocomplete="name" autocapitalize="words" enterkeyhint="done">
-                <svg aria-hidden="true"><use href="#pencil"/></svg>
-              </div>
+        <h1 class="journey-title" id="journey-title"><span data-copy="titleLead">Viajeros,</span><br> <em data-copy="titleEnd">¡todos a bordo!</em></h1>
+        <div class="passport-book" id="passport-book">
+          <div class="ticket" id="ticket" hidden inert>
+            <div class="ticket-head">
+              <p class="ticket-label" data-copy="boardingPass">Pasaporte de viaje</p>
+              <h2 id="passport-page-title" tabindex="-1" lang="fr">Passeport<br>Voyageurs</h2>
+              <p class="passport-course" lang="fr">4e année · Pratique IV<br>Professorat de Français · 2026</p>
             </div>
-            <button class="primary" type="submit"><span data-copy="board">Embarcar</span></button>
-          </form>
-          <div class="stamp" id="stamp" hidden aria-hidden="true">
-            <div class="stamp-wing"><svg><use href="#plane"/></svg></div>
-            <strong data-copy="aboard">A bordo</strong><small>30 · 11 · 2026</small>
+            <form class="ticket-stub" id="ticket-form">
+              <div class="name-row">
+                <label for="passenger" class="name-label">
+                  <strong data-copy="name">Nombre y apellido</strong><span data-copy="optional">Opcional</span>
+                </label>
+                <div class="name-line">
+                  <input id="passenger" name="name" type="text" autocomplete="name" autocapitalize="words" enterkeyhint="done">
+                  <svg aria-hidden="true"><use href="#pencil"/></svg>
+                </div>
+              </div>
+              <div class="passport-stamp-area">
+                <span class="passport-stamp-label" data-copy="stampArea">Sello de embarque</span>
+                <div class="stamp" id="stamp" hidden aria-hidden="true">
+                  <div class="stamp-wing"><svg><use href="#plane"/></svg></div>
+                  <strong data-copy="aboard">A bordo</strong><small>30 · 11 · 2026</small>
+                </div>
+              </div>
+              <button class="primary" type="submit"><span data-copy="board">Embarcar</span></button>
+            </form>
+            <p class="passport-date"><time datetime="2026-11-30T20:00:00-03:00" data-copy="longDate">30 noviembre 2026 · 20 h</time></p>
+            <p class="passport-specimen" lang="fr">Spécimen fictif · Usage scolaire</p>
           </div>
+          <button class="passport-cover" id="open-passport-cover" type="button" aria-controls="ticket" aria-expanded="false">
+            <img src="./src/assets/passport-cover.webp" width="720" height="1080" alt="" fetchpriority="high" decoding="async">
+            <span data-copy="openPassport">Abrir pasaporte</span>
+          </button>
         </div>
+        <p class="venue">Profesorado Superior de Lenguas Vivas N.º 6007</p>
       </section>
 
       <section class="survey" id="survey" aria-labelledby="survey-title" hidden>
