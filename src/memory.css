@@ -12,7 +12,7 @@
   background: var(--slip-paper);
   box-shadow: 3px 4px 0 #c6b79a, 0 8px 15px #2a16195c;
   text-align: left;
-  transition: transform .3s, box-shadow .3s;
+  transition: box-shadow .3s;
 }
 .memory-entry::before { position: absolute; z-index: 1; inset: 0 auto 0 0; width: 5px; content: ''; background: #977250; box-shadow: 3px 0 8px #0005; }
 .memory-entry > img { width: 100%; height: 100%; min-height: 190px; object-fit: cover; object-position: 43% center; }
@@ -21,8 +21,7 @@
 .memory-entry-paper strong { font: 600 clamp(21px, 5.4vw, 29px)/1.1 var(--serif); }
 .memory-entry-paper > span { font: 14px/1.5 var(--reading); }
 .memory-entry-paper em { justify-self: start; margin-top: 2px; padding-bottom: 3px; border-bottom: 1px solid #99764e; font: 700 12px/1.4 var(--reading); }
-.memory-entry:hover { transform: translateY(-2px); box-shadow: 3px 6px 0 #c6b79a, 0 12px 20px #2a161970; }
-.memory-entry:active { transform: translateY(1px); }
+.memory-entry:hover { box-shadow: 3px 4px 0 #c6b79a, 0 10px 18px #2a161970; }
 
 .memory-transition {
   position: fixed;

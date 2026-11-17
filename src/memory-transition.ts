@@ -8,7 +8,6 @@ export function createMemoryTransition() {
   const book = root.querySelector<HTMLElement>('.memory-book')!;
   const flap = root.querySelector<HTMLElement>('.memory-flap')!;
   const room = root.querySelector<HTMLElement>('.memory-room')!;
-  const photo = room.querySelector('img')!;
   const caption = root.querySelector<HTMLElement>('#memory-caption')!;
   const skip = root.querySelector<HTMLButtonElement>('#skip-memory')!;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -31,7 +30,7 @@ export function createMemoryTransition() {
     root.hidden = true;
     stage.inert = false;
     journey.classList.remove('is-recalling');
-    gsap.set([root, book, flap, room, photo, caption], { clearProps: 'opacity,transform' });
+    gsap.set([root, book, flap, room, caption], { clearProps: 'opacity,transform' });
     if (lockedScroll !== undefined) {
       document.documentElement.classList.remove('is-memory-transition');
       window.scrollTo({ top: lockedScroll, behavior: 'instant' });
@@ -77,9 +76,8 @@ export function createMemoryTransition() {
           gsap.fromTo(caption, { opacity: .25 }, { opacity: 1, duration: .5 });
         }, [], 2.5)
         .fromTo(room, { opacity: 0 }, { opacity: 1, duration: 1.2, ease: 'sine.inOut' }, 2.4)
-        .fromTo(photo, { scale: 1.18 }, { scale: 1, duration: 3.4, ease: 'sine.out' }, 2.4)
-        .to(book, { scale: 1.55, opacity: 0, duration: 1.25, ease: 'sine.inOut' }, 2.4)
-        .to(root, { opacity: 0, duration: .9, ease: 'sine.inOut' }, 5.8);
+        .to(book, { opacity: 0, duration: 1.2, ease: 'sine.inOut' }, 2.4)
+        .to(root, { opacity: 0, duration: .9, ease: 'sine.inOut' }, 3.6);
     },
     translate(lang: Language) {
       language = lang;
