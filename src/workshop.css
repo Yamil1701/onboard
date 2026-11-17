@@ -1,0 +1,196 @@
+.materials-next {
+  display: grid;
+  gap: 14px;
+  margin: 28px 4px 0;
+}
+.materials-next p { max-width: 28em; color: #d9e1dd; font: 18px/1.4 var(--serif); }
+.materials-next .primary { width: 100%; }
+
+.workshop {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  width: 100%;
+  padding-bottom: 38px;
+}
+.workshop-scene {
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 auto;
+  height: 430px;
+  pointer-events: none;
+}
+.workshop-scene img { width: 100%; height: 100%; object-fit: cover; object-position: center 52%; }
+.workshop-scene::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: linear-gradient(180deg, #08131f55, #08131f50 20%, #08131fe8 80%, var(--night)),
+    linear-gradient(90deg, #08131f45, transparent 40%, #08131f45);
+}
+.workshop-inner { width: min(100%, 650px); margin-inline: auto; padding-inline: 20px; }
+.workshop-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin: 14px 0 16px;
+  padding: 0;
+  border: 0;
+  color: #bce5db;
+  background: transparent;
+  font: 13px/1.3 Arial, sans-serif;
+}
+.workshop-back > span:first-child { font-size: 26px; }
+.workshop-heading { margin-bottom: 28px; }
+.workshop-heading h1 {
+  max-width: 10em;
+  margin: 0;
+  color: #fff3d9;
+  font: 600 clamp(38px, 10vw, 58px)/1.03 var(--serif);
+  letter-spacing: -.025em;
+  text-shadow: 0 3px 15px #06101b;
+}
+.workshop-heading p {
+  max-width: 35em;
+  margin-top: 19px;
+  color: #e2e4d9;
+  font: 17px/1.55 var(--serif);
+  text-shadow: 0 2px 8px #06101b;
+  overflow-wrap: anywhere;
+}
+.workshop-paper {
+  position: relative;
+  padding: clamp(19px, 5vw, 32px);
+  border: 1px solid #d3bd98;
+  border-radius: 3px 9px 9px 3px;
+  color: var(--ink);
+  color-scheme: light;
+  background: repeating-linear-gradient(0deg, #9d7b4407 0 1px, transparent 1px 4px),
+    linear-gradient(125deg, #faf1dc, #f0e2c5);
+  box-shadow: -4px 0 0 #846148, -7px 0 0 #4f352c, 0 14px 35px #0007;
+  scroll-margin-top: 90px;
+}
+.workshop-paper::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7px;
+  content: '';
+  border-left: 1px solid #b48d6326;
+  pointer-events: none;
+}
+.workshop-paper:focus, .workshop-evidence:focus, .workshop-heading h1:focus { outline: none; }
+.workshop-paper-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #b99e7580;
+  color: #775537;
+  font: 700 10px/1.5 var(--mono);
+  letter-spacing: .025em;
+}
+#workshop-context { max-width: 20em; }
+#workshop-position { flex: none; text-align: right; }
+.workshop-paper h2 {
+  margin: 25px 0 20px;
+  font: 600 clamp(26px, 7vw, 36px)/1.16 var(--serif);
+  overflow-wrap: anywhere;
+}
+.workshop-prompt { margin-bottom: 19px; color: #4c5758; font: 15px/1.5 Arial, sans-serif; }
+.workshop-decisions { display: grid; gap: 10px; }
+.workshop-decisions button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 61px;
+  padding: 13px 15px;
+  border: 1px solid #3c6570;
+  border-radius: 4px;
+  color: #173e49;
+  background: #fcf7ed;
+  text-align: left;
+  font: 600 17px/1.3 var(--serif);
+}
+.workshop-decisions button:last-child { border-color: #a68a56; background: #eee5cf; color: #1e4146; }
+.workshop-decisions button:active { transform: translateY(1px); }
+.workshop-decisions svg, .decision-hand { flex: none; width: 20px; font-size: 20px; }
+.workshop-decision-echo { margin-bottom: 19px; color: #495957; font: 16px/1.5 var(--serif); }
+.workshop-resource {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 62px;
+  padding: 12px;
+  border: 3px double #a78952;
+  border-radius: 3px 7px 7px 3px;
+  background: #ebe0c5;
+  color: #28474f;
+  box-shadow: 2px 3px 0 #bdad90;
+  font: italic 600 21px/1.25 var(--serif);
+}
+.workshop-resource svg { flex: none; font-size: 24px; }
+.workshop-evidence { scroll-margin-top: 90px; }
+.workshop-evidence-label, .workshop-answer-label {
+  margin: 20px 0 12px;
+  color: #725538;
+  font: 700 10px/1.5 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.workshop-photo { position: relative; min-height: 155px; margin: 15px 0 22px; overflow: hidden; border-radius: 4px; background: #dccfb6; }
+.workshop-photo img { display: block; width: 100%; height: clamp(155px, 38vw, 230px); object-fit: cover; opacity: 0; transition: opacity .45s ease; }
+.workshop-photo.is-ready img { opacity: 1; }
+.workshop-photo[aria-busy]::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: linear-gradient(110deg, transparent 20%, #fff6 48%, transparent 75%) 100% 0 / 240% 100%;
+}
+.workshop-evidence h3 { margin: 0 0 13px; color: #1e5258; font: 600 25px/1.2 var(--serif); }
+#workshop-explanation { color: #3e5155; font: 16px/1.55 Arial, sans-serif; }
+.workshop-evidence-source { margin-top: 12px; color: #6b6b59; font: 10px/1.5 var(--mono); }
+.workshop-rule { display: grid; justify-items: center; gap: 12px; padding: 22px 12px; margin-bottom: 16px; border-block: 1px dashed #9ba696; color: #264a4e; text-align: center; font: 18px/1.55 var(--serif); }
+.workshop-rule > span { color: #99724c; font-size: 24px; line-height: 1; }
+.workshop-rule strong { color: #7d3e32; }
+#workshop-shared-answer { margin: 0 0 22px; padding-left: 14px; border-left: 2px solid #bda16b; font: italic 600 19px/1.5 var(--serif); }
+.workshop-paper .primary { width: 100%; white-space: normal; }
+.workshop-paper button:focus-visible, .workshop-reflection-line:focus-within { outline-color: #27535a; }
+.workshop-story > h2 { margin-top: 0; }
+.workshop-story > blockquote { margin: 0; font: 18px/1.7 var(--serif); }
+.workshop-attribution { margin-top: 17px; color: #67706c; font: 11px/1.5 Arial, sans-serif; }
+.workshop-bridge { margin: 25px 0; padding: 17px 0; border-block: 1px solid #c8b08c; color: #344e51; font: 16px/1.5 Arial, sans-serif; }
+#workshop-reflection fieldset { display: grid; gap: 0; padding: 0; margin: 0 0 22px; border: 0; min-width: 0; }
+#workshop-reflection legend { margin-bottom: 18px; padding: 0; font: 600 24px/1.25 var(--serif); }
+.workshop-reflection-line { display: flex; align-items: center; gap: 12px; min-height: 63px; padding: 13px 8px; border-bottom: 1px dashed #baaa8f; cursor: pointer; font: italic 600 18px/1.45 var(--serif); }
+.workshop-reflection-line input { flex: none; width: 18px; height: 18px; margin: 0; accent-color: #23535a; }
+.workshop-reflection-line:has(:checked) { background: #dce5d540; color: #18515a; }
+.workshop-completed > h2 { margin-top: 0; }
+.workshop-seal { display: grid; justify-items: center; gap: 9px; max-width: 250px; margin: 32px auto; padding: 22px 16px; border: 3px double #954d3a; border-radius: 8px; color: #954d3a; transform: rotate(-7deg); text-align: center; text-transform: uppercase; font: 700 10px/1.4 var(--mono); letter-spacing: .045em; }
+.workshop-seal svg { font-size: 21px; transform: rotate(90deg); }
+.workshop-seal strong { font-size: 15px; }
+.workshop-closing { font: 600 23px/1.4 var(--serif); }
+.workshop-takeaway { margin: 0 0 28px; font: italic 600 22px/1.45 var(--serif); color: #235259; }
+.workshop-summary { margin-bottom: 24px; padding-block: 17px; border-block: 1px solid #c4ad87; }
+.workshop-summary > summary { cursor: pointer; font: 600 18px/1.4 var(--serif); }
+.workshop-summary ol { display: grid; gap: 20px; margin: 23px 0 0; padding-left: 23px; }
+.workshop-summary li::marker { color: #7e613b; font-family: var(--mono); }
+.workshop-summary small { display: block; margin-bottom: 7px; color: #657270; font: 11px/1.4 Arial, sans-serif; }
+.workshop-summary p { font: 17px/1.5 var(--serif); }
+.workshop-replay { display: block; min-height: 44px; margin: 12px auto 0; padding: 0 10px; border: 0; color: #395b60; background: transparent; font-size: 13px; }
+.workshop-source { margin: 23px 0 0; color: #9badae; text-align: center; font: 10px/1.5 var(--mono); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .workshop-photo[aria-busy]::after { animation: skeleton-sweep 1.7s ease-in-out infinite; }
+}
+@media (min-width: 650px) {
+  .workshop-inner { padding-inline: 28px; }
+  .workshop-back { margin-top: 20px; margin-bottom: 25px; }
+  .workshop-heading { margin-bottom: 35px; }
+  .workshop-decisions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

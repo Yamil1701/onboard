@@ -168,6 +168,85 @@
             </details>
           </div>
         </div>
+        <div class="materials-next">
+          <p data-copy="workshopInvitation">Una pregunta del aula. Ahora la decisión es tuya.</p>
+          <button class="primary" id="enter-workshop" type="button" data-copy="enterWorkshop">Entrar al aula</button>
+        </div>
+      </section>
+
+      <section class="workshop" id="workshop" aria-labelledby="workshop-title" hidden>
+        <div class="workshop-scene" aria-hidden="true"><img src="./src/assets/workshop-room.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"></div>
+        <div class="workshop-inner">
+          <button class="workshop-back" data-back-materials type="button"><span aria-hidden="true">‹</span><span data-workshop-copy="back">Volver a materiales</span></button>
+          <header class="workshop-heading">
+            <h1 id="workshop-title" tabindex="-1" data-workshop-copy="title">¿Confirmás o verificás?</h1>
+            <p id="workshop-welcome"></p>
+          </header>
+
+          <article class="workshop-paper" id="workshop-paper" tabindex="-1" aria-labelledby="workshop-question">
+            <div class="workshop-paper-header"><span id="workshop-context"></span><span id="workshop-position" aria-live="polite"></span></div>
+            <h2 id="workshop-question"></h2>
+            <div id="workshop-decisions">
+              <p class="workshop-prompt" data-workshop-copy="prompt">No estás completamente seguro. ¿Cómo seguirías?</p>
+              <div class="workshop-decisions">
+                <button type="button" data-decision="confirm"><span class="decision-hand" aria-hidden="true">✓</span><span data-workshop-copy="confirm">Confirmaría la respuesta</span></button>
+                <button type="button" data-decision="verify"><svg aria-hidden="true"><use href="#file"/></svg><span data-workshop-copy="verify">Lo verificaría con el grupo</span></button>
+              </div>
+            </div>
+            <div id="workshop-response" hidden>
+              <p class="workshop-decision-echo" id="workshop-decision-echo"></p>
+              <button type="button" class="workshop-resource" id="workshop-consult"><svg aria-hidden="true"><use href="#file"/></svg><span>Consultar el material</span></button>
+              <section class="workshop-evidence" id="workshop-evidence" tabindex="-1" hidden aria-labelledby="workshop-answer">
+                <p class="workshop-evidence-label" data-workshop-copy="evidence">La pista en el material</p>
+                <figure class="workshop-photo" id="workshop-photo" aria-busy="true" hidden>
+                  <img id="workshop-litchi" src="./src/assets/workshop-litchi.webp" width="900" height="600" alt="" loading="lazy" decoding="async">
+                </figure>
+                <h3 id="workshop-answer"></h3>
+                <div class="workshop-rule" id="workshop-rule" lang="fr" hidden>
+                  <p>Je voudrais <strong>des</strong> bananes.</p>
+                  <span aria-hidden="true">↓</span>
+                  <p>Je <strong>ne</strong> voudrais <strong>pas de</strong> bananes.</p>
+                </div>
+                <p id="workshop-explanation"></p>
+                <p class="workshop-evidence-source" data-workshop-copy="supportSource">Ficha de apoyo · Adaptada del informe de práctica</p>
+                <p class="workshop-answer-label" data-workshop-copy="ready">La respuesta que compartimos</p>
+                <blockquote id="workshop-shared-answer"></blockquote>
+                <button class="primary" id="workshop-share" type="button" data-workshop-copy="share">Llevar esta respuesta al aula</button>
+              </section>
+            </div>
+          </article>
+
+          <article class="workshop-paper workshop-story" id="workshop-story" tabindex="-1" hidden aria-labelledby="workshop-story-title">
+            <h2 id="workshop-story-title" data-workshop-copy="storyTitle">Lo que me pasó en Turismo</h2>
+            <blockquote data-workshop-copy="story"></blockquote>
+            <p class="workshop-attribution" data-workshop-copy="attribution"></p>
+            <p class="workshop-bridge" data-workshop-copy="bridge"></p>
+            <form id="workshop-reflection">
+              <fieldset>
+                <legend data-workshop-copy="reflection">¿Qué frase te llevarías a tu próxima clase?</legend>
+                <label class="workshop-reflection-line"><input type="radio" name="workshop-reflection" value="together"><span data-workshop-copy="together">Lo verificamos juntos.</span></label>
+                <label class="workshop-reflection-line"><input type="radio" name="workshop-reflection" value="consult"><span data-workshop-copy="consult">Dame un momento para consultarlo.</span></label>
+                <label class="workshop-reflection-line"><input type="radio" name="workshop-reflection" value="revisit"><span data-workshop-copy="revisit">Voy a revisar esa respuesta.</span></label>
+              </fieldset>
+              <button type="submit" class="primary" id="workshop-seal-button" data-workshop-copy="seal" disabled>Sellar este aprendizaje</button>
+            </form>
+          </article>
+
+          <section class="workshop-paper workshop-completed" id="workshop-completed" tabindex="-1" hidden aria-labelledby="workshop-completed-title">
+            <h2 id="workshop-completed-title"></h2>
+            <div class="workshop-seal" id="workshop-seal"><svg aria-hidden="true"><use href="#plane"/></svg><span data-workshop-copy="stampTop">Estaciones 1 y 4</span><strong data-workshop-copy="stampText">Lo verificamos juntos</strong></div>
+            <p class="workshop-closing" data-workshop-copy="closing"></p>
+            <p class="workshop-answer-label" data-workshop-copy="takeaway">La frase que elegiste llevarte</p>
+            <blockquote class="workshop-takeaway" id="workshop-takeaway"></blockquote>
+            <details class="workshop-summary">
+              <summary data-workshop-copy="summary">Las respuestas que construimos</summary>
+              <ol id="workshop-summary"></ol>
+            </details>
+            <button type="button" class="primary" data-back-materials data-workshop-copy="back">Volver a materiales</button>
+            <button type="button" class="workshop-replay" id="workshop-replay" data-workshop-copy="replay">Volver a participar</button>
+          </section>
+          <p class="workshop-source" data-workshop-copy="source">Actividad del informe de práctica · págs. 7–8</p>
+        </div>
       </section>
     </main>
     <footer class="progress" id="progress" hidden>

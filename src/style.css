@@ -657,7 +657,9 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 }
 .progress[data-stop="3"] { --position: 40%; }
 .progress[data-stop="3"] .progress-track i:nth-child(-n+2) { background: var(--gold); }
-.journey:is([data-phase="survey"], [data-phase="materials"]) .window { visibility: hidden; }
+.progress[data-stop="4"] { --position: 60%; }
+.progress[data-stop="4"] .progress-track i:nth-child(-n+3) { background: var(--gold); }
+.journey:is([data-phase="survey"], [data-phase="materials"], [data-phase="workshop"]) .window { visibility: hidden; }
 
 .survey-stack { width: 100%; }
 .survey-confirmation { gap: 12px; padding: 22px 19px 16px; }
@@ -689,7 +691,7 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 .survey-confirmation .primary { margin-top: 2px; }
 
 /* The same paper and brass tones from the boarding pass carry into the wallet. */
-.journey[data-phase="materials"] { max-width: 800px; }
+.journey:is([data-phase="materials"], [data-phase="workshop"]) { max-width: 800px; }
 .materials { width: 100%; padding: clamp(44px, 9dvh, 78px) 18px 38px; align-self: stretch; }
 .materials::before {
   content: '';

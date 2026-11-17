@@ -3,9 +3,11 @@ import { copy, type CopyKey, type Language } from './copy';
 import { createTakeoff, flightExit } from './takeoff';
 import { createReader } from './reader';
 import { createArchive } from './archive';
+import { createWorkshop } from './workshop';
 import './style.css';
+import './workshop.css';
 
-type Phase = 'gate' | 'boarding' | 'takeoff' | 'survey' | 'materials';
+type Phase = 'gate' | 'boarding' | 'takeoff' | 'survey' | 'materials' | 'workshop';
 type Expectation = 'adapt' | 'play' | 'ideas';
 
 function find<T extends HTMLElement>(id: string): T {
@@ -43,6 +45,9 @@ const materialsTitle = find('materials-title');
 const wallet = find('wallet');
 const walletContents = find('wallet-contents');
 const walletCover = find('wallet-cover');
+const workshopSection = find('workshop');
+const workshopTitle = find('workshop-title');
+const enterWorkshop = find<HTMLButtonElement>('enter-workshop');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const progress = find('progress');
 const progressValue = find('progress-value');
@@ -68,6 +73,7 @@ let passportOpening: gsap.core.Timeline | undefined;
 let passportOpened = false;
 const reader = createReader(() => phase === 'materials');
 const archive = createArchive(() => phase === 'materials');
+const workshop = createWorkshop(save);
 
 function isExpectation(value: unknown): value is Expectation {
   return value === 'adapt' || value === 'play' || value === 'ideas';
@@ -81,7 +87,9 @@ function restore() {
     if (typeof stored.name === 'string') state.name = stored.name;
     if (isExpectation(stored.selected)) state.selected = stored.selected;
     if (isExpectation(stored.submitted)) state.submitted = stored.submitted;
-    if (stored.stop === 3 && state.submitted) phase = 'materials';
+    workshop.restore(stored.workshop);
+    if (stored.stop === 4 && state.submitted) phase = 'workshop';
+    else if (stored.stop === 3 && state.submitted) phase = 'materials';
     else if (stored.stop === 2) phase = 'survey';
   } catch {
     // A malformed or inaccessible session should still allow boarding.
@@ -94,6 +102,7 @@ function save() {
     sessionStorage.setItem(storageKey, JSON.stringify({
       ...state,
       stop: currentStop(),
+      workshop: workshop.snapshot(),
     }));
   } catch {
     storageBlock = true;
@@ -131,7 +140,7 @@ function renderPoll() {
 }
 
 function renderStageLabel() {
-  const key = phase === 'materials' || phase === 'survey' ? phase : flightBeat ?? 'welcome';
+  const key = phase === 'materials' || phase === 'survey' || phase === 'workshop' ? phase : flightBeat ?? 'welcome';
   stageLabel.dataset.copy = key;
   stageLabel.textContent = copy[state.language][key];
 }
@@ -153,10 +162,13 @@ function renderLanguage(animateIntro = false) {
   renderPoll();
   reader.translate(language);
   archive.translate(state.language);
+  workshop.translate(state.language, state.name);
 }
 
 function currentStop() {
-  return phase === 'materials' ? 3 : phase === 'survey' || phase === 'takeoff' ? 2 : 1;
+  if (phase === 'workshop') return 4;
+  if (phase === 'materials') return 3;
+  return phase === 'survey' || phase === 'takeoff' ? 2 : 1;
 }
 
 function renderPhase() {
@@ -165,6 +177,7 @@ function renderPhase() {
   boarding.hidden = phase !== 'boarding';
   survey.hidden = phase !== 'survey';
   materials.hidden = phase !== 'materials';
+  workshopSection.hidden = phase !== 'workshop';
   progress.hidden = phase === 'gate';
   const stop = currentStop();
   progress.dataset.stop = String(stop);
@@ -335,6 +348,32 @@ function beginFlight() {
   flight.call(() => openMaterials(true), [], flightExit);
 }
 
+function openWorkshop() {
+  if (phase !== 'materials') return;
+  phase = 'workshop';
+  renderPhase();
+  renderLanguage();
+  save();
+  window.scrollTo(0, 0);
+  workshopTitle.focus({ preventScroll: true });
+  if (!reducedMotion.matches) {
+    gsap.fromTo(workshopSection, { opacity: 0, y: 18 }, {
+      opacity: 1, y: 0, duration: .85, ease: 'sine.out', clearProps: 'opacity,transform',
+    });
+  }
+}
+
+function backToMaterials() {
+  gsap.killTweensOf(workshopSection);
+  gsap.set(workshopSection, { clearProps: 'opacity,transform' });
+  phase = 'materials';
+  renderPhase();
+  renderLanguage();
+  save();
+  enterWorkshop.focus({ preventScroll: true });
+  enterWorkshop.scrollIntoView({ block: 'center' });
+}
+
 function restartJourney() {
   flight?.kill();
   flight = undefined;
@@ -355,10 +394,11 @@ function restartJourney() {
   gsap.set([wallet, walletCover, walletContents], { clearProps: 'transform,opacity' });
   reader.reset();
   archive.reset();
+  workshop.reset();
   flightBeat = null;
   takeoff.clear();
-  gsap.killTweensOf([boarding, survey, result, confirmationStamp, windowPhoto]);
-  gsap.set([boarding, survey, result, confirmationStamp, ticket, stamp, windowPhoto], {
+  gsap.killTweensOf([boarding, survey, result, confirmationStamp, windowPhoto, workshopSection]);
+  gsap.set([boarding, survey, result, confirmationStamp, ticket, stamp, windowPhoto, workshopSection], {
     clearProps: 'opacity,transform',
   });
   state.name = '';
@@ -401,7 +441,7 @@ for (const button of languageButtons) {
     const readerPanel = journey.querySelector('.reader:not([hidden])');
     const surfaces = readerPanel
       ? [...readerPanel.querySelectorAll('.reader-header, .reader-controls, figcaption')]
-      : [gate, boarding, survey, materials].filter(surface => !surface.hidden);
+      : [gate, boarding, survey, materials, workshopSection].filter(surface => !surface.hidden);
     languageFades = [stageLabel, ...surfaces].map(surface =>
       surface.animate([{ opacity: .68 }, { opacity: 1 }], { duration: 160, easing: 'ease-out' }),
     );
@@ -444,6 +484,10 @@ surveyForm.addEventListener('submit', event => {
 });
 
 continueJourney.addEventListener('click', beginFlight);
+enterWorkshop.addEventListener('click', openWorkshop);
+for (const button of workshopSection.querySelectorAll('[data-back-materials]')) {
+  button.addEventListener('click', backToMaterials);
+}
 
 const viewport = window.visualViewport;
 if (viewport) {

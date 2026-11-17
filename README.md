@@ -38,7 +38,9 @@ Los formularios propios son las preguntas y opciones dibujadas como parte de la 
 
 ## Vista previa móvil
 
-El pase lleva a «Antes de despegar». Al guardar la respuesta aparece «Despegar», que inicia el vuelo y abre «Pasaporte y materiales». Se puede leer el informe y recorrer el archivo bilingüe de trabajos. Las estaciones 4 a 6 del recorrido web siguen previstas. El nombre y la respuesta de prueba se conservan en la sesión del navegador. El envío usa almacenamiento de sesión y no tiene un servidor de encuestas conectado. El control «Reiniciar» en el indicador del recorrido vuelve al boleto y limpia el nombre y la respuesta de prueba de esta sesión, conservando el idioma.
+El pasaporte lleva a «Antes de despegar». Al guardar la respuesta aparece «Despegar», que inicia el vuelo y abre «Pasaporte y materiales». Se puede leer el informe y recorrer el archivo bilingüe de trabajos. «Entrar al aula» abre la parada 4, «¿Confirmás o verificás?». Incluye las tres situaciones del informe, consulta de apoyos, una respuesta para compartir, la anécdota real, una reflexión personal y el sello de las estaciones 1 y 4. Las paradas 5 y 6 siguen previstas.
+
+El nombre, la encuesta inicial y las decisiones de la actividad se conservan en la sesión del navegador. Recargar o cambiar de idioma conserva el avance. Los textos de `src/workshop-copy.ts` adaptan el informe, págs. 4 y 7–8. Las escenas de aula y del litchi son imágenes ilustrativas creadas para la web. El envío usa almacenamiento de sesión y no tiene un servidor de encuestas conectado. «Reiniciar» vuelve al inicio y limpia los datos de esta visita, conservando el idioma.
 
 ```sh
 npm ci
