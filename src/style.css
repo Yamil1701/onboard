@@ -789,14 +789,14 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 .archive-count { display: block; margin-top: 4px; color: #e1bfa9; font: 12px/1.2 Arial, sans-serif; }
 .archive-caret { width: 9px; height: 9px; border: solid #e9bd86; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); margin: -5px 4px 0 0; }
 .wallet-archive[open] .archive-caret { transform: rotate(225deg); margin-top: 5px; }
-.archive-list { display: grid; box-sizing: border-box; align-content: start; overflow: clip; gap: 5px; padding: 0 7px 7px; }
+.archive-list { display: grid; box-sizing: border-box; align-content: start; overflow: clip; gap: 8px; padding: 0 9px 9px; }
 .archive-entry {
   display: grid;
-  grid-template-columns: 50px minmax(0, 1fr);
-  gap: 9px;
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: 12px;
   align-items: center;
-  min-height: 49px;
-  padding: 5px 7px;
+  min-height: 142px;
+  padding: 10px;
   border: 1px solid #997766;
   border-radius: 5px;
   color: #fff2d9;
@@ -805,24 +805,17 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 }
 .archive-entry:is(:hover, :active) { background: #69483a; }
 .collection-cover {
-  --ink: #61432f;
-  display: grid;
-  place-items: center;
-  width: 46px;
-  height: 48px;
-  padding-inline-start: 3px;
-  border: 3px double currentColor;
+  display: block;
+  width: 80px;
+  height: 120px;
+  object-fit: cover;
+  border: 1px solid #d5b980;
   border-radius: 2px 4px 4px 2px;
-  color: var(--ink);
   background: var(--slip-paper);
-  box-shadow: inset 4px 0 #a17e4c44, 1px 2px 4px #22151188;
-  font: 600 24px/1 var(--serif);
+  box-shadow: 2px 3px 7px #22151199;
 }
-.collection-cover:is([data-album="mapas"], [data-album="verduras"]) { --ink: #3e5847; }
-.collection-cover:is([data-album="vino"], [data-album="frutas"]) { --ink: #793d41; }
-.collection-cover:is([data-album="juegos"], [data-album="bebidas"]) { --ink: #395668; }
 .archive-entry strong, .archive-entry small { display: block; line-height: 1.2; }
-.archive-entry strong { font-size: 13px; }
+.archive-entry strong { font: 600 18px/1.2 var(--serif); }
 .archive-entry small { margin-top: 3px; color: #ead0b8; font-size: 11px; }
 .wallet :is(.document-entry, summary, .archive-entry):focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 @media (min-width: 650px) {

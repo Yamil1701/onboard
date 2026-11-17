@@ -7,11 +7,6 @@ const archiveHash = '#archivo-';
 const archivePath = `${import.meta.env.BASE_URL}materiales/archivo/`;
 const photoCount = Object.values(albums).reduce((count, album) => count + album.photos.length, 0);
 
-const coverMarks: Record<AlbumId, string> = {
-  mapas: '✥', vino: '♧', juegos: '✦', vocabulario: 'Aa',
-  memoria: '❖', frutas: '❧', verduras: '✿', bebidas: '◇',
-};
-
 function find<T extends HTMLElement = HTMLElement>(id: string) {
   return document.getElementById(id) as T;
 }
@@ -148,11 +143,12 @@ export function createArchive(canOpen: () => boolean) {
     const button = document.createElement('button');
     button.className = 'archive-entry';
     button.type = 'button';
-    const thumb = document.createElement('span');
+    const thumb = new Image(80, 120);
     thumb.className = 'collection-cover';
-    thumb.dataset.album = id;
-    thumb.setAttribute('aria-hidden', 'true');
-    thumb.textContent = coverMarks[id];
+    thumb.src = `${archivePath}portadas/${id}.webp`;
+    thumb.alt = '';
+    thumb.loading = 'lazy';
+    thumb.decoding = 'async';
     const text = document.createElement('span');
     text.append(document.createElement('strong'), document.createElement('small'));
     button.append(thumb, text);
