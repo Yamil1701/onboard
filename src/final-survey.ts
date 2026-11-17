@@ -1,0 +1,142 @@
+import type { Language } from './copy';
+import { finalSurveyCopy } from './final-survey-copy';
+
+type Answer = 0 | 1 | 2 | null;
+type SurveyState = { answers: Answer[]; step: number; submitted: boolean };
+const emptyState = (): SurveyState => ({ answers: [null, null, null, null, null], step: 0, submitted: false });
+const isAnswer = (value: unknown): value is Answer => value === null || value === 0 || value === 1 || value === 2;
+
+export function createFinalSurvey(onChange: () => void) {
+  const root = document.querySelector<HTMLElement>('#final-survey')!;
+  const find = <T extends HTMLElement = HTMLElement>(id: string) => root.querySelector<T>(`#${id}`)!;
+  const paper = find('final-paper');
+  const form = find<HTMLFormElement>('final-form');
+  const question = find('final-question');
+  const radios = [...form.querySelectorAll<HTMLInputElement>('input')];
+  const previous = find<HTMLButtonElement>('final-previous');
+  const next = find<HTMLButtonElement>('final-next');
+  const review = find('final-review');
+  const reviewList = find('final-review-list');
+  const completed = find('final-completed');
+  const expectationLine = find('final-expectation');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let data = emptyState();
+  let language: Language = 'ar';
+  let expectation = '';
+  let editingFromReview = false;
+  let motion: Animation | undefined;
+  const allAnswered = () => data.answers.every(value => value !== null);
+
+  function render() {
+    const words = finalSurveyCopy[language];
+    for (const element of root.querySelectorAll<HTMLElement>('[data-final-copy]')) {
+      const value = words[element.dataset.finalCopy as keyof typeof words];
+      if (typeof value === 'string') element.textContent = value;
+    }
+    const reviewing = data.step === 5;
+    root.dataset.mode = data.submitted ? 'completed' : reviewing ? 'review' : 'question';
+    form.hidden = reviewing || data.submitted;
+    review.hidden = !reviewing || data.submitted;
+    completed.hidden = !data.submitted;
+    expectationLine.hidden = !expectation || data.step !== 0 || data.submitted;
+    expectationLine.textContent = words.expectation.replace('{answer}', expectation);
+    find('final-position').textContent = words.progress.replace('{count}', String(data.answers.filter(value => value !== null).length));
+    root.querySelectorAll<HTMLElement>('.final-route i').forEach((point, index) => {
+      point.classList.toggle('is-answered', data.answers[index] !== null);
+      point.classList.toggle('is-current', index === data.step && !data.submitted);
+    });
+    if (!reviewing) {
+      const item = words.questions[data.step];
+      question.textContent = item.question;
+      find('final-question-position').textContent = words.position.replace('{step}', String(data.step + 1));
+      radios.forEach((radio, index) => {
+        radio.checked = data.answers[data.step] === index;
+        radio.nextElementSibling!.textContent = item.options[index];
+      });
+      previous.hidden = data.step === 0;
+      next.disabled = data.answers[data.step] === null;
+      next.textContent = data.step === 4 || editingFromReview ? words.review : words.next;
+    }
+    reviewList.replaceChildren(...words.questions.map((item, index) => {
+      const row = document.createElement('li');
+      const title = document.createElement('h3');
+      title.textContent = item.question;
+      const answer = document.createElement('p');
+      const value = data.answers[index];
+      answer.textContent = value === null ? '—' : item.options[value];
+      const edit = document.createElement('button');
+      edit.type = 'button';
+      edit.textContent = words.edit.replace('{step}', String(index + 1));
+      edit.addEventListener('click', () => {
+        editingFromReview = true;
+        data.submitted = false;
+        data.step = index;
+        update();
+      });
+      row.append(title, answer, edit);
+      return row;
+    }));
+  }
+
+  function focusPage(animate = true) {
+    const target = find(data.submitted ? 'final-done-title' : data.step === 5 ? 'final-review-title' : 'final-question');
+    target.focus({ preventScroll: true });
+    paper.scrollIntoView({ block: 'start', behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+    motion?.cancel();
+    if (animate && !reducedMotion.matches) motion = paper.animate([
+      { opacity: .45, transform: 'translateY(7px)' }, { opacity: 1, transform: 'translateY(0)' },
+    ], { duration: 260, easing: 'ease-out' });
+  }
+
+  function update() { render(); onChange(); focusPage(); }
+  form.addEventListener('change', event => {
+    if (!(event.target instanceof HTMLInputElement)) return;
+    const value = Number(event.target.value);
+    if (value !== 0 && value !== 1 && value !== 2) return;
+    data.answers[data.step] = value;
+    render();
+    onChange();
+  });
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    if (data.answers[data.step] === null) return;
+    data.step = editingFromReview && allAnswered() ? 5 : Math.min(5, data.step + 1);
+    editingFromReview = false;
+    update();
+  });
+  previous.addEventListener('click', () => {
+    data.step = Math.max(0, data.step - 1);
+    editingFromReview = false;
+    update();
+  });
+  find('final-finish').addEventListener('click', () => {
+    if (!allAnswered()) return;
+    data.submitted = true;
+    update();
+  });
+  find('final-review-again').addEventListener('click', () => {
+    data.submitted = false;
+    data.step = 5;
+    update();
+  });
+  render();
+
+  return {
+    translate(lang: Language, initialExpectation: string) {
+      // Preserve the focused radio and keyboard arrow navigation on language changes.
+      language = lang; expectation = initialExpectation; render();
+    },
+    snapshot: () => ({ ...data, answers: [...data.answers] }),
+    restore(value: unknown) {
+      if (!value || typeof value !== 'object') return;
+      const stored = value as Record<string, unknown>;
+      if (!Array.isArray(stored.answers) || stored.answers.length !== 5 || !stored.answers.every(isAnswer)) return;
+      const firstMissing = stored.answers.indexOf(null);
+      const requested = typeof stored.step === 'number' && Number.isInteger(stored.step) && stored.step >= 0 && stored.step <= 5 ? stored.step : 0;
+      data = { answers: [...stored.answers], step: firstMissing === -1 ? requested : Math.min(requested, firstMissing), submitted: firstMissing === -1 && stored.submitted === true };
+      if (data.submitted) data.step = 5;
+      render();
+    },
+    reset() { motion?.cancel(); data = emptyState(); editingFromReview = false; render(); },
+  };
+}

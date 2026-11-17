@@ -22,12 +22,20 @@ export function createMemoryTransition() {
     caption.textContent = copy[language][returning ? 'memoryReturning' : 'memoryOpening'];
   }
 
+  function waitForContinue() {
+    timeline = undefined;
+    root.dataset.ready = '';
+    skip.disabled = false;
+  }
+
   function cancel() {
     timeline?.kill();
     timeline = undefined;
     gsap.killTweensOf(caption);
     onComplete = undefined;
     root.hidden = true;
+    delete root.dataset.ready;
+    skip.disabled = false;
     stage.inert = false;
     journey.classList.remove('is-recalling');
     gsap.set([root, book, flap, room, caption], { clearProps: 'opacity,transform' });
@@ -44,15 +52,13 @@ export function createMemoryTransition() {
     complete?.();
   }
 
-  skip.addEventListener('click', finish);
+  skip.addEventListener('click', () => {
+    if (!skip.disabled) finish();
+  });
 
   return {
     play(complete: () => void) {
       cancel();
-      if (reducedMotion.matches) {
-        complete();
-        return;
-      }
       onComplete = complete;
       returning = false;
       renderCaption();
@@ -61,10 +67,20 @@ export function createMemoryTransition() {
       journey.classList.add('is-recalling');
       lockedScroll = window.scrollY;
       document.documentElement.classList.add('is-memory-transition');
-      skip.focus({ preventScroll: true });
+      skip.disabled = true;
+      root.focus({ preventScroll: true });
       gsap.set(root, { opacity: 1 });
       gsap.set(room, { opacity: 0 });
-      timeline = gsap.timeline({ onComplete: finish })
+      if (reducedMotion.matches) {
+        returning = true;
+        renderCaption();
+        gsap.set(book, { opacity: 0 });
+        gsap.set(room, { opacity: 1 });
+        waitForContinue();
+        skip.focus({ preventScroll: true });
+        return;
+      }
+      timeline = gsap.timeline({ onComplete: waitForContinue })
         .fromTo(book, { y: 34, rotation: -3, opacity: 0 }, {
           y: 0, rotation: 0, opacity: 1, duration: .95, ease: 'sine.out',
         }, 0)
@@ -76,8 +92,7 @@ export function createMemoryTransition() {
           gsap.fromTo(caption, { opacity: .25 }, { opacity: 1, duration: .5 });
         }, [], 2.5)
         .fromTo(room, { opacity: 0 }, { opacity: 1, duration: 1.2, ease: 'sine.inOut' }, 2.4)
-        .to(book, { opacity: 0, duration: 1.2, ease: 'sine.inOut' }, 2.4)
-        .to(root, { opacity: 0, duration: .9, ease: 'sine.inOut' }, 3.6);
+        .to(book, { opacity: 0, duration: 1.2, ease: 'sine.inOut' }, 2.4);
     },
     translate(lang: Language) {
       language = lang;

@@ -174,6 +174,7 @@
             </details>
           </div>
         </div>
+        <button class="final-resume" id="resume-final-survey" type="button" data-copy="finalSurvey" hidden>Última estación</button>
       </section>
 
       <section class="workshop" id="workshop" aria-labelledby="workshop-title" hidden>
@@ -245,21 +246,60 @@
               <summary data-workshop-copy="summary">Las respuestas que construimos</summary>
               <ol id="workshop-summary"></ol>
             </details>
-            <button type="button" class="primary" data-back-materials data-workshop-copy="back">Volver a materiales</button>
+            <button type="button" class="primary" id="open-final-survey" data-copy="enterFinalSurvey">Continuar a la última estación</button>
+            <button type="button" class="workshop-replay" data-back-materials data-workshop-copy="back">Volver a materiales</button>
             <button type="button" class="workshop-replay" id="workshop-replay" data-workshop-copy="replay">Volver a participar</button>
           </section>
           <p class="workshop-feedback" id="workshop-feedback" role="status" data-workshop-copy="shareFeedback" hidden>Respuesta compartida con el grupo.</p>
           <p class="workshop-source" data-workshop-copy="source">Actividad del informe de práctica · págs. 7–8</p>
         </div>
       </section>
+      <section class="final-survey" id="final-survey" aria-labelledby="final-title" hidden>
+        <button type="button" class="workshop-back" id="final-back"><span aria-hidden="true">‹</span><span data-final-copy="back">Volver al cuaderno</span></button>
+        <header class="final-heading">
+          <p class="final-kicker">FR 101 · 05 / 06</p>
+          <h1 id="final-title" data-final-copy="title" tabindex="-1">Última estación</h1>
+          <p data-final-copy="intro">Antes de llegar, tu mirada también forma parte de este viaje.</p>
+        </header>
+        <div class="final-route" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <p class="final-position" id="final-position" role="status"></p>
+        <p class="final-expectation" id="final-expectation"></p>
+        <div class="workshop-paper final-paper" id="final-paper">
+          <form id="final-form">
+            <p class="final-question-position" id="final-question-position"></p>
+            <fieldset>
+              <legend id="final-question" tabindex="-1"></legend>
+              <div class="final-options">
+                <label><input type="radio" name="final-answer" value="0"><span></span></label>
+                <label><input type="radio" name="final-answer" value="1"><span></span></label>
+                <label><input type="radio" name="final-answer" value="2"><span></span></label>
+              </div>
+            </fieldset>
+            <div class="final-actions"><button type="button" class="final-secondary" id="final-previous" data-final-copy="previous">Anterior</button><button type="submit" class="primary" id="final-next" disabled>Continuar</button></div>
+          </form>
+          <section id="final-review" aria-labelledby="final-review-title" hidden>
+            <h2 id="final-review-title" tabindex="-1" data-final-copy="reviewTitle">Tu mirada sobre el viaje</h2>
+            <p data-final-copy="reviewIntro">Podés cambiar cualquier respuesta antes de finalizar.</p>
+            <ol class="final-review-list" id="final-review-list"></ol>
+            <button type="button" class="primary" id="final-finish" data-final-copy="finish">Finalizar encuesta</button>
+          </section>
+          <section id="final-completed" aria-labelledby="final-done-title" hidden>
+            <span class="final-mark" aria-hidden="true">✓</span>
+            <h2 id="final-done-title" tabindex="-1" data-final-copy="doneTitle">Gracias por dejar tu huella</h2>
+            <p data-final-copy="done"></p>
+            <div class="final-actions"><button type="button" class="primary" id="final-materials" data-final-copy="materials">Volver a materiales</button><button type="button" class="final-secondary" id="final-review-again" data-final-copy="review">Revisar mis respuestas</button></div>
+          </section>
+          <p class="final-note" data-final-copy="local">En esta versión de prueba, las respuestas se guardan en este navegador durante la visita.</p>
+        </div>
+      </section>
     </main>
-    <div class="memory-transition" id="memory-transition" role="region" aria-label="Cuaderno de a bordo" hidden>
+    <div class="memory-transition" id="memory-transition" role="region" tabindex="-1" aria-label="Cuaderno de a bordo" hidden>
       <div class="memory-room"><img src="./src/assets/workshop-room.webp" width="1200" height="800" alt="" decoding="async"></div>
       <div class="memory-book">
         <div class="memory-page"><img src="./src/assets/workshop-room.webp" width="1200" height="800" alt="" decoding="async"><span data-copy="memoryPage">Una página de la práctica</span></div>
         <div class="memory-flap"><svg aria-hidden="true"><use href="#plane"/></svg><span data-copy="workshop">Cuaderno de a bordo</span></div>
       </div>
-      <p class="memory-caption" id="memory-caption" aria-live="polite"></p>
+      <div class="memory-caption"><p id="memory-caption" aria-live="polite"></p><p class="memory-invitation" data-copy="memoryReady">¿Listo para ser profe por un momento?</p></div>
       <button type="button" id="skip-memory" data-copy="skipMemory">Continuar</button>
     </div>
     <footer class="progress" id="progress" hidden>

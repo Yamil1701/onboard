@@ -1,0 +1,54 @@
+import type { Language } from './copy';
+
+// Preguntas recuperadas de la conversación del 15/11 y del mensaje de Tía Mimi.
+// Se conservan las opciones recibidas; la traducción sigue la versión bilingüe.
+export const finalSurveyCopy = {
+  ar: {
+    title: 'Última estación',
+    intro: 'Antes de llegar, tu mirada también forma parte de este viaje.',
+    instruction: 'Elegí la respuesta que mejor refleje tu experiencia.',
+    expectation: 'Antes de despegar elegiste: {answer}.',
+    position: 'Pregunta {step} de 5',
+    progress: '{count} de 5 respuestas',
+    next: 'Continuar', previous: 'Anterior', review: 'Revisar mis respuestas',
+    reviewTitle: 'Tu mirada sobre el viaje',
+    reviewIntro: 'Podés cambiar cualquier respuesta antes de finalizar.',
+    edit: 'Cambiar respuesta {step}',
+    finish: 'Finalizar encuesta',
+    doneTitle: 'Gracias por dejar tu huella',
+    done: 'Tus cinco respuestas quedaron guardadas en esta visita. Gracias por compartir tu mirada sobre la experiencia.',
+    local: 'En esta versión de prueba, las respuestas se guardan en este navegador durante la visita.',
+    back: 'Volver al cuaderno', materials: 'Volver a materiales',
+    questions: [
+      { question: '¿Esta experiencia cumplió tus expectativas?', options: ['No es lo que yo esperaba', 'Cumplió mis expectativas', 'Superó mis expectativas'] },
+      { question: '¿Qué te parecieron las exposiciones?', options: ['Confusas', 'Claras y accesibles', 'Interesantes'] },
+      { question: 'Respecto a los materiales didácticos, ¿qué te pareció su utilización?', options: ['Adecuada', 'Excesiva', 'Entretenida y útil'] },
+      { question: 'A partir de las experiencias contadas, sistematizar estas experiencias te va a servir para:', options: ['No cometer los mismos errores.', 'Tener en cuenta lo positivo, para enriquecerme y aplicarlo.', 'Tomarlo como un aprendizaje del cual servirme cuando sea necesario.'] },
+      { question: 'Y al final, ¿qué me llevo de este viaje?', options: ['¿Respuestas a mis interrogantes?', '¿Una visión clara para evitar errores en mi recorrido?', '¿Herramientas valiosas que me guíen a superar los posibles obstáculos?'] },
+    ],
+  },
+  fr: {
+    title: 'Dernière étape',
+    intro: 'Avant l’arrivée, ton regard fait aussi partie de ce voyage.',
+    instruction: 'Choisis la réponse qui reflète le mieux ton expérience.',
+    expectation: 'Avant le décollage, tu as choisi : {answer}.',
+    position: 'Question {step} sur 5',
+    progress: '{count} réponses sur 5',
+    next: 'Continuer', previous: 'Précédente', review: 'Relire mes réponses',
+    reviewTitle: 'Ton regard sur le voyage',
+    reviewIntro: 'Tu peux modifier chaque réponse avant de terminer.',
+    edit: 'Modifier la réponse {step}',
+    finish: 'Terminer le questionnaire',
+    doneTitle: 'Merci d’avoir laissé ta trace',
+    done: 'Tes cinq réponses sont enregistrées pour cette visite. Merci d’avoir partagé ton regard sur l’expérience.',
+    local: 'Dans cette version de test, les réponses sont conservées dans ce navigateur pendant la visite.',
+    back: 'Retour au carnet', materials: 'Retour aux ressources',
+    questions: [
+      { question: 'Cette expérience a-t-elle répondu à vos attentes ?', options: ['Ce n’est pas ce que j’attendais', 'Elle a répondu à mes attentes', 'Elle a dépassé mes attentes'] },
+      { question: 'Que pensez-vous des expositions ?', options: ['Confuses', 'Claires et accessibles', 'Intéressantes'] },
+      { question: 'Concernant les supports didactiques, que pensez-vous de leur utilisation ?', options: ['Adaptée', 'Excessive', 'Divertissante et utile'] },
+      { question: 'À partir des expériences racontées, systématiser ces expériences vous servira à :', options: ['Ne pas commettre les mêmes erreurs.', 'Prendre en compte le positif, pour m’enrichir et l’appliquer.', 'Le prendre comme un apprentissage dont je pourrai me servir quand ce sera nécessaire.'] },
+      { question: 'Et à la fin, qu’est-ce que je retiens de ce voyage ?', options: ['Des réponses à mes questions ?', 'Une vision claire pour éviter les erreurs dans mon parcours ?', 'Des outils précieux qui me guident pour surmonter les obstacles possibles ?'] },
+    ],
+  },
+} satisfies Record<Language, unknown>;

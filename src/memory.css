@@ -50,6 +50,10 @@
 .memory-flap svg { font-size: 39px; }
 .memory-flap span { font: 600 27px/1.2 var(--serif); }
 .memory-caption { position: absolute; z-index: 3; right: 23px; bottom: max(118px, 16%); left: 23px; color: #fff0cf; text-align: center; font: 22px/1.5 var(--reading); text-shadow: 0 2px 9px #000; }
+.memory-invitation { margin-top: 12px; font-weight: 700; visibility: hidden; }
+.memory-transition[data-ready] .memory-invitation { visibility: visible; }
+.memory-transition:focus { outline: none; }
+#skip-memory:disabled { opacity: .45; cursor: default; }
 #skip-memory { position: absolute; z-index: 4; bottom: max(35px, env(safe-area-inset-bottom, 0px)); min-height: 44px; padding: 9px 19px; border: 1px solid #bca67a99; border-radius: 4px; color: #f4e8c9; background: #132831aa; font: 14px/1.4 var(--reading); }
 .is-recalling .progress { opacity: 0; }
 /* The fixed cinematic must not let the longer notebook scroll underneath it. */
