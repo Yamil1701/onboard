@@ -1,5 +1,6 @@
 import albums from './archive-data.json';
 import { copy, type Language } from './copy';
+import { bindPageSwipes } from './page-swipes';
 
 type AlbumId = keyof typeof albums;
 const albumIds = Object.keys(albums) as AlbumId[];
@@ -50,12 +51,14 @@ export function createArchive(canOpen: () => boolean) {
     position.textContent = `${index + 1} / ${album.photos.length}`;
     if (openImage.getAttribute('href') !== src) {
       const image = new Image();
+      image.draggable = false;
       pendingImage = image;
       image.decoding = 'async';
       image.src = src;
       frame.replaceChildren();
       frame.dataset.loading = '';
       frame.setAttribute('aria-busy', 'true');
+      view.removeAttribute('data-page-swipe');
       openImage.setAttribute('href', src);
       view.scrollTop = 0;
 
@@ -71,6 +74,7 @@ export function createArchive(canOpen: () => boolean) {
         pendingImage = undefined;
         delete frame.dataset.loading;
         frame.removeAttribute('aria-busy');
+        swipes.refresh();
       });
     } else {
       const image = frame.querySelector('img');
@@ -106,6 +110,8 @@ export function createArchive(canOpen: () => boolean) {
       history.replaceState(history.state, '', location.pathname + location.search);
     }
     if (active) {
+      swipes.reset();
+      view.removeAttribute('data-page-swipe');
       const trigger = buttons.get(active);
       active = undefined;
       panel.inert = true;
@@ -138,6 +144,15 @@ export function createArchive(canOpen: () => boolean) {
     if (focused === prev && prev.disabled) next.focus();
     if (focused === next && next.disabled) prev.focus();
   }
+
+  const swipes = bindPageSwipes(view, frame, {
+    canStart: () => Boolean(active) && !panel.hidden && !pendingImage && Boolean(frame.querySelector('img')),
+    turnPage(delta) {
+      if (delta < 0 ? prev.disabled : next.disabled) return false;
+      step(delta);
+      return true;
+    },
+  });
 
   for (const id of albumIds) {
     const button = document.createElement('button');
@@ -207,6 +222,7 @@ export function createArchive(canOpen: () => boolean) {
     },
     syncRoute,
     reset() {
+      swipes.reset();
       listAnimation?.cancel();
       listAnimation = undefined;
       list.inert = false;

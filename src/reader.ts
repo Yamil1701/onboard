@@ -1,5 +1,6 @@
 import workerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
 import type { copy, CopyKey } from './copy';
+import { bindPageSwipes } from './page-swipes';
 
 type PdfLibrary = typeof import('pdfjs-dist');
 type PdfDocument = Awaited<ReturnType<PdfLibrary['getDocument']>['promise']>;
@@ -25,6 +26,7 @@ export function createReader(onOpen: () => boolean) {
   const minus = find<HTMLButtonElement>('zoom-out');
   const plus = find<HTMLButtonElement>('zoom-in');
   const fit = find<HTMLButtonElement>('zoom-fit');
+  const swipeHint = find('pdf-swipe-hint');
   const closeButton = find<HTMLButtonElement>('close-reader');
   const stage = document.querySelector<HTMLElement>('.stage')!;
   const progress = document.querySelector<HTMLElement>('#progress')!;
@@ -55,6 +57,8 @@ export function createReader(onOpen: () => boolean) {
     notice.hidden = mode === 'ready';
     notice.classList.toggle('is-loading', loading);
     paper.setAttribute('aria-busy', String(loading));
+    swipes.refresh();
+    swipeHint.hidden = !usable || zoom !== 0;
     retry.hidden = download.hidden = mode !== 'error';
     if (mode !== 'ready' && words) {
       const key: CopyKey = mode === 'error' ? 'errorPdf' : 'loadingPdf';
@@ -131,6 +135,7 @@ export function createReader(onOpen: () => boolean) {
       title.focus({ preventScroll: true });
       void load();
     } else if (!element.hidden) {
+      swipes.reset();
       priorOffset = { x: view.scrollLeft, y: view.scrollTop };
       ++generation;
       renderer?.cancel();
@@ -152,6 +157,7 @@ export function createReader(onOpen: () => boolean) {
   }
 
   function changePage(delta: number) {
+    if (mode !== 'ready' || !pdf || number + delta < 1 || number + delta > pdf.numPages) return;
     number += delta;
     priorOffset = { x: 0, y: 0 };
     void render();
@@ -165,6 +171,15 @@ export function createReader(onOpen: () => boolean) {
     priorOffset = { x, y };
     void render(priorOffset);
   }
+
+  const swipes = bindPageSwipes(view, paper, {
+    canStart: () => !element.hidden && mode === 'ready' && zoom === 0,
+    turnPage(delta) {
+      if (delta < 0 ? prev.disabled : next.disabled) return false;
+      changePage(delta);
+      return true;
+    },
+  });
 
   openButton.addEventListener('click', () => {
     history.pushState({ ...history.state, passportReader: true }, '', reportHash);
@@ -195,6 +210,7 @@ export function createReader(onOpen: () => boolean) {
     },
     syncRoute,
     reset() {
+      swipes.reset();
       number = 1;
       zoom = 0;
       priorOffset = { x: 0, y: 0 };

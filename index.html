@@ -25,14 +25,16 @@
     <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></symbol>
     <symbol id="pencil" viewBox="0 0 24 24"><path d="m5 15-1 5 5-1L20 8a1.4 1.4 0 0 0 0-2l-2-2a1.4 1.4 0 0 0-2 0ZM14.5 5.5l4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="flag-ar" viewBox="0 0 24 16"><path fill="#75b9df" d="M0 0h24v16H0z"/><path fill="#fffdf5" d="M0 5.33h24v5.34H0z"/><g stroke="#d6a640" stroke-width=".65"><path d="M12 5.8v4.4M9.8 8h4.4M10.45 6.45l3.1 3.1m0-3.1-3.1 3.1"/><circle cx="12" cy="8" r="1.1" fill="#efc85c"/></g></symbol>
+    <symbol id="flag-fr" viewBox="0 0 24 16"><path fill="#163d86" d="M0 0h8v16H0z"/><path fill="#fffdf5" d="M8 0h8v16H8z"/><path fill="#df4e54" d="M16 0h8v16h-8z"/></symbol>
   </svg>
 
   <div class="journey" id="journey" data-phase="gate">
     <header class="topbar">
       <span class="stage-label"><svg aria-hidden="true"><use href="#plane"/></svg><span id="stage-label" data-copy="welcome">Bienvenida</span></span>
-      <div class="languages" role="group" id="languages" aria-label="Idioma">
-        <button type="button" data-lang="ar" aria-pressed="true" aria-label="Español (Argentina)">AR</button>
-        <button type="button" data-lang="fr" aria-pressed="false" aria-label="Français" lang="fr">FR</button>
+      <div class="languages" role="group" id="languages" data-language="ar" aria-label="Idioma">
+        <button type="button" data-lang="ar" aria-pressed="true" aria-label="Español (Argentina)"><svg class="language-flag" aria-hidden="true"><use href="#flag-ar"/></svg><span>AR</span></button>
+        <button type="button" data-lang="fr" aria-pressed="false" aria-label="Français" lang="fr"><svg class="language-flag" aria-hidden="true"><use href="#flag-fr"/></svg><span>FR</span></button>
       </div>
     </header>
     <main class="stage">
@@ -159,6 +161,10 @@
                 <p class="slip-status" data-copy="pendingMaterials">Materiales definitivos pendientes</p>
               </article>
             </div>
+            <button class="memory-entry" id="enter-workshop" type="button">
+              <img src="./src/assets/workshop-room.webp" width="1200" height="800" alt="" loading="lazy" decoding="async">
+              <span class="memory-entry-paper"><small data-copy="workshop">Cuaderno de a bordo</small><strong data-copy="workshopTitle">¿Confirmás o verificás?</strong><span data-copy="workshopInvitation">Una página de mis prácticas, una decisión en tus manos.</span><em data-copy="enterWorkshop">Abrir el cuaderno</em></span>
+            </button>
             <details class="wallet-archive" id="wallet-archive">
               <summary>
                 <span><span class="archive-title" data-copy="archiveTitle">Archivos de trabajo</span><span class="archive-count" id="archive-count"></span></span>
@@ -168,20 +174,16 @@
             </details>
           </div>
         </div>
-        <div class="materials-next">
-          <p data-copy="workshopInvitation">Una pregunta del aula. Ahora la decisión es tuya.</p>
-          <button class="primary" id="enter-workshop" type="button" data-copy="enterWorkshop">Entrar al aula</button>
-        </div>
       </section>
 
       <section class="workshop" id="workshop" aria-labelledby="workshop-title" hidden>
-        <div class="workshop-scene" aria-hidden="true"><img src="./src/assets/workshop-room.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"></div>
         <div class="workshop-inner">
           <button class="workshop-back" data-back-materials type="button"><span aria-hidden="true">‹</span><span data-workshop-copy="back">Volver a materiales</span></button>
           <header class="workshop-heading">
             <h1 id="workshop-title" tabindex="-1" data-workshop-copy="title">¿Confirmás o verificás?</h1>
             <p id="workshop-welcome"></p>
           </header>
+          <figure class="workshop-scene"><img src="./src/assets/workshop-room.webp" width="1200" height="800" alt="" decoding="async"><figcaption data-workshop-copy="memoryCaption">Una página de la práctica · Turismo y BSPA</figcaption></figure>
 
           <article class="workshop-paper" id="workshop-paper" tabindex="-1" aria-labelledby="workshop-question">
             <div class="workshop-paper-header"><span id="workshop-context"></span><span id="workshop-position" aria-live="polite"></span></div>
@@ -193,7 +195,7 @@
                 <button type="button" data-decision="verify"><svg aria-hidden="true"><use href="#file"/></svg><span data-workshop-copy="verify">Lo verificaría con el grupo</span></button>
               </div>
             </div>
-            <div id="workshop-response" hidden>
+            <div id="workshop-response" tabindex="-1" hidden>
               <p class="workshop-decision-echo" id="workshop-decision-echo"></p>
               <button class="workshop-undo" id="workshop-change-decision" type="button" data-workshop-copy="changeDecision" hidden>Volver a elegir</button>
               <button type="button" class="workshop-resource" id="workshop-consult"><svg aria-hidden="true"><use href="#file"/></svg><span>Consultar el material</span></button>
@@ -246,10 +248,20 @@
             <button type="button" class="primary" data-back-materials data-workshop-copy="back">Volver a materiales</button>
             <button type="button" class="workshop-replay" id="workshop-replay" data-workshop-copy="replay">Volver a participar</button>
           </section>
+          <p class="workshop-feedback" id="workshop-feedback" role="status" data-workshop-copy="shareFeedback" hidden>Respuesta compartida con el grupo.</p>
           <p class="workshop-source" data-workshop-copy="source">Actividad del informe de práctica · págs. 7–8</p>
         </div>
       </section>
     </main>
+    <div class="memory-transition" id="memory-transition" role="region" aria-label="Cuaderno de a bordo" hidden>
+      <div class="memory-room"><img src="./src/assets/workshop-room.webp" width="1200" height="800" alt="" decoding="async"></div>
+      <div class="memory-book">
+        <div class="memory-page"><img src="./src/assets/workshop-room.webp" width="1200" height="800" alt="" decoding="async"><span data-copy="memoryPage">Una página de la práctica</span></div>
+        <div class="memory-flap"><svg aria-hidden="true"><use href="#plane"/></svg><span data-copy="workshop">Cuaderno de a bordo</span></div>
+      </div>
+      <p class="memory-caption" id="memory-caption" aria-live="polite"></p>
+      <button type="button" id="skip-memory" data-copy="skipMemory">Continuar</button>
+    </div>
     <footer class="progress" id="progress" hidden>
       <div class="progress-track" aria-hidden="true">
         <i></i><i></i><i></i><i></i><i></i><i></i>
@@ -277,6 +289,7 @@
           <button type="button" id="zoom-in" disabled><span aria-hidden="true">+</span><span class="visually-hidden" data-copy="zoomIn">Acercar</span></button>
           <button type="button" id="zoom-fit" disabled data-copy="fit">Ajustar</button>
         </div>
+        <span class="reader-gesture-hint" id="pdf-swipe-hint" data-copy="swipePages" hidden>Deslizá hacia los lados para pasar de página</span>
       </div>
       <div class="reader-view" id="reader-view" tabindex="0" role="region" aria-labelledby="reader-title">
         <div id="reader-notice" class="reader-notice" role="status" hidden>
@@ -296,6 +309,7 @@
         <button type="button" id="previous-photo" data-copy="previousPhoto">Anterior</button>
         <output id="photo-position" aria-live="polite"></output>
         <button type="button" id="next-photo" data-copy="nextPhoto">Siguiente</button>
+        <span class="reader-gesture-hint" data-copy="swipePages">Deslizá hacia los lados para pasar de página</span>
       </div>
       <div class="reader-view archive-view" id="archive-view" tabindex="0" role="region" aria-labelledby="archive-reader-title">
         <figure class="archive-figure">

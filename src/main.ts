@@ -4,8 +4,10 @@ import { createTakeoff, flightExit } from './takeoff';
 import { createReader } from './reader';
 import { createArchive } from './archive';
 import { createWorkshop } from './workshop';
+import { createMemoryTransition } from './memory-transition';
 import './style.css';
 import './workshop.css';
+import './memory.css';
 
 type Phase = 'gate' | 'boarding' | 'takeoff' | 'survey' | 'materials' | 'workshop';
 type Expectation = 'adapt' | 'play' | 'ideas';
@@ -64,16 +66,19 @@ const state: {
   name: string;
   selected: Expectation | null;
   submitted: Expectation | null;
-} = { language: 'ar', name: '', selected: null, submitted: null };
+  furthestStop: number;
+} = { language: 'ar', name: '', selected: null, submitted: null, furthestStop: 1 };
 let storageBlock = false;
 let flight: gsap.core.Timeline | undefined;
 let flightBeat: 'runway' | 'climb' | null = null;
 let walletOpening: gsap.core.Timeline | undefined;
 let passportOpening: gsap.core.Timeline | undefined;
 let passportOpened = false;
+let closingMemory: Animation | undefined;
 const reader = createReader(() => phase === 'materials');
 const archive = createArchive(() => phase === 'materials');
 const workshop = createWorkshop(save);
+const memory = createMemoryTransition();
 
 function isExpectation(value: unknown): value is Expectation {
   return value === 'adapt' || value === 'play' || value === 'ideas';
@@ -91,6 +96,10 @@ function restore() {
     if (stored.stop === 4 && state.submitted) phase = 'workshop';
     else if (stored.stop === 3 && state.submitted) phase = 'materials';
     else if (stored.stop === 2) phase = 'survey';
+    const priorProgress = Number.isInteger(stored.furthestStop) && stored.furthestStop >= 1 && stored.furthestStop <= 4
+      ? stored.furthestStop : 1;
+    const participated = workshop.snapshot().replies.some(reply => reply !== null) ? 4 : 1;
+    state.furthestStop = Math.max(currentStop(), priorProgress, participated);
   } catch {
     // A malformed or inaccessible session should still allow boarding.
   }
@@ -155,6 +164,7 @@ function renderLanguage(animateIntro = false) {
     element.textContent = language[element.dataset.copy as CopyKey];
   }
   languageGroup.setAttribute('aria-label', language.language);
+  languageGroup.dataset.language = state.language;
   for (const button of languageButtons) {
     button.setAttribute('aria-pressed', String(button.dataset.lang === state.language));
   }
@@ -163,6 +173,7 @@ function renderLanguage(animateIntro = false) {
   reader.translate(language);
   archive.translate(state.language);
   workshop.translate(state.language, state.name);
+  memory.translate(state.language);
 }
 
 function currentStop() {
@@ -180,8 +191,9 @@ function renderPhase() {
   workshopSection.hidden = phase !== 'workshop';
   progress.hidden = phase === 'gate';
   const stop = currentStop();
-  progress.dataset.stop = String(stop);
-  progressValue.textContent = `${stop} / 6`;
+  state.furthestStop = Math.max(stop, state.furthestStop);
+  progress.dataset.stop = String(state.furthestStop);
+  progressValue.textContent = `${state.furthestStop} / 6`;
 }
 
 function openBoarding(focusButton = false) {
@@ -355,26 +367,43 @@ function openWorkshop() {
   renderLanguage();
   save();
   window.scrollTo(0, 0);
-  workshopTitle.focus({ preventScroll: true });
-  if (!reducedMotion.matches) {
-    gsap.fromTo(workshopSection, { opacity: 0, y: 18 }, {
-      opacity: 1, y: 0, duration: .85, ease: 'sine.out', clearProps: 'opacity,transform',
-    });
-  }
+  memory.play(() => {
+    if (phase === 'workshop') workshopTitle.focus({ preventScroll: true });
+  });
 }
 
 function backToMaterials() {
-  gsap.killTweensOf(workshopSection);
-  gsap.set(workshopSection, { clearProps: 'opacity,transform' });
-  phase = 'materials';
-  renderPhase();
-  renderLanguage();
-  save();
-  enterWorkshop.focus({ preventScroll: true });
-  enterWorkshop.scrollIntoView({ block: 'center' });
+  if (phase !== 'workshop' || closingMemory) return;
+  const reveal = () => {
+    workshopSection.inert = false;
+    phase = 'materials';
+    renderPhase();
+    renderLanguage();
+    save();
+    enterWorkshop.focus({ preventScroll: true });
+    enterWorkshop.scrollIntoView({ block: 'center' });
+  };
+  if (reducedMotion.matches) {
+    reveal();
+    return;
+  }
+  workshopSection.inert = true;
+  closingMemory = workshopSection.animate([
+    { opacity: 1, transform: 'perspective(1000px) rotateY(0deg)' },
+    { opacity: 0, transform: 'perspective(1000px) rotateY(-4deg) translateX(-12px)' },
+  ], { duration: 550, easing: 'ease-in', fill: 'both' });
+  closingMemory.onfinish = () => {
+    reveal();
+    closingMemory?.cancel();
+    closingMemory = undefined;
+  };
 }
 
 function restartJourney() {
+  memory.cancel();
+  closingMemory?.cancel();
+  closingMemory = undefined;
+  workshopSection.inert = false;
   flight?.kill();
   flight = undefined;
   passportOpening?.kill();
@@ -404,6 +433,7 @@ function restartJourney() {
   state.name = '';
   state.selected = null;
   state.submitted = null;
+  state.furthestStop = 1;
   nameInput.value = '';
   nameInput.readOnly = false;
   boardButton.disabled = false;

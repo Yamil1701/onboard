@@ -13,7 +13,7 @@ La experiencia se abre desde un QR y se diseña primero para celular. Las seis p
 | Bienvenida | Un panel de aeropuerto introduce el destino mientras se prepara la primera escena. Ventanilla, pista nocturna, pase de embarque y sello al tocar Embarcar. La carga inicial termina cuando la escena puede mostrarse. Los documentos y videos se cargan al abrirlos. |
 | Antes de despegar | Encuesta real de expectativas, dentro de la web. Una pregunta con tres opciones: adaptar una clase, participar del juego o llevarse ideas para la futura Práctica IV. |
 | Pasaporte y materiales | Un portadocumentos de viaje reúne el informe en PDF, las fichas de BSPA y Turismo y el archivo de trabajos. El informe y las galerías se abren dentro del sitio. Cerrar o usar Atrás devuelve al punto de partida. |
-| ¿Confirmás o verificás? | Una decisión ante una duda en el aula revela la anécdota del litchi y lo que se aprendió al verificar. |
+| ¿Confirmás o verificás? | El cuaderno de a bordo abre una página de las prácticas. Una transición de libro a escena de aula sitúa al visitante dentro de ese recuerdo. Las decisiones recuperan la anécdota del litchi y lo aprendido al verificar. |
 | Última estación | Cinco preguntas sobre expectativas, presentaciones, materiales, aplicación a la futura práctica y aprendizaje personal. Avance visible, revisión y envío dentro del recorrido. |
 | Llegada | Regreso a la ventanilla, sello final y pausa antes de ofrecer el recuerdo, la bitácora y el canal de WhatsApp posterior a la experiencia. El cierre visual se afina después de probar el resto. |
 
@@ -38,9 +38,13 @@ Los formularios propios son las preguntas y opciones dibujadas como parte de la 
 
 ## Vista previa móvil
 
-El pasaporte lleva a «Antes de despegar». Al guardar la respuesta aparece «Despegar», que inicia el vuelo y abre «Pasaporte y materiales». Se puede leer el informe y recorrer el archivo bilingüe de trabajos. «Entrar al aula» abre la parada 4, «¿Confirmás o verificás?». Incluye las tres situaciones del informe, consulta de apoyos, una respuesta para compartir, la anécdota real, una reflexión personal y el sello de las estaciones 1 y 4. Las paradas 5 y 6 siguen previstas.
+El pasaporte lleva a «Antes de despegar». Al guardar la respuesta aparece «Despegar», que inicia el vuelo y abre «Pasaporte y materiales». Se puede leer el informe y recorrer el archivo bilingüe de trabajos. El cuaderno integrado al portadocumentos abre la parada 4, «¿Confirmás o verificás?», como un recuerdo de las prácticas. Incluye las tres situaciones del informe, consulta de apoyos, una respuesta para compartir, la anécdota real, una reflexión personal y el sello de las estaciones 1 y 4. Las paradas 5 y 6 siguen previstas.
 
-El nombre, la encuesta inicial y las decisiones de la actividad se conservan en la sesión del navegador. Recargar o cambiar de idioma conserva el avance. Los textos de `src/workshop-copy.ts` adaptan el informe, págs. 4 y 7–8. Las escenas de aula y del litchi son imágenes ilustrativas creadas para la web. El envío usa almacenamiento de sesión y no tiene un servidor de encuestas conectado. «Reiniciar» vuelve al inicio y limpia los datos de esta visita, conservando el idioma.
+El nombre, la encuesta inicial y las decisiones de la actividad se conservan en la sesión del navegador. Recargar o cambiar de idioma conserva el avance. La línea del viaje conserva la parada más avanzada, aunque se cierre el cuaderno para revisar materiales. Los textos de `src/workshop-copy.ts` adaptan el informe, págs. 4 y 7–8. Las escenas de aula y del litchi son imágenes ilustrativas creadas para la web. El envío usa almacenamiento de sesión y no tiene un servidor de encuestas conectado. «Reiniciar» vuelve al inicio y limpia los datos de esta visita, conservando el idioma.
+
+PT Serif se aloja localmente para los textos de lectura, con su licencia en `src/assets/fonts/`. Noto Serif Display se usa en los títulos. El cambio AR/FR conserva el estado y mueve el indicador del selector, con banderas decorativas y foco visible para teclado.
+
+Fotos y PDF aceptan gestos horizontales sobre la imagen o la hoja, además de sus botones. `src/page-swipes.ts` filtra movimientos cortos, diagonales, desplazamientos verticales y gestos con varios dedos. En PDF, la navegación gestual se suspende al ampliar la hoja o la vista del navegador, para permitir desplazar y ampliar el documento.
 
 ```sh
 npm ci

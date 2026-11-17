@@ -32,12 +32,14 @@ export function createWorkshop(onChange: () => void) {
   const sealButton = find<HTMLButtonElement>('workshop-seal-button');
   const seal = find('workshop-seal');
   const summary = find('workshop-summary');
+  const feedback = find('workshop-feedback');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let data = emptyState();
   let language: Language = 'ar';
   let name = '';
   let pageAnimation: Animation | undefined;
   let sealAnimation: Animation | undefined;
+  let feedbackAnimation: Animation | undefined;
   let photoFailed = false;
 
   function activeIndex() {
@@ -97,16 +99,16 @@ export function createWorkshop(onChange: () => void) {
     }));
   }
 
-  function settle(target: HTMLElement) {
+  function settle(target: HTMLElement, block: ScrollLogicalPosition = 'start') {
     pageAnimation?.cancel();
     if (!reducedMotion.matches) {
       pageAnimation = target.animate(
-        [{ opacity: .3, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }],
-        { duration: 520, easing: 'ease-out' },
+        [{ opacity: .25, transform: 'perspective(900px) rotateY(-4deg) translateY(10px)' }, { opacity: 1, transform: 'perspective(900px) rotateY(0deg) translateY(0)' }],
+        { duration: 650, easing: 'ease-out' },
       );
     }
     target.focus({ preventScroll: true });
-    target.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start' });
+    target.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block });
   }
 
   for (const button of decisions.querySelectorAll<HTMLButtonElement>('[data-decision]')) {
@@ -116,8 +118,7 @@ export function createWorkshop(onChange: () => void) {
       data.replies[index] = { decision: button.dataset.decision as Decision, consulted: false, shared: false };
       render();
       onChange();
-      consult.focus({ preventScroll: true });
-      response.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'nearest' });
+      settle(response, 'nearest');
     });
   }
 
@@ -147,6 +148,17 @@ export function createWorkshop(onChange: () => void) {
     render();
     onChange();
     settle(activeIndex() < 3 ? paper : story);
+    feedbackAnimation?.cancel();
+    feedback.hidden = false;
+    feedbackAnimation = feedback.animate(reducedMotion.matches
+      ? [{ opacity: 1 }, { opacity: 1 }]
+      : [
+        { opacity: 0, translate: '0 8px', offset: 0 },
+        { opacity: 1, translate: '0 0', offset: .15 },
+        { opacity: 1, translate: '0 0', offset: .8 },
+        { opacity: 0, translate: '0 -4px', offset: 1 },
+      ], { duration: 2200, easing: 'ease-out' });
+    feedbackAnimation.onfinish = () => { feedback.hidden = true; };
   });
 
   form.addEventListener('change', event => {
@@ -175,6 +187,8 @@ export function createWorkshop(onChange: () => void) {
   find('workshop-replay').addEventListener('click', () => {
     data = emptyState();
     sealAnimation?.cancel();
+    feedbackAnimation?.cancel();
+    feedback.hidden = true;
     render();
     onChange();
     settle(paper);
@@ -224,6 +238,8 @@ export function createWorkshop(onChange: () => void) {
     reset() {
       pageAnimation?.cancel();
       sealAnimation?.cancel();
+      feedbackAnimation?.cancel();
+      feedback.hidden = true;
       data = emptyState();
       render();
     },

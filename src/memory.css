@@ -1,0 +1,65 @@
+.memory-entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(76px, 31%) minmax(0, 1fr);
+  min-height: 190px;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #c6ab78;
+  border-radius: 4px 10px 10px 4px;
+  color: #173c47;
+  background: var(--slip-paper);
+  box-shadow: 3px 4px 0 #c6b79a, 0 8px 15px #2a16195c;
+  text-align: left;
+  transition: transform .3s, box-shadow .3s;
+}
+.memory-entry::before { position: absolute; z-index: 1; inset: 0 auto 0 0; width: 5px; content: ''; background: #977250; box-shadow: 3px 0 8px #0005; }
+.memory-entry > img { width: 100%; height: 100%; min-height: 190px; object-fit: cover; object-position: 43% center; }
+.memory-entry-paper { display: grid; align-content: center; gap: 9px; padding: 15px; }
+.memory-entry-paper small { color: #80613a; font: 700 9px/1.4 var(--mono); letter-spacing: .035em; text-transform: uppercase; }
+.memory-entry-paper strong { font: 600 clamp(21px, 5.4vw, 29px)/1.1 var(--serif); }
+.memory-entry-paper > span { font: 14px/1.5 var(--reading); }
+.memory-entry-paper em { justify-self: start; margin-top: 2px; padding-bottom: 3px; border-bottom: 1px solid #99764e; font: 700 12px/1.4 var(--reading); }
+.memory-entry:hover { transform: translateY(-2px); box-shadow: 3px 6px 0 #c6b79a, 0 12px 20px #2a161970; }
+.memory-entry:active { transform: translateY(1px); }
+
+.memory-transition {
+  position: fixed;
+  z-index: 15;
+  top: calc(70px + env(safe-area-inset-top, 0px));
+  bottom: 0;
+  left: 50%;
+  width: min(100%, 800px);
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 38%, #263744, #08131f 80%);
+  perspective: 1400px;
+}
+.memory-room { position: absolute; inset: 0; }
+.memory-room img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 48% center; }
+.memory-room::after { position: absolute; inset: 0; content: ''; background: linear-gradient(transparent 40%, #08131fb3 75%, #08131f); }
+.memory-book { position: relative; width: min(66%, 320px); aspect-ratio: 2 / 3; margin-top: -85px; perspective: 1100px; perspective-origin: left center; border-radius: 5px 12px 12px 5px; box-shadow: 5px 3px 0 #d0c3a4, 8px 5px 0 #393125, 0 20px 50px #000b; }
+.memory-page, .memory-flap { position: absolute; inset: 0; border-radius: inherit; }
+.memory-page { display: grid; align-content: center; gap: 20px; padding: 15px; color: #283e40; background: #eee0c3; }
+.memory-page img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border: 5px solid #fcf4dd; box-shadow: 0 3px 9px #44332355; }
+.memory-page span { text-align: center; font: italic 16px/1.4 var(--reading); }
+.memory-flap { display: grid; place-content: center; justify-items: center; gap: 26px; padding: 24px; border: 1px solid #b29460; color: var(--gold); background: repeating-linear-gradient(105deg, #ffffff04 0 1px, transparent 1px 4px), linear-gradient(130deg, #304449, #102733); transform-origin: left center; backface-visibility: hidden; box-shadow: inset 8px 0 14px #0006; text-align: center; }
+.memory-flap::before { position: absolute; inset: 10px; border: 1px dashed #bda56c88; border-radius: 4px 8px 8px 4px; content: ''; }
+.memory-flap svg { font-size: 39px; }
+.memory-flap span { font: 600 27px/1.2 var(--serif); }
+.memory-caption { position: absolute; z-index: 3; right: 23px; bottom: max(118px, 16%); left: 23px; color: #fff0cf; text-align: center; font: 22px/1.5 var(--reading); text-shadow: 0 2px 9px #000; }
+#skip-memory { position: absolute; z-index: 4; bottom: max(35px, env(safe-area-inset-bottom, 0px)); min-height: 44px; padding: 9px 19px; border: 1px solid #bca67a99; border-radius: 4px; color: #f4e8c9; background: #132831aa; font: 14px/1.4 var(--reading); }
+.is-recalling .progress { opacity: 0; }
+
+.reader-view[data-page-swipe] { touch-action: pan-y pinch-zoom; }
+.reader-gesture-hint { display: none; flex-basis: 100%; color: #abc2c2; text-align: center; font: 11px/1.4 var(--reading); padding: 4px 0 3px; }
+.reader-controls { flex-wrap: wrap; }
+.reader:not(:has([data-page-swipe])) .reader-gesture-hint { display: none; }
+#photo-frame img { -webkit-user-drag: none; user-select: none; }
+@media (hover: none) and (pointer: coarse) { .reader-gesture-hint { display: block; } }
+@media (prefers-reduced-motion: reduce) {
+  .memory-entry, .language-flag, .languages::before, .languages button { transition: none; }
+}
