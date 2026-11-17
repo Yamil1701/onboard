@@ -20,6 +20,7 @@ export function createWorkshop(onChange: () => void) {
   const decisions = find('workshop-decisions');
   const response = find('workshop-response');
   const echo = find('workshop-decision-echo');
+  const changeDecision = find<HTMLButtonElement>('workshop-change-decision');
   const consult = find<HTMLButtonElement>('workshop-consult');
   const evidence = find('workshop-evidence');
   const photo = find('workshop-photo');
@@ -52,7 +53,7 @@ export function createWorkshop(onChange: () => void) {
       if (typeof text === 'string') element.textContent = text;
     }
     find('workshop-welcome').textContent = name
-      ? words.namedWelcome.replace('{name}', name) : words.welcome;
+      ? words.namedWelcome.replace('{name}', () => name) : words.welcome;
     const index = activeIndex();
     paper.hidden = index === 3;
     story.hidden = index !== 3 || data.stamped;
@@ -68,6 +69,7 @@ export function createWorkshop(onChange: () => void) {
       title.textContent = item.question;
       decisions.hidden = reply !== null;
       response.hidden = reply === null;
+      changeDecision.hidden = !reply || reply.consulted;
       echo.textContent = reply?.decision === 'confirm' ? words.confirmed : words.verified;
       consult.querySelector('span')!.textContent = index === 2 ? words.rule : words.glossary;
       consult.hidden = Boolean(reply?.consulted);
@@ -82,7 +84,7 @@ export function createWorkshop(onChange: () => void) {
     for (const radio of radios) radio.checked = radio.value === data.reflection;
     sealButton.disabled = data.reflection === null;
     find('workshop-completed-title').textContent = name
-      ? words.personalCompleted.replace('{name}', name) : words.completed;
+      ? words.personalCompleted.replace('{name}', () => name) : words.completed;
     find('workshop-takeaway').textContent = data.reflection ? words[data.reflection] : '';
     summary.replaceChildren(...words.cases.map((item, index) => {
       const row = document.createElement('li');
@@ -118,6 +120,16 @@ export function createWorkshop(onChange: () => void) {
       response.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'nearest' });
     });
   }
+
+  changeDecision.addEventListener('click', () => {
+    const index = activeIndex();
+    const reply = data.replies[index];
+    if (!reply || reply.consulted) return;
+    data.replies[index] = null;
+    render();
+    onChange();
+    settle(paper);
+  });
 
   consult.addEventListener('click', () => {
     const reply = data.replies[activeIndex()];

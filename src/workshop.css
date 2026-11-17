@@ -135,6 +135,7 @@
   font: italic 600 21px/1.25 var(--serif);
 }
 .workshop-resource svg { flex: none; font-size: 24px; }
+.workshop-undo { display: block; min-height: 44px; margin: -9px 0 12px; padding: 0; border: 0; color: #406368; background: transparent; font: 13px/1.4 Arial, sans-serif; text-decoration: underline; text-underline-offset: 3px; }
 .workshop-evidence { scroll-margin-top: 90px; }
 .workshop-evidence-label, .workshop-answer-label {
   margin: 20px 0 12px;
@@ -187,6 +188,9 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .workshop-photo[aria-busy]::after { animation: skeleton-sweep 1.7s ease-in-out infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .workshop-photo img { transition: none; }
 }
 @media (min-width: 650px) {
   .workshop-inner { padding-inline: 28px; }
