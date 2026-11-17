@@ -284,6 +284,8 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
 }
 
 .boarding {
+  width: 100%;
+  min-width: 0;
   align-self: stretch;
   display: flex;
   flex-direction: column;
