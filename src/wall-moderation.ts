@@ -15,8 +15,9 @@ export function checkFootprint(value: unknown): WallCheck {
   const compact = normalized.replace(/\s/g, '');
   if (badWords.test(disguised) || badWords.test(normalized) || badWords.test(normalized.replace(/([a-z])\1+/g,'$1')) || /(?:hij[oa]s?deputa|andatealamierda|tevoyamatar|suce(?:ma|la)bite|vastefaire)/.test(compact)) return { ok: false, reason: 'language' };
   if (/(.)\1{6,}/iu.test(message) || /\b(\p{L}{2,})(?:\s+\1){4,}\b/iu.test(message)) return { ok: false, reason: 'spam' };
-  // Disguised words and unsupported scripts wait for the owner's review.
+  // Reject uncertain masked text; accepted reflections publish immediately.
   const doubtful = /\p{L}[*#_]{2,}\p{L}/u.test(message) || !/[a-z]/i.test(normalized)
     || /[^\p{Script=Latin}\p{M}\p{N}\p{P}\p{Z}\p{Extended_Pictographic}\uFE0F\u200D]/u.test(message);
-  return { ok: true, message, status: doubtful ? 'pending' : 'approved' };
+  if(doubtful)return {ok:false,reason:'language'};
+  return { ok: true, message, status: 'approved' };
 }

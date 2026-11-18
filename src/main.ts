@@ -7,6 +7,7 @@ import { createWorkshop } from './workshop';
 import { createMemoryTransition } from './memory-transition';
 import { createFinalSurvey } from './final-survey';
 import { createArrival } from './arrival';
+import { createSurveySync } from './survey-sync';
 import { initSound, sound, translateSound, startFlightSound, stopFlightSound } from './sound';
 import './style.css';
 import './workshop.css';
@@ -93,7 +94,13 @@ const archive = createArchive(() => phase === 'materials');
 const workshop = createWorkshop(save);
 const memory = createMemoryTransition();
 const finalSurvey = createFinalSurvey(save);
-const arrival = createArrival(save,openMenu);
+const arrival = createArrival(save,()=>openMenu(true));
+const surveySync=createSurveySync(renderSurveySync);
+let menuEntrance:gsap.core.Timeline|undefined;
+function renderSurveySync(){
+  const status=surveySync.status(state.language,state.reliving);
+  for(const id of ['survey-sync-status','final-sync-status'])find(id).textContent=status;
+}
 initSound();
 
 function isExpectation(value: unknown): value is Expectation {
@@ -130,7 +137,10 @@ function restore() {
 }
 
 function save() {
-  if (storageBlock || state.reliving) return;
+  if(state.reliving)return;
+  if(state.submitted)surveySync.queue({language:state.language,expectation:state.submitted,answers:finalSurvey.snapshot().submitted?finalSurvey.snapshot().answers:null,rating:finalSurvey.snapshot().submitted?finalSurvey.snapshot().rating:null});
+  renderSurveySync();
+  if (storageBlock) return;
   try {
     sessionStorage.setItem(storageKey, JSON.stringify({
       ...state,
@@ -454,6 +464,7 @@ function backToMaterials() {
     phase = 'materials';
     renderPhase();
     renderLanguage();
+    renderSurveySync();
     save();
     enterWorkshop.focus({ preventScroll: true });
     enterWorkshop.scrollIntoView({ block: 'center' });
@@ -510,7 +521,7 @@ function leaveArrival() {
   window.scrollTo({top:0,behavior:'instant'});materialsTitle.focus({preventScroll:true});
 }
 
-function openMenu(){
+function openMenu(animatePassport=false){
   if(!arrival.snapshot().finished)return;
   if(state.reliving){state.reliving=false;arrival.setReplay(false);restore();}
   stopFlightSound();
@@ -519,10 +530,19 @@ function openMenu(){
   wallet.inert=false;materials.inert=false;
   gsap.set([wallet,walletCover,walletContents,materials],{clearProps:'opacity,transform'});
   closingMemory?.cancel();closingMemory=undefined;workshopSection.inert=false;
+  menuEntrance?.kill();menuEntrance=undefined;
   arrival.pauseAudio();phase='menu';renderPhase();renderLanguage();save();
+  const menuPassport=menuSection.querySelector('.menu-passport')!;
+  gsap.set(menuPassport,{clearProps:'transform,opacity'});
+  if(animatePassport&&!reducedMotion.matches){
+    menuEntrance=gsap.timeline({onComplete:()=>{menuEntrance=undefined;}})
+      .fromTo(menuPassport,{y:-260,rotation:18,opacity:0},{y:0,rotation:-7,opacity:1,duration:1.1,ease:'bounce.out',clearProps:'transform,opacity'});
+  }
   window.scrollTo({top:0,behavior:'instant'});find('travel-menu-title').focus({preventScroll:true});
 }
 function explore(part:string){
+  menuEntrance?.kill();menuEntrance=undefined;
+  gsap.set(menuSection.querySelector('.menu-passport')!,{clearProps:'transform,opacity'});
   if(!arrival.snapshot().finished||phase!=='menu')return;
   sound('paper');
   if(part==='materials'){openMaterials();return;}
@@ -572,6 +592,7 @@ function restartJourney() {
   gsap.set([boarding, survey, result, confirmationStamp, ticket, stamp, windowPhoto, workshopSection], {
     clearProps: 'opacity,transform',
   });
+  if(!state.reliving)surveySync.newVisit();
   state.name = '';
   state.selected = null;
   state.submitted = null;
@@ -597,6 +618,7 @@ for (const option of pollOptions) {
 }
 renderPhase();
 renderLanguage(false);
+renderSurveySync();
 reader.syncRoute();
 archive.syncRoute();
 if ((phase as Phase) === 'arrival') arrival.play();
@@ -608,6 +630,7 @@ for (const button of languageButtons) {
     if (language === state.language) return;
     state.language = language;
     renderLanguage();
+    renderSurveySync();
     save();
 
     for (const fade of languageFades) fade.cancel();
@@ -638,8 +661,8 @@ ticketForm.addEventListener('submit', event => {
 });
 passportCover.addEventListener('click', openPassport);
 restart.addEventListener('click', restartJourney);
-menuButton.addEventListener('click',openMenu);
-topMenu.addEventListener('click',openMenu);
+menuButton.addEventListener('click',()=>openMenu());
+topMenu.addEventListener('click',()=>openMenu());
 for(const button of menuSection.querySelectorAll<HTMLButtonElement>('[data-explore]'))button.addEventListener('click',()=>explore(button.dataset.explore!));
 
 surveyForm.addEventListener('change', event => {

@@ -14,8 +14,8 @@ test('rejects common insults, leetspeak, punctuation, accents and invisible sepa
 test('blocks links, personal contact data, markup and spam', () => {
   for(const message of ['https://mal.example', 'contacto@example.com', 'Llamame 387 555 1234', '<img src=x>', 'aaaaaaaaaaaa', 'hola hola hola hola hola']) assert.equal(checkFootprint(message).ok,false,message);
 });
-test('holds masked content for review and validates exact length limits', () => {
-  const result=checkFootprint('sos un p***ta'); assert.equal(result.ok,true); if(result.ok) assert.equal(result.status,'pending');
+test('rejects uncertain masked content rather than waiting for manual review and validates length limits', () => {
+  const result=checkFootprint('sos un p***ta'); assert.equal(result.ok,false);
   for(const message of ['', 'x', 'a'.repeat(161)]) assert.equal(checkFootprint(message).ok,false);
   const message='Una experiencia '.repeat(10).trim(); assert.equal(checkFootprint(message).ok,true);
 });

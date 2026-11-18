@@ -9,15 +9,15 @@ El mural usa el proyecto existente **Chofer Utilities** de **Yamil17**, ref `lar
 - La clave privilegiada se obtiene dentro de Edge desde las variables del entorno; nunca se copia al sitio.
 - El frontend no tiene permisos directos sobre las tablas ni sobre la RPC. RLS está habilitado sin políticas públicas, intencionalmente; solo `service_role` accede desde la función.
 - GET devuelve únicamente los mensajes aprobados en páginas de 40, con cursor de fecha e identificador, sin identificadores de solicitud ni hashes de red.
-- POST normaliza y valida 2–160 caracteres. Rechaza insultos comunes en español, francés e inglés, enlaces, contactos, marcado y repeticiones. Retiene contenido enmascarado o alfabetos no previstos para revisión. Este filtro es una primera barrera, no una garantía de detección total.
+- POST normaliza y valida 2–160 caracteres. Rechaza insultos comunes en español, francés e inglés, enlaces, contactos, marcado y repeticiones. Rechaza contenido enmascarado o alfabetos no previstos para reformularlo. Todo mensaje que pasa el filtro se publica automáticamente. Este filtro es una primera barrera, no una garantía de detección total.
 - El servidor calcula un HMAC de la dirección de red para limitar a 20 solicitudes nuevas por minuto y red. No guarda la dirección original. El límite admite varias personas conectadas al mismo wifi de la muestra.
 - Un UUID por navegador hace idempotentes los reintentos. La interfaz ofrece una huella por dispositivo, incluso después de reiniciar el recorrido; no es autenticación de personas.
 
 `schema.sql` describe la estructura inicial. Los cambios siguientes se aplican como migraciones, sin recrear tablas existentes. Para desplegar Edge se incluyen `backend/voyageurs-wall/index.ts` y su dependencia relativa `src/wall-moderation.ts`, manteniendo las rutas. No hay dependencias remotas ni import map.
 
-## Revisión del mural
+## Administración excepcional del mural
 
-En el [editor de tablas de Supabase](https://supabase.com/dashboard/project/laraxhjvidedicozimsr/editor), abrir `public.voyageurs_wall_entries` y filtrar `status = pending`.
+En el [editor de tablas de Supabase](https://supabase.com/dashboard/project/laraxhjvidedicozimsr/editor), abrir `public.voyageurs_wall_entries` para ocultar excepcionalmente una publicación si hiciera falta. No se exige aprobar publicaciones nuevas.
 
 - Cambiar a `approved` para publicar un mensaje revisado.
 - Cambiar a `rejected` para ocultarlo. Se puede rechazar también un mensaje ya aprobado.
@@ -39,4 +39,4 @@ node --test tests/wall-moderation.test.ts
 git diff --check
 ```
 
-También se comprueban contra la función desplegada: lectura pública, publicación, reintento idempotente, cola pendiente invisible, rechazo de lenguaje/contactos, y denegación del acceso directo con clave anon. La llegada guarda el avance, permite omitir la animación y respeta el movimiento reducido. Las encuestas siguen siendo locales a la sesión; el mural es la única escritura centralizada agregada en esta entrega.
+También se comprueban contra la función desplegada: lectura pública, publicación, reintento idempotente, rechazo de texto dudoso, rechazo de lenguaje/contactos, y denegación del acceso directo con clave anon. La llegada guarda el avance, permite omitir la animación y respeta el movimiento reducido. Las encuestas usan ahora su propia función `voyageurs-surveys`; ver su README.

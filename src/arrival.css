@@ -115,3 +115,7 @@ html.is-landing { overflow: hidden; overscroll-behavior: none; }
 .passport-stage #preview-passport { background: #eee1c4; }
 .souvenir-passport { width: min(100%,430px); }
 .passport-stage #preview-passport { inset: 3.5% 6%; width: 88%; height: 93%; object-fit: contain; }
+
+.closing-book { will-change: transform; }
+.arrival-closing:focus { outline: none; }
+.survey-sync-status { font: 12px/1.6 var(--reading); color: #41605a; }

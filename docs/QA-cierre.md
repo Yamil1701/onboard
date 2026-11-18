@@ -38,3 +38,7 @@ Comprobación alojada de esta revisión: ambas hojas muestran solo sus contenido
 ## Corrección de escritura y scroll del mural
 
 El sonido de firma usa un recorte de una grabación de lapicera sobre papel (CC0; origen y tratamiento en `src/assets/pen-writing-LICENSE.md`). Se reemplazaron los cinco pulsos sintéticos; si el archivo no carga hay un roce continuo sin golpeteos. Se restauraron las tarjetas y radios del diseño anterior de la primera encuesta y se ajustaron las tres frases, conservando sus intenciones e identificadores. El mural conserva su scroll interno y usa encadenamiento nativo (`overscroll-behavior-y: auto`) para que el desplazamiento continúe en la página al alcanzar sus límites.
+
+## Resultados y cierre encadenado
+
+El cierre mantiene su capa opaca hasta mostrar el menú; el pasaporte cierra, sube y sale girando por abajo. El del menú entra con caída y rebote. Las encuestas y estrellas confirmadas se envían a una función propia, con upsert por UUID y cola local de reintentos. El panel `/onboard/resultados/` valida el PIN en Edge y utiliza sesiones HMAC de una hora. Las tres tablas nuevas tienen RLS y ningún permiso público; la lectura anónima se rechaza. Los mensajes aceptados por el filtro del mural se autopublican y los dudosos se rechazan, sin cola manual nueva. Diez pruebas Node aprobadas y compilación TS/Vite completa.

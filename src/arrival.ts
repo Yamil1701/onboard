@@ -128,6 +128,7 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
       const page=await readWall(append?cursor:null);if(ticket!==generation)return;
       const combined=append?[...entries,...page.entries]:page.entries;
       entries=[...new Map(combined.map(entry=>[entry.id,entry])).values()];cursor=page.nextCursor;wallMode='ready';
+      if(own.entry&&entries.some(entry=>entry.id===own.entry!.id)){own.entry.status='approved';persistOwn();}
     }catch{if(ticket===generation)wallMode='error';}
     finally{if(ticket===generation){loading=false;renderWall();}}
   }
@@ -172,14 +173,21 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
   });
   function finishTrip(){
     if(closingTimeline)return;audio.pause();
-    const done=()=>{closingTimeline?.kill();closingTimeline=undefined;state.finished=true;unlock();onChange();onFinish();};
+    // Switch the underlying screen while the opaque closing layer still covers it.
+    const done=()=>{closingTimeline=undefined;state.finished=true;onChange();onFinish();unlock();};
     if(reducedMotion.matches){done();return;}
+    const book=find('closing-book'),cover=find('closing-cover'),paper=book.querySelector('.closing-paper')!;
+    gsap.set(closing,{opacity:1});gsap.set(paper,{opacity:1});
     closing.hidden=false;content.inert=true;document.documentElement.classList.add('is-landing');closing.focus({preventScroll:true});sound('paper');
     closingTimeline=gsap.timeline({onComplete:done})
-      .fromTo(find('closing-book'),{opacity:0,y:18},{opacity:1,y:0,duration:.5},0)
-      .fromTo(find('closing-cover'),{rotationY:-155},{rotationY:0,duration:1.4,ease:'sine.inOut'},.35)
-      .call(()=>sound('finish'),[],1.6)
-      .to(closing,{opacity:0,duration:.6,clearProps:'opacity'},2.4);
+      .fromTo(book,{opacity:0,y:18,rotation:0,scale:1},{opacity:1,y:0,duration:.4},0)
+      .fromTo(cover,{rotationY:-155},{rotationY:0,duration:1.15,ease:'sine.inOut'},.3)
+      .set(paper,{opacity:0},1.45)
+      .call(()=>sound('finish'),[],1.45)
+      .to(book,{y:-65,rotation:-9,scale:1.04,duration:.42,ease:'power2.out'},1.7)
+      .call(()=>sound('whoosh'),[],2.1)
+      .to(book,{y:()=>window.innerHeight+400,rotation:145,scale:.72,duration:.82,ease:'power2.in'},2.12);
+
   }
   find('finish-journey').addEventListener('click',finishTrip);
   render();

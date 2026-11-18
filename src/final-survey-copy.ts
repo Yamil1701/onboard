@@ -22,8 +22,8 @@ export const finalSurveyCopy = {
     edit: 'Cambiar respuesta {step}',
     finish: 'Finalizar encuesta',
     doneTitle: 'Gracias por dejar tu huella',
-    done: 'Tus cinco respuestas quedaron guardadas en esta visita. Gracias por compartir tu mirada sobre la experiencia.',
-    local: 'En esta versión de prueba, las respuestas se guardan en este navegador durante la visita.',
+    done: 'Gracias por compartir tu mirada sobre la experiencia.',
+    local: 'Tus respuestas son anónimas y se reúnen con las de los demás visitantes.',
     back: 'Volver al cuaderno', materials: 'Volver a materiales',
     questions: [
       { question: '¿Esta experiencia cumplió tus expectativas?', options: ['No es lo que yo esperaba', 'Cumplió mis expectativas', 'Superó mis expectativas'] },
@@ -52,8 +52,8 @@ export const finalSurveyCopy = {
     edit: 'Modifier la réponse {step}',
     finish: 'Terminer le questionnaire',
     doneTitle: 'Merci d’avoir laissé ta trace',
-    done: 'Tes cinq réponses sont enregistrées pour cette visite. Merci d’avoir partagé ton regard sur l’expérience.',
-    local: 'Dans cette version de test, les réponses sont conservées dans ce navigateur pendant la visite.',
+    done: 'Merci d’avoir partagé ton regard sur l’expérience.',
+    local: 'Tes réponses sont anonymes et réunies avec celles des autres visiteurs.',
     back: 'Retour au carnet', materials: 'Retour aux ressources',
     questions: [
       { question: 'Cette expérience a-t-elle répondu à tes attentes ?', options: ['Ce n’est pas ce que j’attendais', 'Elle a répondu à mes attentes', 'Elle a dépassé mes attentes'] },

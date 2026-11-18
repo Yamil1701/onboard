@@ -127,6 +127,7 @@
           <div class="confirmation-stamp" aria-hidden="true"><svg><use href="#check"/></svg></div>
           <h2 id="response-title" data-copy="responseTitle" tabindex="-1">Respuesta guardada</h2>
           <p data-copy="received">Tu respuesta de prueba quedó en este navegador.</p>
+          <p id="survey-sync-status" class="survey-sync-status" role="status"></p>
           <p class="chosen-answer"><svg aria-hidden="true"><use href="#check"/></svg><span id="chosen-answer"></span></p>
           <button type="button" class="primary" id="continue-journey"><span data-copy="takeFlight">Despegar</span></button>
         </section>
@@ -312,6 +313,7 @@
             <span class="final-mark" aria-hidden="true">✓</span>
             <h2 id="final-done-title" tabindex="-1" data-final-copy="doneTitle">Gracias por dejar tu huella</h2>
             <p data-final-copy="done"></p>
+            <p id="final-sync-status" class="survey-sync-status" role="status"></p>
             <div class="final-actions final-done-actions"><button type="button" class="primary" id="start-arrival" data-copy="enterArrival">Preparar el aterrizaje</button><button type="button" class="final-secondary" id="final-materials" data-final-copy="materials">Volver a materiales</button></div>
           </section>
           <p class="final-note" data-final-copy="local">En esta versión de prueba, las respuestas se guardan en este navegador durante la visita.</p>
@@ -407,7 +409,7 @@
           <button type="button" data-explore="memories"><span>06</span><strong data-arrival-copy="menuMemories"></strong><svg aria-hidden="true"><use href="#arrow"/></svg></button>
         </nav>
         <button class="relive-trigger" id="relive-journey" type="button" data-copy="relive">Revivir el viaje</button>
-        <p class="site-credit"><span data-copy="ownWebsite">Si querés tu propia web, </span><a href="https://wa.me/5493876855654" target="_blank" rel="noopener noreferrer" data-copy="writeMe">escribime</a>.</p>
+        <p class="site-credit"><span data-copy="ownWebsite">¿Querés una web propia? </span><a href="https://wa.me/5493876855654" target="_blank" rel="noopener noreferrer" data-copy="writeMe">Escribime</a>.</p>
 
       </section>
     </main>
