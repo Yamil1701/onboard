@@ -77,3 +77,15 @@ La llegada tiene tres capítulos: despedida con aparición progresiva al desplaz
 «Terminar viaje» cierra el pasaporte y abre el menú de exploración. Se pueden repetir pasaporte, despegue, materiales, actividad y despedida/recuerdos, sin reabrir encuestas ni publicar nuevas huellas. La recarga conserva el cierre y el acceso al menú.
 
 Los sonidos de interfaz, papel, sellos, vuelo y cierre se sintetizan localmente con Web Audio, a volumen discreto. Empiezan solo después de una interacción; el botón junto a AR/FR silencia inmediatamente todo el sonido y conserva la preferencia. El audio real también respeta ese silencio. Las animaciones respetan movimiento reducido y el desplazamiento es nativo.
+
+## Audio y segunda visita
+
+El primer toque en «Comenzar el viaje» inicia el cartel de letras con su claqueteo y habilita el audio según las reglas del navegador. El pasaporte aparece con un woosh, terminar de editar el nombre produce un trazo de lapicera y el sello tiene impacto grave y textura de papel. Turbinas y viento comparten un diseño sonoro y cubren todo el despegue y aterrizaje; las fases se declaran en `src/flight-timing.ts`. Silenciar regula el canal maestro sin congelar el reloj de la cinemática.
+
+El portadocumentos conserva su fondo y se divide en dos hojas: informe/BSPA/Turismo y cuaderno/archivos. Un botón explícito cambia de hoja; continuar a la parada 4 queda en el flujo normal debajo del portadocumentos. La nueva ruta diferencia el avance recorrido de la ubicación actual del avión.
+
+La postal usa una acuarela de Salta y París como marca de agua y dos estampillas ilustrativas de AR/FR. La cubierta sin fondo se comparte entre el inicio, el recuerdo que se abre, el cierre y el menú. Las tres notas editoriales del mural están identificadas como notas de bienvenida; no simulan visitantes.
+
+El enlace discreto «Revivir el viaje» reinicia una visita temporal. En este modo el guardado de sesión no reemplaza la visita original y el formulario de la huella no llama al servidor ni actualiza su identificador local. Al terminar, se restaura el recorrido original y su menú. Recargar también recupera la visita original. Las encuestas de la primera visita siguen siendo locales al navegador.
+
+La ilustración y el recorte fueron creados con el generador de imágenes integrado. Los assets listos para web están en `src/assets/postcard-watermark.webp` y `src/assets/passport-cutout.webp`. El arte conecta arquitectura de Salta, Andes y viñedos con París, en acuarela y tinta suave sobre transparencia. El recorte conserva la cubierta azul y dorada y elimina el blanco exterior.

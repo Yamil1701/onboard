@@ -1,11 +1,13 @@
 import { gsap } from 'gsap';
+import {flightTiming} from './flight-timing';
+import {stopFlightSound} from './sound';
 import airUrl from './assets/flight-air.webp';
 import asphaltUrl from './assets/runway-asphalt.webp';
 import { createRunway, type RunwayCamera } from './runway';
 
-const runwayStart = 1.8;
-const wheelsUp = 4.65;
-const climbDuration = 3.75;
+const runwayStart = flightTiming.runway;
+const wheelsUp = flightTiming.liftoff;
+const climbDuration = flightTiming.climb;
 export const flightExit = wheelsUp + climbDuration;
 
 const eyeLevel: RunwayCamera = { travel: 0, height: 3.3, horizon: .407, speed: 0 };
@@ -69,6 +71,7 @@ export function createTakeoff(scene: HTMLElement) {
   }
 
   function clear() {
+    stopFlightSound();
     scene.hidden = true;
     Object.assign(camera, eyeLevel);
     gsap.set([scene, frame, distant, fallback, canvas, air, wing, glint], { clearProps: 'transform,opacity' });

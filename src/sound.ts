@@ -1,59 +1,76 @@
 import type { Language } from './copy';
-type Cue = 'tap'|'paper'|'stamp'|'flight'|'landing'|'success'|'error'|'finish';
-let context:AudioContext|undefined, muted=false, language:Language='ar';
+import {flightEnvelope,landingTiming,type FlightMode} from './flight-timing';
+type Cue='tap'|'paper'|'stamp'|'success'|'error'|'finish'|'letter'|'whoosh'|'pen'|'touchdown';
+let context:AudioContext|undefined,master:GainNode|undefined,muted=false,language:Language='ar';
 let noise:AudioBuffer|undefined;
+let flight:{mode:FlightMode;started:number;nodes:AudioScheduledSourceNode[]}|undefined;
 const key='voyageurs-sound-muted';
-try {muted=localStorage.getItem(key)==='true';} catch {/* Keep the in-memory preference. */}
-function audioContext() {
-  if(!context) {
-    const Constructor=window.AudioContext ?? (window as unknown as {webkitAudioContext?:typeof AudioContext}).webkitAudioContext;
-    if(Constructor)context=new Constructor();
-  }
+try{muted=localStorage.getItem(key)==='true';}catch{/* Keep this visit's preference. */}
+function audioContext(){
+  if(!context){const Constructor=window.AudioContext??(window as unknown as {webkitAudioContext?:typeof AudioContext}).webkitAudioContext;
+    if(Constructor){context=new Constructor();master=context.createGain();master.gain.value=muted?0:.7;master.connect(context.destination);}}
   return context;
 }
-function tone(ctx:AudioContext,freq:number,start:number,duration:number,volume:number,end=freq) {
-  const oscillator=ctx.createOscillator(),gain=ctx.createGain();oscillator.type='sine';oscillator.frequency.setValueAtTime(freq,start);oscillator.frequency.exponentialRampToValueAtTime(end,start+duration);
-  gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(volume,start+.015);gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
-  oscillator.connect(gain).connect(ctx.destination);oscillator.start(start);oscillator.stop(start+duration+.02);
+function tone(ctx:AudioContext,freq:number,start:number,duration:number,volume:number,end=freq,type:OscillatorType='sine'){
+  const node=ctx.createOscillator(),gain=ctx.createGain();node.type=type;node.frequency.setValueAtTime(freq,start);node.frequency.exponentialRampToValueAtTime(end,start+duration);
+  gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(volume,start+.008);gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+  node.connect(gain).connect(master!);node.start(start);node.stop(start+duration+.02);return node;
 }
-function air(ctx:AudioContext,start:number,duration:number,volume:number,frequency:number) {
+function noiseBuffer(ctx:AudioContext){
   if(!noise){noise=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);const samples=noise.getChannelData(0);for(let i=0;i<samples.length;i++)samples[i]=Math.random()*2-1;}
-  const source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();source.buffer=noise;source.loop=true;filter.type='lowpass';filter.frequency.setValueAtTime(frequency,start);filter.frequency.exponentialRampToValueAtTime(frequency/3,start+duration);
-  gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(volume,start+Math.min(.3,duration/4));gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
-  source.connect(filter).connect(gain).connect(ctx.destination);source.start(start);source.stop(start+duration);
+  return noise;
 }
-export function sound(cue:Cue) {
-  if(muted || document.hidden || !context || context.state!=='running')return;
-  const t=context.currentTime;
-  if(cue==='tap')tone(context,740,t,.055,.025,510);
-  if(cue==='paper')air(context,t,.35,.075,1900);
-  if(cue==='stamp'){air(context,t,.16,.16,450);tone(context,110,t,.18,.09,65);}
-  if(cue==='flight'||cue==='landing')air(context,t,cue==='flight'?5:3.8,.11,900);
+function air(ctx:AudioContext,start:number,duration:number,volume:number,frequency:number,end=frequency/3){
+  const source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();source.buffer=noiseBuffer(ctx);source.loop=true;filter.type='lowpass';filter.frequency.setValueAtTime(frequency,start);filter.frequency.exponentialRampToValueAtTime(Math.max(30,end),start+duration);
+  gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(volume,start+Math.min(.12,duration/4));gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+  source.connect(filter).connect(gain).connect(master!);source.start(start);source.stop(start+duration);return source;
+}
+export function sound(cue:Cue,delay=0){
+  if(muted||document.hidden||!context||context.state!=='running')return;
+  const t=context.currentTime+delay;
+  if(cue==='tap')tone(context,680,t,.045,.018,440);
+  if(cue==='letter'){air(context,t,.036,.095,2300);tone(context,210,t,.04,.028,150);}
+  if(cue==='paper')air(context,t,.36,.09,2200);
+  if(cue==='whoosh')air(context,t,.7,.11,300,1800);
+  if(cue==='pen')for(let i=0;i<5;i++)air(context,t+i*.075,.065,.06,2700-i*140,1500);
+  if(cue==='stamp'){tone(context,95,t,.34,.2,42);air(context,t,.085,.25,700);air(context,t+.045,.2,.08,2300);}
+  if(cue==='touchdown'){tone(context,65,t,.45,.15,40);air(context,t,.55,.18,800);}
   if(cue==='error')tone(context,240,t,.16,.035,190);
   if(cue==='success'||cue==='finish'){tone(context,440,t,.4,.04);tone(context,554,t+.12,.4,.035);tone(context,660,t+.24,.7,.03);}
 }
-function render() {
+function playFlight(){
+  if(!flight||flight.nodes.length||!context||context.state!=='running'||muted||document.hidden)return;
+  const ctx=context,t=ctx.currentTime,offset=(performance.now()-flight.started)/1000;
+  const points=flightEnvelope(flight.mode),duration=points.at(-1)![0];if(offset>=duration)return;
+  const a=[...points].reverse().find(p=>p[0]<=offset)??points[0],b=points.find(p=>p[0]>offset)??a;
+  const fraction=b[0]===a[0]?0:(offset-a[0])/(b[0]-a[0]);
+  const value=(column:number)=>a[column]+(b[column]-a[column])*fraction;
+  const wind=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),windGain=ctx.createGain();wind.buffer=noiseBuffer(ctx);wind.loop=true;filter.type='lowpass';filter.Q.value=.7;
+  windGain.gain.setValueAtTime(value(2),t);filter.frequency.setValueAtTime(value(3),t);
+  wind.connect(filter).connect(windGain).connect(master!);wind.start(t);wind.stop(t+duration-offset+.05);flight.nodes.push(wind);
+  for(const p of points.filter(p=>p[0]>offset)){windGain.gain.linearRampToValueAtTime(p[2],t+p[0]-offset);filter.frequency.linearRampToValueAtTime(p[3],t+p[0]-offset);}
+  for(const multiplier of [1,1.027,2.03]){
+    const turbine=ctx.createOscillator(),lowpass=ctx.createBiquadFilter(),gain=ctx.createGain();turbine.type='sawtooth';lowpass.type='lowpass';lowpass.frequency.value=370;gain.gain.setValueAtTime(.006+value(2)*.08,t);
+    turbine.frequency.setValueAtTime(value(1)*multiplier,t);turbine.connect(lowpass).connect(gain).connect(master!);
+    for(const p of points.filter(p=>p[0]>offset)){turbine.frequency.linearRampToValueAtTime(p[1]*multiplier,t+p[0]-offset);gain.gain.linearRampToValueAtTime(p[2]===0?0:.006+p[2]*.08,t+p[0]-offset);}
+    turbine.start(t);turbine.stop(t+duration-offset+.05);flight.nodes.push(turbine);
+  }
+  if(flight.mode==='landing'&&offset<landingTiming.touchdown){flight.nodes.push(tone(ctx,65,t+landingTiming.touchdown-offset,.45,.15,40));flight.nodes.push(air(ctx,t+landingTiming.touchdown-offset,.5,.18,800));}
+}
+export function startFlightSound(mode:FlightMode){stopFlightSound();flight={mode,started:performance.now(),nodes:[]};playFlight();}
+export function stopFlightSound(){for(const node of flight?.nodes??[])try{node.stop();}catch{/* It already ended. */}flight=undefined;}
+function render(){
   const button=document.querySelector<HTMLButtonElement>('#sound-toggle');if(!button)return;
-  button.setAttribute('aria-pressed',String(muted));
-  button.setAttribute('aria-label',language==='ar'?(muted?'Activar sonidos':'Silenciar sonidos'):(muted?'Activer les sons':'Couper les sons'));
+  button.setAttribute('aria-pressed',String(muted));button.setAttribute('aria-label',language==='ar'?(muted?'Activar sonidos':'Silenciar sonidos'):(muted?'Activer les sons':'Couper les sons'));
+  if(context&&master)master.gain.setTargetAtTime(muted?0:.7,context.currentTime,.015);
   for(const audio of document.querySelectorAll('audio'))audio.muted=muted;
 }
 export function translateSound(lang:Language){language=lang;render();}
-export function initSound() {
-  render();
-  const unlock=()=>{if(muted)return;try {const ctx=audioContext();if(ctx?.state==='suspended')void ctx.resume().catch(()=>{});}catch{/* Sound is optional on unsupported browsers. */}};
+export function initSound(){
+  render();const unlock=()=>{if(muted)return;try{const ctx=audioContext();if(ctx?.state==='suspended')void ctx.resume().then(playFlight).catch(()=>{});else playFlight();}catch{/* Audio is optional. */}};
   document.addEventListener('pointerdown',unlock,{capture:true,passive:true});
   document.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' ')unlock();},{capture:true});
-  document.querySelector('#sound-toggle')?.addEventListener('click',()=>{
-    muted=!muted;try{localStorage.setItem(key,String(muted));}catch{/* Retain this visit's choice. */}
-    if(muted){void context?.suspend();}else{unlock();}
-    render();
-  });
-  document.addEventListener('click',event=>{
-    const target=event.target instanceof Element?event.target.closest('button,summary,input[type="radio"]'):null;
-    if(target && target.id!=='sound-toggle' && !target.hasAttribute('disabled'))sound('tap');
-  });
-  document.addEventListener('visibilitychange',()=>{
-    if(document.hidden){void context?.suspend();for(const audio of document.querySelectorAll('audio'))audio.pause();}
-  });
+  document.querySelector('#sound-toggle')?.addEventListener('click',()=>{muted=!muted;try{localStorage.setItem(key,String(muted));}catch{/* Memory preference remains. */}if(!muted)unlock();render();});
+  document.addEventListener('click',event=>{const target=event.target instanceof Element?event.target.closest('button,summary,input[type="radio"]'):null;if(target&&target.id!=='sound-toggle'&&!target.hasAttribute('disabled'))sound('tap');});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){stopFlightSound();void context?.suspend();for(const audio of document.querySelectorAll('audio'))audio.pause();}});
 }

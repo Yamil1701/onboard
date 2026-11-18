@@ -1,6 +1,9 @@
 export const copy = {
   ar: {
     language: 'Idioma',
+    startJourney: 'Comenzar el viaje', walletNext: 'Ver hoja 2 · Cuaderno y archivos', walletPrevious: 'Volver a hoja 1 · Informe y estaciones',
+    relive: 'Revivir el viaje', reliveNotice: 'Modo revivir · tus respuestas y tu huella no se guardan.',
+    ownWebsite: 'Si querés tu propia web, ', writeMe: 'escribime',
     welcome: 'Bienvenida',
     departures: 'Salidas',
     destination: 'Destino',
@@ -79,6 +82,9 @@ export const copy = {
   },
   fr: {
     language: 'Langue',
+    startJourney: 'Commencer le voyage', walletNext: 'Voir la page 2 · Carnet et archives', walletPrevious: 'Retour à la page 1 · Rapport et étapes',
+    relive: 'Revivre le voyage', reliveNotice: 'Mode souvenir · tes réponses et ta trace ne sont pas enregistrées.',
+    ownWebsite: 'Si tu souhaites ton propre site, ', writeMe: 'écris-moi',
     welcome: 'Bienvenue',
     departures: 'Départs',
     destination: 'Destination',

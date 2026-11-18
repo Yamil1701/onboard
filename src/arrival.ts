@@ -4,7 +4,8 @@ import { arrivalAudio } from './arrival-config';
 import { createSouvenir } from './souvenirs';
 import { checkFootprint } from './wall-moderation';
 import { readWall, postFootprint, type Footprint, type WallCursor } from './wall-service';
-import { sound } from './sound';
+import { sound,startFlightSound,stopFlightSound } from './sound';
+import {welcomeNotes} from './wall-welcome';
 import type { Language } from './copy';
 
 type Chapter='story'|'souvenirs'|'wall';
@@ -29,6 +30,9 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
   let wallMode:'idle'|'loading'|'ready'|'error'='idle',errorKey:Words|undefined;
   let souvenirMode:'downloading'|'saved'|'exportError'|undefined,landingBeat:'landing'|'runway'|'landed'='landing';
   let entries:Footprint[]=[],cursor:WallCursor|null=null;
+  let replaying=false,replayEntry:Footprint|undefined,bookOpened=false;
+  let bookOpening:gsap.core.Timeline|undefined;
+  const currentEntry=()=>replaying?replayEntry:own.entry;
   let own:{token:string;entry?:Footprint}={token:crypto.randomUUID()};
   try {
     const stored=JSON.parse(localStorage.getItem(ownKey)??'null');
@@ -47,6 +51,7 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
         target.classList.add('is-visible');
         if(target.classList.contains('arrival-goodbye'))sound('stamp');
         else if(!target.classList.contains('arrival-opening'))sound('paper');
+        if(target.querySelector('#souvenir-passport'))openSouvenirPassport();
       }
     }
   },{threshold:.12});
@@ -55,7 +60,13 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
 
   let previewKey='',previewTicket=0;
   let previews:Partial<Record<Kind,{blob:Blob;url:string}>>={};
-  function clearPreviews(){for(const item of Object.values(previews))if(item)URL.revokeObjectURL(item.url);previews={};previewKey='';previewTicket++;}
+  function openSouvenirPassport(){
+    if(bookOpened||!previews.passport)return;bookOpened=true;bookOpening?.kill();
+    const cover=find('souvenir-cover');
+    if(reducedMotion.matches){gsap.set(cover,{opacity:0});return;}
+    bookOpening=gsap.timeline().call(()=>sound('paper'),[],.4).fromTo(cover,{rotationY:0,opacity:1},{rotationY:-165,duration:1.65,ease:'sine.inOut'},.4).to(cover,{opacity:0,duration:.25},1.7);
+  }
+  function clearPreviews(){bookOpening?.kill();bookOpened=false;gsap.set(find('souvenir-cover'),{rotationY:0,opacity:1});for(const item of Object.values(previews))if(item)URL.revokeObjectURL(item.url);previews={};previewKey='';previewTicket++;}
   async function ensurePreviews(){
     const key=JSON.stringify([name,phrase,language]);if(key===previewKey)return;
     clearPreviews();previewKey=key;const ticket=previewTicket;
@@ -70,25 +81,27 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
         const image=find<HTMLImageElement>(`preview-${kind}`);image.src=url;image.hidden=false;
       }
       souvenirMode=undefined;
+      if(find('souvenir-passport').closest('[data-reveal]')?.classList.contains('is-visible'))openSouvenirPassport();
     }catch{if(ticket===previewTicket){previewKey='';souvenirMode='exportError';}}
     finally{if(ticket===previewTicket){find('arrival-souvenirs').classList.remove('is-preparing');renderStatus();}}
   }
   function renderStatus(){find('souvenir-status').textContent=souvenirMode?arrivalCopy[language][souvenirMode]:'';}
   function renderWall(){
-    const w=arrivalCopy[language];form.hidden=!!own.entry;
+    const w=arrivalCopy[language],entry=currentEntry();form.hidden=!!entry;
     if(input.value!==state.draft)input.value=state.draft;
     input.disabled=sending;submit.disabled=sending;submit.textContent=sending?w.wallSending:w.wallSend;
     find('wall-count').textContent=`${Array.from(state.draft).length}/160`;
-    feedback.textContent=errorKey?w[errorKey]:own.entry?(own.entry.status==='pending'?w.wallPending:w.wallSaved):'';
+    feedback.textContent=errorKey?w[errorKey]:entry?(replaying?w.wallDemoDone:entry.status==='pending'?w.wallPending:w.wallSaved):replaying?w.wallReplay:'';
     feedback.hidden=!feedback.textContent;
     input.setAttribute('aria-invalid',String(!!errorKey&&['wallLength','wallLanguage','wallLinks','wallSpam'].includes(errorKey)));
-    const notice=find('wall-notice');notice.textContent=wallMode==='loading'&&!entries.length?w.wallLoading:wallMode==='error'?w.wallLoadError:!entries.length?w.wallEmpty:'';
+    const notice=find('wall-notice');notice.textContent=wallMode==='loading'&&!entries.length?w.wallLoading:wallMode==='error'?w.wallLoadError:'';
     notice.hidden=!notice.textContent;find('wall-retry').hidden=wallMode!=='error';
-    find('wall-scroll').hidden=!entries.length;find('wall-browse').hidden=!entries.length;
+    find('wall-scroll').hidden=false;find('wall-browse').hidden=false;
     const more=find<HTMLButtonElement>('wall-more');more.hidden=!cursor;more.disabled=loading;more.textContent=loading?w.wallLoading:w.wallMore;
-    list.replaceChildren(...entries.map(entry=>{
+    const notes=[...entries.map(entry=>({...entry,welcome:false})),...welcomeNotes[language].map((message,index)=>({id:`welcome-${index}`,message,created_at:'',welcome:true}))];
+    list.replaceChildren(...notes.map(entry=>{
       const card=document.createElement('li'),quote=document.createElement('blockquote'),author=document.createElement('span');
-      quote.textContent=entry.message;author.textContent=w.wallGuest;card.append(quote,author);return card;
+      quote.textContent=entry.message;author.textContent=entry.welcome?w.wallWelcome:w.wallGuest;card.append(quote,author);return card;
     }));
   }
   function render(){
@@ -97,7 +110,7 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
       const text=w[el.dataset.arrivalCopy as Words];if(typeof text==='string')el.textContent=text;
     }
     for(const chapter of ['story','souvenirs','wall'] as const)find(`arrival-${chapter}`).hidden=state.chapter!==chapter;
-    caption.textContent=w[landingBeat];find('arrival-personal-phrase').textContent=phrase||w.quote;
+    caption.textContent=w[landingBeat];find('arrival-personal-phrase').textContent=`“${phrase||w.quote}”`;
     input.placeholder=w.wallPlaceholder;audio.setAttribute('aria-label',w.audio);
     find('arrival-audio-group').hidden=!arrivalAudio.src;find('arrival-audio-placeholder').hidden=!!arrivalAudio.src;
     if(arrivalAudio.src&&!audio.hasAttribute('src'))audio.src=arrivalAudio.src;
@@ -126,7 +139,7 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
     state.chapter=chapter;audio.pause();render();onChange();focusChapter();sound('paper');
     if(chapter==='wall')void refreshWall();
   }
-  function finishLanding(){timeline?.kill();timeline=undefined;state.landed=true;unlock();render();onChange();focusChapter();}
+  function finishLanding(){stopFlightSound();timeline?.kill();timeline=undefined;state.landed=true;unlock();render();onChange();focusChapter();}
   find('skip-arrival').addEventListener('click',finishLanding);
   find('arrival-reveal').addEventListener('click',()=>setChapter('souvenirs'));
   find('arrival-to-wall').addEventListener('click',()=>state.finished?onFinish():setChapter('wall'));
@@ -135,9 +148,10 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
   input.addEventListener('input',()=>{state.draft=input.value;errorKey=undefined;find('wall-count').textContent=`${Array.from(state.draft).length}/160`;input.setAttribute('aria-invalid','false');feedback.hidden=true;onChange();});
   const errors:Record<string,Words>={length:'wallLength',links:'wallLinks',language:'wallLanguage',spam:'wallSpam',rate:'wallRate'};
   form.addEventListener('submit',async event=>{
-    event.preventDefault();if(sending||own.entry)return;
+    event.preventDefault();if(sending||currentEntry())return;
     const check=checkFootprint(state.draft);
     if(!check.ok){errorKey=errors[check.reason];renderWall();feedback.focus({preventScroll:true});sound('error');return;}
+    if(replaying){replayEntry={id:crypto.randomUUID(),message:check.message,created_at:new Date().toISOString(),status:'demo'};state.draft='';renderWall();feedback.focus({preventScroll:true});sound('success');return;}
     sending=true;errorKey=undefined;renderWall();persistOwn();const ticket=generation;
     try{
       const entry=await postFootprint(check.message,language,own.token);own.entry=entry;persistOwn();if(ticket!==generation)return;
@@ -176,7 +190,7 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
       if(state.landed){unlock();focusChapter();if(state.chapter==='wall')void refreshWall();return;}
       intro.hidden=false;content.inert=true;document.documentElement.classList.add('is-landing');find('skip-arrival').focus({preventScroll:true});
       if(reducedMotion.matches){finishLanding();return;}
-      landingBeat='landing';caption.textContent=arrivalCopy[language].landing;sound('landing');
+      landingBeat='landing';caption.textContent=arrivalCopy[language].landing;startFlightSound('landing');
       gsap.set([intro,scene,sky,runway],{clearProps:'opacity,transform'});
       timeline=gsap.timeline({onComplete:finishLanding})
         .fromTo(scene,{opacity:0},{opacity:1,duration:.65},0)
@@ -188,13 +202,14 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
         .to(intro,{opacity:0,duration:.7,clearProps:'opacity'},5.1);
     },
     revisit(){state.chapter='story';render();focusChapter();},
+    setReplay(value:boolean){replaying=value;replayEntry=undefined;render();},
     snapshot:()=>({...state}),
     restore(value:unknown){
       if(!value||typeof value!=='object')return;const saved=value as Record<string,unknown>;
       const chapter:Chapter=saved.chapter==='wall'||saved.wallOpen===true?'wall':saved.chapter==='souvenirs'||saved.revealed===true?'souvenirs':'story';
       state={landed:saved.landed===true,chapter,finished:saved.finished===true,draft:typeof saved.draft==='string'?saved.draft.slice(0,320):''};render();
     },
-    reset(){generation++;timeline?.kill();closingTimeline?.kill();timeline=undefined;closingTimeline=undefined;audio.pause();unlock();clearPreviews();state=fresh();loading=false;sending=false;errorKey=undefined;souvenirMode=undefined;entries=[];cursor=null;wallMode='idle';for(const el of root.querySelectorAll('[data-reveal]'))el.classList.remove('is-visible');render();},
-    pauseAudio(){audio.pause();},
+    reset(){stopFlightSound();replayEntry=undefined;generation++;timeline?.kill();closingTimeline?.kill();timeline=undefined;closingTimeline=undefined;audio.pause();unlock();clearPreviews();state=fresh();loading=false;sending=false;errorKey=undefined;souvenirMode=undefined;entries=[];cursor=null;wallMode='idle';for(const el of root.querySelectorAll('[data-reveal]'))el.classList.remove('is-visible');render();},
+    pauseAudio(){audio.pause();stopFlightSound();},
   };
 }

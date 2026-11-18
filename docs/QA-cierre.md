@@ -28,3 +28,7 @@ Fuente visual: el diseño existente aprobado de Voyageurs, con su paleta nocturn
 ## Límites concretos
 
 La grabación de Cyntia sigue pendiente. Las encuestas conservan su almacenamiento de sesión; el mural usa el servidor compartido. El filtro de lenguaje sigue siendo una primera barrera y requiere revisar los mensajes pendientes. La revisión estrecha verifica el diseño a 390 px, sin sustituir pruebas táctiles en un dispositivo físico. Las notas intercaladas se poblarán con mensajes reales aprobados; el estado vacío no simula visitantes.
+
+## Revisión siguiente: audio, dos hojas y modo revivir
+
+El diseño de la primera encuesta cambia únicamente la presentación de las tres opciones. Las respuestas originales permanecen intactas. Las envolventes de audio tienen pruebas de cobertura de toda la aceleración, ascenso, transición final y aterrizaje. Las notas iniciales del mural son editoriales y están rotuladas como bienvenida. «Revivir» es una rama temporal: no escribe respuestas en la sesión original ni ejecuta POST para la huella.

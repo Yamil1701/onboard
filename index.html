@@ -38,6 +38,7 @@
         <button type="button" data-lang="fr" aria-pressed="false" aria-label="Français" lang="fr"><svg class="language-flag" aria-hidden="true"><use href="#flag-fr"/></svg><span>FR</span></button>
       </div></div>
     </header>
+    <p class="relive-notice" id="relive-notice" data-copy="reliveNotice" hidden>Modo revivir · tus respuestas y tu huella no se guardan.</p>
     <main class="stage">
       <picture class="window"><img
         id="window-photo" src="./src/assets/runway.webp" width="840" height="1132"
@@ -66,6 +67,7 @@
             <p class="board-date"><time datetime="2026-11-30" data-copy="shortDate">30 nov 2026</time><time datetime="20:00">20 h</time></p>
           </div>
         </div>
+        <button class="intro-start" id="intro-start" type="button" data-copy="startJourney">Comenzar el viaje</button>
       </section>
 
       <section class="boarding" id="boarding" aria-labelledby="journey-title" hidden>
@@ -100,7 +102,7 @@
             <p class="passport-specimen" lang="fr">Spécimen fictif · Usage scolaire</p>
           </div>
           <button class="passport-cover" id="open-passport-cover" type="button" aria-controls="ticket" aria-expanded="false">
-            <img src="./src/assets/passport-cover.webp" width="720" height="1080" alt="" fetchpriority="high" decoding="async">
+            <img src="./src/assets/passport-cutout.webp" width="720" height="1080" alt="" fetchpriority="high" decoding="async">
             <span data-copy="openPassport">Abrir pasaporte</span>
           </button>
         </div>
@@ -143,6 +145,7 @@
               <span><svg aria-hidden="true"><use href="#plane"/></svg><span data-copy="walletLabel">Portadocumentos de viaje</span></span>
               <span class="wallet-code">FR 101</span>
             </div>
+            <div class="wallet-leaf" id="wallet-page-1">
             <button class="document-entry" type="button" id="open-passport">
               <svg aria-hidden="true"><use href="#file"/></svg>
               <span><strong data-copy="reportTitle">Informe de práctica</strong><small data-copy="reportDetails">Estaciones 1 y 4 · PDF en español</small></span>
@@ -162,6 +165,8 @@
                 <p class="slip-status" data-copy="pendingMaterials">Materiales definitivos pendientes</p>
               </article>
             </div>
+            </div>
+            <div class="wallet-leaf" id="wallet-page-2" hidden>
             <button class="memory-entry" id="enter-workshop" type="button">
               <img src="./src/assets/workshop-room.webp" width="1200" height="800" alt="" loading="lazy" decoding="async">
               <span class="memory-entry-paper"><small data-copy="workshop">Cuaderno de a bordo</small><strong data-copy="workshopTitle">¿Confirmás o verificás?</strong><span data-copy="workshopInvitation">Una página de mis prácticas, una decisión en tus manos.</span><em data-copy="enterWorkshop">Abrir el cuaderno</em></span>
@@ -173,6 +178,12 @@
               </summary>
               <div class="archive-list" id="archive-list"></div>
             </details>
+            </div>
+            <nav class="wallet-navigation" aria-label="Hojas del portadocumentos">
+              <p id="wallet-position" aria-live="polite">01 / 02</p>
+              <button class="wallet-next" type="button" id="wallet-next"><span data-copy="walletNext">Ver hoja 2 · Cuaderno y archivos</span><svg aria-hidden="true"><use href="#arrow"/></svg></button>
+              <button class="wallet-previous" type="button" id="wallet-previous" hidden><svg aria-hidden="true"><use href="#arrow"/></svg><span data-copy="walletPrevious">Volver a hoja 1 · Informe y estaciones</span></button>
+            </nav>
           </div>
         </div>
         <div class="materials-next"><p data-copy="nextWorkshopHint">Los materiales quedan disponibles para volver después.</p><button class="primary" type="button" id="continue-to-workshop" data-copy="nextWorkshop">Continuar a la parada 4</button></div>
@@ -335,6 +346,7 @@
                 <audio controls preload="none" id="arrival-audio"></audio>
                 <details id="arrival-transcript-details" hidden><summary data-arrival-copy="transcript"></summary><p id="arrival-transcript"></p></details>
               </div>
+              <p class="scroll-invitation"><span data-arrival-copy="scroll">Deslizá para seguir</span><svg aria-hidden="true"><use href="#arrow"/></svg></p>
             </section>
             <section class="arrival-beat arrival-goodbye" aria-labelledby="arrival-takeaway-title" data-reveal>
               <div class="arrival-seal" id="arrival-seal"><strong data-arrival-copy="seal"></strong><span data-arrival-copy="date"></span></div>
@@ -347,7 +359,7 @@
           <section class="arrival-souvenirs" id="arrival-souvenirs" aria-labelledby="souvenir-title" hidden>
             <header class="chapter-heading"><p class="arrival-kicker">02 / 03</p><h2 id="souvenir-title" tabindex="-1" data-arrival-copy="souvenirTitle"></h2></header>
             <figure class="souvenir-showcase" data-reveal>
-              <div class="souvenir-stage passport-stage"><img id="preview-passport" width="800" height="1100" alt="" hidden><p class="preview-loading" data-arrival-copy="previewLoading"></p></div>
+              <div class="souvenir-stage passport-stage"><div class="souvenir-passport" id="souvenir-passport"><img class="souvenir-cover" id="souvenir-cover" src="./src/assets/passport-cutout.webp" width="720" height="1080" alt=""><img id="preview-passport" width="800" height="1100" alt="" hidden></div><p class="preview-loading" data-arrival-copy="previewLoading"></p></div>
               <figcaption><h3 data-arrival-copy="passportTitle"></h3><button class="download-memory" type="button" id="save-passport" data-souvenir data-arrival-copy="download">Descargar</button></figcaption>
             </figure>
             <figure class="souvenir-showcase" data-reveal>
@@ -379,12 +391,12 @@
           <button type="button" class="arrival-back" id="arrival-materials" data-arrival-copy="back">Volver a materiales</button>
         </div>
         <div class="arrival-closing" id="arrival-closing" tabindex="-1" hidden>
-          <div class="closing-book" id="closing-book" aria-hidden="true"><div class="closing-paper">VOYAGEURS<br>FR 101<br>30 · 11 · 2026</div><img id="closing-cover" src="./src/assets/passport-cover.webp" width="720" height="1080" alt=""></div>
+          <div class="closing-book" id="closing-book" aria-hidden="true"><div class="closing-paper">VOYAGEURS<br>FR 101<br>30 · 11 · 2026</div><img id="closing-cover" src="./src/assets/passport-cutout.webp" width="720" height="1080" alt=""></div>
           <p data-arrival-copy="finishing" role="status"></p>
         </div>
       </section>
       <section class="travel-menu" id="travel-menu" aria-labelledby="travel-menu-title" hidden>
-        <img class="menu-passport" src="./src/assets/passport-cover.webp" width="720" height="1080" alt="">
+        <img class="menu-passport" src="./src/assets/passport-cutout.webp" width="720" height="1080" alt="">
         <h1 id="travel-menu-title" tabindex="-1" data-arrival-copy="menuTitle">El viaje queda con vos.</h1>
         <p data-arrival-copy="menuIntro"></p>
         <nav id="travel-menu-nav" aria-labelledby="travel-menu-title">
@@ -394,6 +406,9 @@
           <button type="button" data-explore="workshop"><span>04</span><strong data-arrival-copy="menuWorkshop"></strong><svg aria-hidden="true"><use href="#arrow"/></svg></button>
           <button type="button" data-explore="memories"><span>06</span><strong data-arrival-copy="menuMemories"></strong><svg aria-hidden="true"><use href="#arrow"/></svg></button>
         </nav>
+        <button class="relive-trigger" id="relive-journey" type="button" data-copy="relive">Revivir el viaje</button>
+        <p class="site-credit"><span data-copy="ownWebsite">Si querés tu propia web, </span><a href="https://wa.me/5493876855654" target="_blank" rel="noopener noreferrer" data-copy="writeMe">escribime</a>.</p>
+
       </section>
     </main>
     <div class="memory-transition" id="memory-transition" role="region" tabindex="-1" aria-label="Cuaderno de a bordo" hidden>
@@ -408,11 +423,11 @@
     <button class="explore-menu" id="explore-menu" type="button" data-copy="travelMenu" hidden>Menú del viaje</button>
     <footer class="progress" id="progress" hidden>
       <div class="progress-track" aria-hidden="true">
-        <i></i><i></i><i></i><i></i><i></i><i></i>
+        <i><span>1</span></i><i><span>2</span></i><i><span>3</span></i><i><span>4</span></i><i><span>5</span></i><i><span>6</span></i>
         <svg><use href="#plane"/></svg>
       </div>
       <div class="progress-label">
-        <span data-copy="journey">Recorrido</span>
+        <span id="progress-current" aria-live="polite">Bienvenida</span>
         <button class="restart" type="button" id="restart-journey"><svg aria-hidden="true"><use href="#restart"/></svg><span data-copy="restart">Reiniciar</span></button>
         <span id="progress-value">1 / 6</span>
       </div>

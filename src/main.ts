@@ -7,7 +7,7 @@ import { createWorkshop } from './workshop';
 import { createMemoryTransition } from './memory-transition';
 import { createFinalSurvey } from './final-survey';
 import { createArrival } from './arrival';
-import { initSound, sound, translateSound } from './sound';
+import { initSound, sound, translateSound, startFlightSound, stopFlightSound } from './sound';
 import './style.css';
 import './workshop.css';
 import './memory.css';
@@ -78,7 +78,9 @@ const state: {
   selected: Expectation | null;
   submitted: Expectation | null;
   furthestStop: number;
-} = { language: 'ar', name: '', selected: null, submitted: null, furthestStop: 1 };
+  walletPage:1|2;
+  reliving:boolean;
+} = { language: 'ar', name: '', selected: null, submitted: null, furthestStop: 1, walletPage:1, reliving:false };
 let storageBlock = false;
 let flight: gsap.core.Timeline | undefined;
 let flightBeat: 'runway' | 'climb' | null = null;
@@ -102,6 +104,7 @@ function restore() {
   try {
     const stored = JSON.parse(sessionStorage.getItem(storageKey) ?? 'null');
     if (!stored) return;
+    state.walletPage=stored.walletPage===2?2:1;
     if (stored.language === 'fr') state.language = 'fr';
     if (typeof stored.name === 'string') state.name = stored.name;
     if (isExpectation(stored.selected)) state.selected = stored.selected;
@@ -127,7 +130,7 @@ function restore() {
 }
 
 function save() {
-  if (storageBlock) return;
+  if (storageBlock || state.reliving) return;
   try {
     sessionStorage.setItem(storageKey, JSON.stringify({
       ...state,
@@ -157,6 +160,7 @@ function renderDestination(animateIntro: boolean) {
       if (char !== ' ') flap.textContent = char;
       if (animateIntro) {
         flap.classList.add('is-arriving');
+        if(char!==' ')sound('letter',rowIndex*.17+line.children.length*.045+.08);
         flap.style.setProperty('--letter-delay', `${rowIndex * 170 + line.children.length * 45}ms`);
       }
       line.append(flap);
@@ -199,9 +203,12 @@ function renderLanguage(animateIntro = false) {
   archive.translate(state.language);
   workshop.translate(state.language, state.name);
   memory.translate(state.language);
-  finalSurvey.translate(state.language, state.submitted ? copy[state.language][state.submitted] : '');
+  finalSurvey.translate(state.language, state.submitted ? copy[state.language][state.submitted] : '',state.reliving);
   arrival.translate(state.language, state.name, workshop.takeaway());
   translateSound(state.language);
+  if(state.reliving)document.querySelector<HTMLElement>('[data-copy=received]')!.textContent=language.reliveNotice;
+  renderProgress();
+  renderWallet();
   const finalLink=find('open-final-survey');finalLink.dataset.copy=arrival.snapshot().finished?'travelMenu':'enterFinalSurvey';finalLink.textContent=language[finalLink.dataset.copy as CopyKey];
 }
 
@@ -227,16 +234,38 @@ function renderPhase() {
   menuButton.hidden=!arrival.snapshot().finished||phase==='menu';
   topMenu.hidden=menuButton.hidden;stageLabel.parentElement!.hidden=!topMenu.hidden;
   progress.hidden = phase === 'gate'||phase==='menu'||arrival.snapshot().finished;
+  find('relive-notice').hidden=!state.reliving;
   const stop = currentStop();
   state.furthestStop = Math.max(stop, state.furthestStop);
   progress.dataset.stop = String(state.furthestStop);
-  progressValue.textContent = `${state.furthestStop} / 6`;
+  renderProgress();
+  renderWallet();
   resumeFinal.hidden = arrival.snapshot().finished || (!workshop.snapshot().stamped && state.furthestStop < 5);
   resumeArrival.hidden = arrival.snapshot().finished || state.furthestStop < 6;
 }
 
+function renderProgress(){
+  const stop=currentStop(),words=copy[state.language];
+  const labels=[words.welcome,words.survey,words.materials,words.workshopTitle,words.finalSurvey,words.arrival];
+  progress.style.setProperty('--current',`${(stop-1)*20}%`);progress.style.setProperty('--travelled',`${(state.furthestStop-1)*20}%`);
+  progressValue.textContent=`${stop} / 6`;find('progress-current').textContent=labels[stop-1];
+  progress.querySelectorAll<HTMLElement>('.progress-track i').forEach((dot,index)=>{dot.classList.toggle('is-visited',index<state.furthestStop);dot.classList.toggle('is-current',index===stop-1);});
+}
+let leafAnimation:Animation|undefined;
+function renderWallet(){
+  find('wallet-page-1').hidden=state.walletPage!==1;find('wallet-page-2').hidden=state.walletPage!==2;
+  find('wallet-next').hidden=state.walletPage===2;find('wallet-previous').hidden=state.walletPage===1;
+  find('wallet-position').textContent=`0${state.walletPage} / 02`;
+}
+function turnWallet(page:1|2){
+  if(phase!=='materials'||wallet.inert)return;leafAnimation?.cancel();state.walletPage=page;renderWallet();save();sound('paper');
+  const leaf=find(`wallet-page-${page}`);if(!reducedMotion.matches)leafAnimation=leaf.animate([{opacity:.35,transform:`perspective(900px) rotateY(${page===2?10:-10}deg) translateX(${page===2?12:-12}px)`},{opacity:1,transform:'none'}],{duration:500,easing:'ease-out'});
+  find(page===2?'wallet-previous':'wallet-next').focus({preventScroll:true});
+}
+
 function openBoarding(focusButton = false) {
   if (phase !== 'gate') return;
+  sound('whoosh');
   phase = 'boarding';
   renderPhase();
   takeoff.preload();
@@ -251,6 +280,7 @@ function openBoarding(focusButton = false) {
 }
 
 function prepareBoarding(focusButton = false) {
+  find('intro-start').hidden=true;renderDestination(true);
   window.setTimeout(() => openBoarding(focusButton), introReadingTime);
 }
 
@@ -305,7 +335,7 @@ function boardJourney() {
   boardButton.disabled = true;
   nameInput.readOnly = true;
   stamp.hidden = false;
-  sound('stamp');
+  sound('stamp',reducedMotion.matches?0:.4);
   renderLanguage();
   if (reducedMotion.matches) {
     flight = gsap.timeline({ onComplete: openSurvey })
@@ -384,7 +414,7 @@ function beginFlight() {
     openMaterials();
     return;
   }
-  sound('flight');
+  startFlightSound('takeoff');
   phase = 'takeoff';
   flightBeat = 'runway';
   renderPhase();
@@ -482,6 +512,8 @@ function leaveArrival() {
 
 function openMenu(){
   if(!arrival.snapshot().finished)return;
+  if(state.reliving){state.reliving=false;arrival.setReplay(false);restore();}
+  stopFlightSound();
   memory.cancel();flight?.kill();flight=undefined;takeoff.clear();
   passportOpening?.kill();passportOpening=undefined;walletOpening?.kill();walletOpening=undefined;
   wallet.inert=false;materials.inert=false;
@@ -502,12 +534,12 @@ function explore(part:string){
     passportCover.hidden=false;passportCover.disabled=false;passportCover.setAttribute('aria-expanded','false');
     ticket.hidden=true;ticket.inert=true;boardButton.disabled=false;stamp.hidden=true;nameInput.readOnly=false;
     gsap.set([passportCover,boarding,ticket,stamp,windowPhoto],{clearProps:'opacity,transform'});
-    phase='gate';renderPhase();renderLanguage(true);save();window.scrollTo(0,0);prepareBoarding(true);
+    phase='gate';renderPhase();renderLanguage(false);save();window.scrollTo(0,0);prepareBoarding(true);
   }
 }
 
 function restartJourney() {
-  if(arrival.snapshot().finished){openMenu();return;}
+  if(arrival.snapshot().finished&&!state.reliving){openMenu();return;}
   memory.cancel();
   closingMemory?.cancel();
   closingMemory = undefined;
@@ -544,6 +576,7 @@ function restartJourney() {
   state.selected = null;
   state.submitted = null;
   state.furthestStop = 1;
+  state.walletPage=1;find('intro-start').hidden=false;
   nameInput.value = '';
   nameInput.readOnly = false;
   boardButton.disabled = false;
@@ -551,10 +584,10 @@ function restartJourney() {
   for (const option of pollOptions) option.checked = false;
   phase = 'gate';
   renderPhase();
-  renderLanguage(true);
+  renderLanguage(false);
   save();
   window.scrollTo(0, 0);
-  prepareBoarding(true);
+  find('intro-start').focus({preventScroll:true});
 }
 
 restore();
@@ -563,7 +596,7 @@ for (const option of pollOptions) {
   option.checked = option.value === state.selected;
 }
 renderPhase();
-renderLanguage(true);
+renderLanguage(false);
 reader.syncRoute();
 archive.syncRoute();
 if ((phase as Phase) === 'arrival') arrival.play();
@@ -660,4 +693,11 @@ if (viewport) {
   });
 }
 
-if (phase === 'gate') prepareBoarding();
+find('intro-start').addEventListener('click',()=>prepareBoarding());
+find('wallet-next').addEventListener('click',()=>turnWallet(2));
+find('wallet-previous').addEventListener('click',()=>turnWallet(1));
+find('relive-journey').addEventListener('click',()=>{
+  if(phase!=='menu')return;const passenger=state.name;state.reliving=true;arrival.setReplay(true);restartJourney();state.name=passenger;nameInput.value=passenger;
+});
+let lastSignature=state.name;
+nameInput.addEventListener('change',()=>{if(nameInput.value.trim()&&nameInput.value!==lastSignature){sound('pen');lastSignature=nameInput.value;}});

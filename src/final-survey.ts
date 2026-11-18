@@ -25,6 +25,7 @@ export function createFinalSurvey(onChange: () => void) {
   let data = emptyState();
   let language: Language = 'ar';
   let expectation = '';
+  let replaying=false;
   let editingFromReview = false;
   let motion: Animation | undefined;
   const allAnswered = () => data.answers.every(value => value !== null);
@@ -47,6 +48,7 @@ export function createFinalSurvey(onChange: () => void) {
       const value = words[element.dataset.finalCopy as keyof typeof words];
       if (typeof value === 'string') element.textContent = value;
     }
+    if(replaying){root.querySelector<HTMLElement>('[data-final-copy=done]')!.textContent=language==='ar'?'Esta es una repetición. Tus respuestas no se guardan.':'C’est une répétition. Tes réponses ne sont pas enregistrées.';root.querySelector<HTMLElement>('[data-final-copy=local]')!.textContent=language==='ar'?'Modo revivir · sin guardar ni enviar respuestas.':'Mode souvenir · sans enregistrer ni envoyer de réponses.';}
     const reviewing = data.step === 5;
     root.dataset.mode = data.submitted ? 'completed' : reviewing ? 'review' : 'question';
     form.hidden = reviewing || data.submitted;
@@ -149,9 +151,9 @@ export function createFinalSurvey(onChange: () => void) {
   render();
 
   return {
-    translate(lang: Language, initialExpectation: string) {
+    translate(lang: Language, initialExpectation: string, replay=false) {
       // Preserve the focused radio and keyboard arrow navigation on language changes.
-      language = lang; expectation = initialExpectation; render();
+      language = lang; expectation = initialExpectation;replaying=replay; render();
     },
     snapshot: () => ({ ...data, answers: [...data.answers] }),
     restore(value: unknown) {

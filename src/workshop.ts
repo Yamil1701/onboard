@@ -1,4 +1,5 @@
 import type { Language } from './copy';
+import {sound} from './sound';
 import { workshopCopy } from './workshop-copy';
 
 type Decision = 'confirm' | 'verify';
@@ -171,6 +172,7 @@ export function createWorkshop(onChange: () => void) {
     event.preventDefault();
     if (activeIndex() !== 3 || !data.reflection || data.stamped) return;
     data.stamped = true;
+    sound('stamp');
     render();
     onChange();
     settle(completed);
