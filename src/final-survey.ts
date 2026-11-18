@@ -37,7 +37,7 @@ export function createFinalSurvey(onChange: () => void) {
       radio.checked = data.rating === value;
       radio.closest('label')!.classList.toggle('is-filled', value > 0 && data.rating !== null && value <= data.rating);
       const label = radio.closest('label')!.querySelector('.visually-hidden');
-      if (label) label.textContent = words.ratingStars.replace('{count}', String(value));
+      if (label) label.textContent = value === 1 ? words.ratingOne : words.ratingStars.replace('{count}', String(value));
     }
     find('rating-value').textContent = data.rating === null ? words.ratingEmpty : `${data.rating}/5`;
     clearRating.hidden = data.rating === null;
