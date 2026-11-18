@@ -91,3 +91,7 @@ El enlace discreto «Revivir el viaje» reinicia una visita temporal. En este mo
 La ilustración y el recorte fueron creados con el generador de imágenes integrado. Los assets listos para web están en `src/assets/postcard-watermark.webp` y `src/assets/passport-cutout.webp`. El arte conecta arquitectura de Salta, Andes y viñedos con París, en acuarela y tinta suave sobre transparencia. El recorte conserva la cubierta azul y dorada y elimina el blanco exterior.
 
 La firma usa ahora una grabación breve de lapicera sobre papel bajo CC0, con su origen documentado junto al archivo. El mural permite el encadenamiento del scroll hacia la página al alcanzar sus límites.
+
+## Vista previa al compartir
+
+El HTML inicial incluye título, descripción e imagen Open Graph y Twitter Cards sin depender de JavaScript. La portada local `/social/voyageurs-preview.jpg` mide 1200 × 630 y usa el pasaporte y la pista del proyecto. Canonical y `og:url` apuntan al enlace limpio `https://yamil1701.github.io/onboard/`. Los servicios de chat deciden la presentación final y pueden conservar una vista anterior en caché.
