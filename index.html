@@ -174,19 +174,20 @@
               <svg aria-hidden="true"><use href="#arrow"/></svg>
             </button>
             <div class="wallet-pockets">
-              <article class="wallet-slip">
+              <button class="wallet-slip practice-entry" id="open-bspa" type="button">
                 <p class="slip-stop" data-copy="stationOne">Estación 1</p>
                 <h2>BSPA</h2>
                 <p class="slip-topic" lang="fr">Mon frigo idéal</p>
-                <p class="slip-status" data-copy="pendingMaterials">Materiales definitivos pendientes</p>
-              </article>
-              <article class="wallet-slip">
+                <span class="slip-open">Explorar la práctica ↗</span>
+              </button>
+              <button class="wallet-slip practice-entry" id="open-turismo" type="button">
                 <p class="slip-stop" data-copy="stationFour">Estación 4</p>
                 <h2 data-copy="tourism">Turismo</h2>
                 <p class="slip-topic" data-copy="wineRoute">La ruta del vino</p>
-                <p class="slip-status" data-copy="pendingMaterials">Materiales definitivos pendientes</p>
-              </article>
+                <span class="slip-open">Explorar la práctica ↗</span>
+              </button>
             </div>
+            <div class="future-practices" id="future-practices"><p>Próximas experiencias</p><strong>UNATE</strong><strong>SECUNDARIA</strong><small id="future-status">Materiales pendientes</small></div>
             </div>
             <div class="wallet-leaf" id="wallet-page-2" hidden>
             <button class="memory-entry" id="enter-workshop" type="button">
@@ -482,6 +483,13 @@
         <div class="reader-page" id="reader-paper"></div>
       </div>
     </section>
+    <section class="reader practice-reader" id="practice-reader" aria-labelledby="practice-title" hidden inert>
+      <header class="reader-header"><button type="button" id="practice-close"><span aria-hidden="true">‹</span> <span id="practice-close-label">Volver</span></button><h2 id="practice-title"></h2></header>
+      <div class="practice-meter" id="practice-progress" aria-hidden="true"></div>
+      <div class="reader-view practice-view" id="practice-view" role="region" aria-labelledby="practice-title"><article class="practice-body" id="practice-body"></article></div>
+      <nav class="practice-navigation" aria-label="Práctica"><button id="practice-prev" type="button">Anterior</button><output id="practice-position" aria-live="polite"></output><button id="practice-next" type="button">Continuar</button></nav>
+    </section>
+
     <section class="reader archive-reader" id="archive-reader" aria-labelledby="archive-reader-title" hidden>
       <header class="reader-header">
         <button type="button" id="close-archive"><span aria-hidden="true">‹</span> <span data-copy="backMaterials">Volver</span></button>

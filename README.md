@@ -64,7 +64,13 @@ Usá Node.js 24. GitHub Actions compila y publica en [GitHub Pages](https://yami
 
 Cada colección vive en `src/archive-data.json`. Tiene un título por idioma y una lista ordenada de imágenes con sus leyendas. Las imágenes WebP van en `public/materiales/archivo/<colección>/`. El resumen y el paginador calculan sus totales a partir de la lista. Para agregar una colección se usa un identificador breve en minúsculas y se agrega su imagen `portada.webp` junto a los demás archivos de la colección.
 
-Las 71 láminas recibidas están en el archivo temático, incluyendo el cuadro y las tres versiones de tarjetas de artículos partitivos. Los espacios de BSPA y Turismo esperan las versiones definitivas de sus materiales de presentación.
+Las 71 láminas recibidas están en el archivo temático, incluyendo el cuadro y las tres versiones de tarjetas de artículos partitivos. BSPA y Turismo abren recorridos propios desde la primera hoja. UNATE y Secundaria quedan identificados como próximas experiencias, con materiales pendientes.
+
+## Recorridos de práctica
+
+`src/practices.ts`, `src/practice-data.ts` y `src/practices.css` organizan los recorridos AR/FR sin alterar las seis paradas del viaje. BSPA tiene seis páginas con contexto, alimentos/comercios, video de mercado, negación, recursos de la heladera y preparación del reel. Turismo tiene diez: presentación/FOS, mapas, Champagne, pimentón, degustación, vinos de altura, maridaje, vinificación, producciones y reflexión. Las revelaciones requieren una acción; las respuestas de estas actividades permanecen en memoria y no se envían como encuestas.
+
+Los materiales nuevos están en `public/materiales/practicas/`. Se muestran ocho fotografías únicas de producciones recibidas (una novena era duplicada), con versiones revisadas de las partes legibles sin sustituir el original. Los maridajes se presentan como propuestas orientativas. El orden de vinificación es un esquema de tinto con maceración/fermentación superpuestas, no un orden universal. Las explicaciones de denominaciones enlazan al Comité Champagne y a la Resolución 52/2025: el nombre oficial local es DO Pimentón del Valle Calchaquí de Salta; el sello DOC de la lámina se identifica como ilustrativo. El reel BSPA sigue descrito como preparación pendiente de confirmación de su grabación.
 
 La revisión final agrupa las cinco respuestas en filas editables con lápiz. Antes de confirmar ofrece cinco estrellas centradas y opcionales. La valoración elegida se conserva al cambiar de idioma y recargar. Las preguntas de ambas encuestas usan PT Serif; toda la interfaz usa la misma familia legible. La foto del aula solo se usa como previa, antes de la actividad.
 
