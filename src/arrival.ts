@@ -89,7 +89,8 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
   function renderWall(){
     const w=arrivalCopy[language],entry=currentEntry();form.hidden=!!entry;
     if(input.value!==state.draft)input.value=state.draft;
-    input.disabled=sending;submit.disabled=sending;submit.textContent=sending?w.wallSending:w.wallSend;
+    input.disabled=sending;submit.disabled=sending;submit.textContent=sending?w.wallSending:replaying?w.wallReplaySend:w.wallSend;
+    find('wall-public').textContent=replaying?w.wallReplay:w.wallPublic;
     find('wall-count').textContent=`${Array.from(state.draft).length}/160`;
     feedback.textContent=errorKey?w[errorKey]:entry?(replaying?w.wallDemoDone:entry.status==='pending'?w.wallPending:w.wallSaved):replaying?w.wallReplay:'';
     feedback.hidden=!feedback.textContent;

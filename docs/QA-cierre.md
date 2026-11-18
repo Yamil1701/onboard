@@ -32,3 +32,5 @@ La grabación de Cyntia sigue pendiente. Las encuestas conservan su almacenamien
 ## Revisión siguiente: audio, dos hojas y modo revivir
 
 El diseño de la primera encuesta cambia únicamente la presentación de las tres opciones. Las respuestas originales permanecen intactas. Las envolventes de audio tienen pruebas de cobertura de toda la aceleración, ascenso, transición final y aterrizaje. Las notas iniciales del mural son editoriales y están rotuladas como bienvenida. «Revivir» es una rama temporal: no escribe respuestas en la sesión original ni ejecuta POST para la huella.
+
+Comprobación alojada de esta revisión: ambas hojas muestran solo sus contenidos; la repetición recorrió expectativas, tres situaciones y cinco respuestas temporales, aterrizaje y huella de prueba. Al terminar reaparecieron el nombre y la frase originales. La huella temporal se cierra con confirmación sin publicarse. La postal descargada fue inspeccionada con acuarela, sellos AR/FR y texto legible. En el navegador no se observaron errores de la aplicación; los errores de extensión siguen siendo ajenos al sitio.
