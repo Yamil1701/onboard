@@ -2,7 +2,7 @@ import {type Language} from './copy';
 import {l,practiceAssets,practiceTitles,stepTitles,productionTexts,pairings,vinification,type Bilingual} from './practice-data';
 import {sound} from './sound';
 import {bindPageSwipes} from './page-swipes';
-import './practices.css';
+import {bindMaterialImages,materialImageSize} from './material-images';
 
 type Practice=keyof typeof practiceTitles;
 const escape=(text:string)=>text.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
@@ -17,7 +17,12 @@ export function createPractices(canOpen:()=>boolean){
   const t=(value:Bilingual)=>escape(value[language]);
   const p=(ar:string,fr:string)=>`<p>${t(l(ar,fr))}</p>`;
   const button=(action:string,label:Bilingual,extra='')=>`<button type="button" data-practice-action="${action}" ${extra}>${t(label)}</button>`;
-  const image=(file:string,caption:Bilingual,archive=false)=>`<figure class="practice-image"><div class="practice-photo-surface"><img src="${import.meta.env.BASE_URL}${archive?'materiales/archivo/':practiceAssets}${file}" alt="${t(caption)}" draggable="false" decoding="async" loading="lazy"></div><figcaption><a href="${import.meta.env.BASE_URL}${archive?'materiales/archivo/':practiceAssets}${file}" target="_blank" rel="noopener noreferrer" aria-label="${t(l('Ampliar imagen: ','Agrandir : '))+t(caption)}">${t(caption)} <span aria-hidden="true">↗</span></a></figcaption></figure>`;
+  const image=(file:string,caption:Bilingual,archive=false)=>{
+    const path=(archive?'archivo/':'practicas/')+file;
+    const [width,height]=materialImageSize(path),src=import.meta.env.BASE_URL+'materiales/'+path;
+    const loading=t(l('Cargando imagen…','Chargement de l’image…'));
+    return `<figure class="practice-image"><div class="practice-photo-surface" data-image-state="loading" aria-busy="true" style="--image-ratio:${width}/${height}"><div class="practice-image-status" role="status"><span class="practice-image-spinner" aria-hidden="true"></span><span>${loading}</span></div><img src="${src}" width="${width}" height="${height}" alt="${t(caption)}" draggable="false" decoding="async" loading="lazy"></div><figcaption><a href="${src}" target="_blank" rel="noopener noreferrer" aria-label="${t(l('Ampliar imagen: ','Agrandir : '))+t(caption)}">${t(caption)} <span aria-hidden="true">↗</span></a></figcaption></figure>`;
+  };
   const prompt=(ar:string,fr:string)=>`<div class="practice-prompt"><p lang="fr">${escape(fr)}</p><p lang="es">${escape(ar)}</p></div>`;
   const reveal=(key:string,label:Bilingual,content:string)=>reveals.has(key)?`<div class="practice-reveal">${content}</div>`:button('reveal',label,`data-key="${key}" class="practice-reveal-button"`);
   const choices=(key:string,items:Bilingual[],correct:number,feedback:Bilingual)=>{
@@ -58,6 +63,7 @@ export function createPractices(canOpen:()=>boolean){
     get('practice-progress').style.setProperty('--practice-progress',`${(current+1)/titles.length*100}%`);
     const y=view.scrollTop;
     body.innerHTML=`<p class="practice-eyebrow">${language==='ar'?'Una experiencia de práctica':'Une expérience de pratique'} · ${active==='bspa'?'BSPA':language==='ar'?'Turismo':'Tourisme'}</p><h2 tabindex="-1">${t(titles[current])}</h2>${active==='bspa'?bspa(current):turismo(current)}`;
+    bindMaterialImages(body,language);
     view.scrollTop=move?0:y;
     if(move){body.querySelector('h2')?.focus({preventScroll:true});if(!matchMedia('(prefers-reduced-motion: reduce)').matches)body.animate([{opacity:.3,transform:'translateY(10px)'},{opacity:1,transform:'translateY(0)'}],{duration:330,easing:'ease-out'});}
   }
@@ -95,5 +101,5 @@ export function createPractices(canOpen:()=>boolean){
   view.addEventListener('pointerdown',()=>swipes.refresh(),{passive:true});
   document.addEventListener('keydown',event=>{if(active&&event.key==='Escape')close();});
   window.addEventListener('popstate',syncRoute);
-  return {syncRoute,translate(lang:Language){language=lang;for(const id of ['bspa','turismo']as const)get(`open-${id}`).querySelector('.slip-open')!.textContent=lang==='ar'?'Explorar la práctica ↗':'Explorer la pratique ↗';get('future-practices').querySelector('p')!.textContent=lang==='ar'?'Próximas experiencias':'Prochaines expériences';get('future-status').textContent=lang==='ar'?'Materiales pendientes':'Supports à venir';render();},reset(){pages.bspa=pages.turismo=0;reveals.clear();answers.clear();production=pairing=foodRound=0;swipes.reset();}};
+  return {syncRoute,translate(lang:Language){language=lang;for(const id of ['bspa','turismo']as const)get(`open-${id}`).querySelector('.slip-open')!.textContent=lang==='ar'?'Explorar la práctica ↗':'Explorer la pratique ↗';get('future-practices').querySelector('.future-title')!.textContent=lang==='ar'?'Próximas experiencias':'Prochaines expériences';for(const el of document.querySelectorAll('.future-status'))el.textContent=lang==='ar'?'Materiales pendientes':'Supports à venir';for(const el of document.querySelectorAll('.future-stop'))el.textContent=lang==='ar'?'Próximamente':'À venir';for(const el of document.querySelectorAll('.future-topic'))el.textContent=lang==='ar'?'Una nueva experiencia de práctica':'Une nouvelle expérience de pratique';render();},reset(){pages.bspa=pages.turismo=0;reveals.clear();answers.clear();production=pairing=foodRound=0;swipes.reset();}};
 }

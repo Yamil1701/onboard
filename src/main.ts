@@ -15,6 +15,7 @@ import './workshop.css';
 import './memory.css';
 import './final-survey.css';
 import './arrival.css';
+import './practices.css';
 
 type Phase = 'gate' | 'boarding' | 'takeoff' | 'survey' | 'materials' | 'workshop' | 'finalSurvey' | 'arrival' | 'menu';
 type Expectation = 'adapt' | 'play' | 'ideas';

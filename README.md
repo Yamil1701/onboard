@@ -72,6 +72,8 @@ Las 71 láminas recibidas están en el archivo temático, incluyendo el cuadro y
 
 Los materiales nuevos están en `public/materiales/practicas/`. Se muestran ocho fotografías únicas de producciones recibidas (una novena era duplicada), con versiones revisadas de las partes legibles sin sustituir el original. Los maridajes se presentan como propuestas orientativas. El orden de vinificación es un esquema de tinto con maceración/fermentación superpuestas, no un orden universal. Las explicaciones de denominaciones enlazan al Comité Champagne y a la Resolución 52/2025: el nombre oficial local es DO Pimentón del Valle Calchaquí de Salta; el sello DOC de la lámina se identifica como ilustrativo. El reel BSPA sigue descrito como preparación pendiente de confirmación de su grabación.
 
+Los estilos de prácticas se importan después de los generales y los controles se acotan a `#practice-reader` para mantener contraste y ajuste de respuestas largas en todos sus estados. Las fotos utilizan las dimensiones reales de `src/material-image-sizes.json`: reservan espacio antes de cargar, muestran skeleton/spinner y permiten reintentar errores sin cambiar de página. `src/material-images.ts` espera la decodificación y descarta resultados de elementos retirados al navegar. UNATE y Secundaria se presentan como tarjetas de práctica con sus materiales pendientes.
+
 La revisión final agrupa las cinco respuestas en filas editables con lápiz. Antes de confirmar ofrece cinco estrellas centradas y opcionales. La valoración elegida se conserva al cambiar de idioma y recargar. Las preguntas de ambas encuestas usan PT Serif; toda la interfaz usa la misma familia legible. La foto del aula solo se usa como previa, antes de la actividad.
 
 ## Cierre y exploración
