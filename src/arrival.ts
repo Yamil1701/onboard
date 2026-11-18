@@ -28,6 +28,7 @@ export function createArrival(onChange:()=>void) {
   let generation=0, loading=false, sending=false, exporting=false;
   let wallMode:'idle'|'loading'|'ready'|'error'='idle';
   let errorKey:keyof typeof arrivalCopy.ar|undefined;
+  let souvenirMode:'downloading'|'saved'|'exportError'|undefined;
   let landingBeat:'landing'|'runway'|'landed'='landing';
   let entries:Footprint[]=[];
   let own:{token:string;entry?:Footprint};
@@ -64,6 +65,7 @@ export function createArrival(onChange:()=>void) {
       const value=w[el.dataset.arrivalCopy as keyof typeof w]; if(typeof value==='string')el.textContent=value;
     }
     caption.textContent=w[landingBeat];
+    find('souvenir-status').textContent=souvenirMode?w[souvenirMode]:'';
     find('arrival-personal-phrase').textContent=phrase || w.quote;
     input.placeholder=w.wallPlaceholder;
     audio.setAttribute('aria-label',w.audio);
@@ -119,12 +121,12 @@ export function createArrival(onChange:()=>void) {
     find<HTMLButtonElement>(`save-${kind}`).addEventListener('click',async()=>{
       if(exporting)return;exporting=true;
       const buttons=root.querySelectorAll<HTMLButtonElement>('[data-souvenir]');buttons.forEach(b=>b.disabled=true);
-      const status=find('souvenir-status');status.textContent=arrivalCopy[language].downloading;
+      const status=find('souvenir-status');souvenirMode='downloading';status.textContent=arrivalCopy[language][souvenirMode];
       try {
         const blob=await createSouvenir(kind,{name,phrase:phrase||arrivalCopy[language].quote,language});
         const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`voyageurs-${kind}.png`;link.click();
-        window.setTimeout(()=>URL.revokeObjectURL(url),60000);status.textContent=arrivalCopy[language].saved;
-      } catch {status.textContent=arrivalCopy[language].exportError;}
+        window.setTimeout(()=>URL.revokeObjectURL(url),60000);souvenirMode='saved';status.textContent=arrivalCopy[language][souvenirMode];
+      } catch {souvenirMode='exportError';status.textContent=arrivalCopy[language][souvenirMode];}
       finally {exporting=false;buttons.forEach(b=>b.disabled=false);}
     });
   }
@@ -154,7 +156,7 @@ export function createArrival(onChange:()=>void) {
       if(!value||typeof value!=='object')return;const stored=value as Record<string,unknown>;
       state={landed:stored.landed===true,revealed:stored.revealed===true,wallOpen:stored.wallOpen===true,draft:typeof stored.draft==='string'?stored.draft.slice(0,320):''};render();
     },
-    reset(){generation++;timeline?.kill();timeline=undefined;gsap.killTweensOf(seal);audio.pause();unlock();state=fresh();loading=false;sending=false;errorKey=undefined;entries=[];wallMode='idle';finishCallback=undefined;render();},
+    reset(){generation++;timeline?.kill();timeline=undefined;gsap.killTweensOf(seal);audio.pause();unlock();state=fresh();souvenirMode=undefined;loading=false;sending=false;errorKey=undefined;entries=[];wallMode='idle';finishCallback=undefined;render();},
     pauseAudio(){audio.pause();},
   };
 }
