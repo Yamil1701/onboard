@@ -2,6 +2,7 @@ import { sound } from './sound';
 
 type SwipeActions = {
   canStart: () => boolean;
+  canStartFrom?: (target: Element) => boolean;
   turnPage: (delta: number) => boolean;
 };
 
@@ -45,7 +46,8 @@ export function bindPageSwipes(view: HTMLElement, content: HTMLElement, actions:
     if (pointers.size !== 1 || event.button !== 0 || !actions.canStart()) return;
     if ((window.visualViewport?.scale ?? 1) > 1.01) return;
     if (!(event.target instanceof Element)) return;
-    if (event.target.closest('button, a, input, textarea, select, figcaption, [role="status"]')) return;
+    if (event.target.closest('button, a, input, textarea, select, summary, details, figcaption, [role="status"]')) return;
+    if (actions.canStartFrom && !actions.canStartFrom(event.target)) return;
     if (!content.contains(event.target)) return;
     rebound?.cancel();
     start = { id: event.pointerId, x: event.clientX, y: event.clientY, time: event.timeStamp, horizontal: false };
