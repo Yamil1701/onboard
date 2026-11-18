@@ -137,7 +137,7 @@ function restore() {
 }
 
 function save() {
-  if(state.reliving)return;
+  if(state.reliving){renderSurveySync();return;}
   if(state.submitted)surveySync.queue({language:state.language,expectation:state.submitted,answers:finalSurvey.snapshot().submitted?finalSurvey.snapshot().answers:null,rating:finalSurvey.snapshot().submitted?finalSurvey.snapshot().rating:null});
   renderSurveySync();
   if (storageBlock) return;
