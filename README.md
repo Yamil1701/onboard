@@ -64,7 +64,7 @@ Usá Node.js 24. GitHub Actions compila y publica en [GitHub Pages](https://yami
 
 Cada colección vive en `src/archive-data.json`. Tiene un título por idioma y una lista ordenada de imágenes con sus leyendas. Las imágenes WebP van en `public/materiales/archivo/<colección>/`. El resumen y el paginador calculan sus totales a partir de la lista. Para agregar una colección se usa un identificador breve en minúsculas y se agrega su imagen `portada.webp` junto a los demás archivos de la colección.
 
-Las 67 láminas recibidas están en el archivo temático. Los espacios de BSPA y Turismo esperan las versiones definitivas de sus materiales de presentación.
+Las 71 láminas recibidas están en el archivo temático, incluyendo el cuadro y las tres versiones de tarjetas de artículos partitivos. Los espacios de BSPA y Turismo esperan las versiones definitivas de sus materiales de presentación.
 
 La revisión final agrupa las cinco respuestas en filas editables con lápiz. Antes de confirmar ofrece cinco estrellas centradas y opcionales. La valoración elegida se conserva al cambiar de idioma y recargar. Las preguntas de ambas encuestas usan PT Serif; toda la interfaz usa la misma familia legible. La foto del aula solo se usa como previa, antes de la actividad.
 
@@ -95,3 +95,9 @@ La firma usa ahora una grabación breve de lapicera sobre papel bajo CC0, con su
 ## Vista previa al compartir
 
 El HTML inicial incluye título, descripción e imagen Open Graph y Twitter Cards sin depender de JavaScript. La portada local `/social/voyageurs-preview.jpg` mide 1200 × 630 y usa el pasaporte y la pista del proyecto. Canonical y `og:url` apuntan al enlace limpio `https://yamil1701.github.io/onboard/`. Los servicios de chat deciden la presentación final y pueden conservar una vista anterior en caché.
+
+## Actualización del archivo de trabajos
+
+La lámina de carnes usa la versión con nombres. «Etapas de la vinificación» reemplaza el título anterior. La colección de partitivos reúne el cuadro de negación y las tarjetas roja, blanca y azul; su portada muestra las propias tarjetas. Un acceso independiente dentro de Archivos de trabajo abre cuatro recursos digitales: LearningApps, Quizlet, el video de YouTube de la secuencia y el reel de Instagram indicado por Cyntia. Todos abren una pestaña nueva y conservan el recorrido. Los espacios de BSPA y Turismo permanecen pendientes y sin cambios.
+
+Los dos QR recibidos como Wordwall y video apuntan a la misma URL de YouTube. Se conserva ese video una sola vez; el enlace real de Wordwall queda por recibir. Las capturas de QR y sus anuncios del visor no se publican como láminas.

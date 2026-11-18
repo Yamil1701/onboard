@@ -487,18 +487,23 @@
         <button type="button" id="close-archive"><span aria-hidden="true">‹</span> <span data-copy="backMaterials">Volver</span></button>
         <h2 id="archive-reader-title" tabindex="-1"></h2>
       </header>
-      <div class="reader-controls archive-controls">
+      <div class="reader-controls archive-controls" id="archive-photo-controls">
         <button type="button" id="previous-photo" data-copy="previousPhoto">Anterior</button>
         <output id="photo-position" aria-live="polite"></output>
         <button type="button" id="next-photo" data-copy="nextPhoto">Siguiente</button>
         <span class="reader-gesture-hint" data-copy="swipePages">Deslizá hacia los lados para pasar de página</span>
       </div>
       <div class="reader-view archive-view" id="archive-view" tabindex="0" role="region" aria-labelledby="archive-reader-title">
-        <figure class="archive-figure">
+        <figure class="archive-figure" id="archive-figure">
           <figcaption id="photo-caption"></figcaption>
           <div id="photo-frame"></div>
           <a id="photo-original" target="_blank" rel="noopener" data-copy="openPhoto">Abrir imagen</a>
         </figure>
+        <section id="archive-digital" class="archive-digital" hidden>
+          <p id="archive-digital-intro"></p>
+          <ul id="archive-digital-list"></ul>
+          <p class="resource-new-tab" id="archive-digital-hint"></p>
+        </section>
       </div>
     </section>
   </div>

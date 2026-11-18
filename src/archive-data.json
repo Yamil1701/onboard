@@ -72,8 +72,8 @@
       {
         "image": "vino/04.webp",
         "title": {
-          "ar": "Tarjetas con las etapas del vino",
-          "fr": "Cartes des étapes de la vinification"
+          "ar": "Etapas de la vinificación",
+          "fr": "Étapes de la vinification"
         }
       },
       {
@@ -177,7 +177,7 @@
         }
       },
       {
-        "image": "vocabulario/02.webp",
+        "image": "vocabulario/carnes-con-nombres.webp",
         "title": {
           "ar": "Carnes y carnicería",
           "fr": "Viandes et boucherie"
@@ -195,6 +195,42 @@
         "title": {
           "ar": "Productos lácteos",
           "fr": "Produits laitiers"
+        }
+      }
+    ]
+  },
+  "partitivos": {
+    "title": {
+      "ar": "Artículos partitivos y negación",
+      "fr": "Articles partitifs et négation"
+    },
+    "photos": [
+      {
+        "image": "partitivos/01.webp",
+        "title": {
+          "ar": "Cuadro de los partitivos y la negación",
+          "fr": "Tableau des articles partitifs et de la négation"
+        }
+      },
+      {
+        "image": "partitivos/02.webp",
+        "title": {
+          "ar": "Tarjetas de partitivos · versión roja",
+          "fr": "Cartes des partitifs · version rouge"
+        }
+      },
+      {
+        "image": "partitivos/03.webp",
+        "title": {
+          "ar": "Tarjetas de partitivos · versión blanca",
+          "fr": "Cartes des partitifs · version blanche"
+        }
+      },
+      {
+        "image": "partitivos/04.webp",
+        "title": {
+          "ar": "Tarjetas de partitivos · versión azul",
+          "fr": "Cartes des partitifs · version bleue"
         }
       }
     ]

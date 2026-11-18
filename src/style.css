@@ -1134,3 +1134,23 @@ body:has(.is-reading) { overflow: hidden; }
 #progress-current { color: #c7d6cc; font: 12px/1.5 var(--reading); text-transform: none; letter-spacing: 0; }
 .progress-track { align-items: flex-start; }
 .progress-track::before { border: 0; }
+
+/* External learning resources remain inside the work archive. */
+.archive-resource-entry { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 75px; padding: 17px; border: 1px solid #cfb88980; border-radius: 6px; background: #253f45; color: #f0ddbb; text-align: left; }
+.archive-resource-entry strong,.archive-resource-entry small { display: block; }
+.archive-resource-entry strong { font: 700 17px/1.4 var(--reading); }
+.archive-resource-entry small { margin-top: 5px; font: 12px/1.5 var(--reading); color: #c6d3bc; }
+.archive-resource-entry > span:last-child { color: #d5bd89; font-size: 23px; }
+.archive-resource-entry:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.archive-digital { width: min(100%,650px); margin-inline: auto; padding-bottom: 30px; text-align: left; }
+.archive-digital > p { margin: 5px 0 25px; color: #b7cec3; font: 15px/1.7 var(--reading); }
+.archive-digital ul { display: grid; gap: 13px; list-style: none; padding: 0; margin: 0; }
+.resource-link { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 120px; padding: 22px; border: 1px solid #ad9f7055; border-radius: 5px; background: #16323c; color: #f0e1c0; text-decoration: none; transition: background .2s,border-color .2s; }
+.resource-link:hover { background: #20424b; border-color: #cbb581; }
+.resource-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.resource-link strong { display: block; margin: 8px 0; font: 700 20px/1.4 var(--reading); }
+.resource-platform { color: #cfbc8d; font: 11px/1.5 var(--mono); }
+.resource-description { display: block; color: #bfd1c5; font: 14px/1.6 var(--reading); }
+.resource-arrow { flex: 0 0 auto; color: #d8c18d; font-size: 26px; }
+.archive-digital .resource-new-tab { margin-top: 25px; font-size: 12px; }
+@media (prefers-reduced-motion: reduce) { .resource-link { transition: none; } }

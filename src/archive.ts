@@ -1,9 +1,12 @@
 import albums from './archive-data.json';
 import { copy, type Language } from './copy';
 import { bindPageSwipes } from './page-swipes';
+import { archiveResources } from './archive-resources';
 
 type AlbumId = keyof typeof albums;
 const albumIds = Object.keys(albums) as AlbumId[];
+type ArchiveId=AlbumId|'recursos';
+const archiveIds:ArchiveId[]=[...albumIds,'recursos'];
 const archiveHash = '#archivo-';
 const archivePath = `${import.meta.env.BASE_URL}materiales/archivo/`;
 const photoCount = Object.values(albums).reduce((count, album) => count + album.photos.length, 0);
@@ -30,8 +33,9 @@ export function createArchive(canOpen: () => boolean) {
   const openImage = find<HTMLAnchorElement>('photo-original');
   const prev = find<HTMLButtonElement>('previous-photo');
   const next = find<HTMLButtonElement>('next-photo');
-  const buttons = new Map<AlbumId, HTMLButtonElement>();
-  let active: AlbumId | undefined;
+  const photoControls=find('archive-photo-controls'),figure=find('archive-figure'),digital=find('archive-digital');
+  const buttons = new Map<ArchiveId, HTMLButtonElement>();
+  let active: ArchiveId | undefined;
   let language: Language | undefined;
   let index = 0;
   let originY = 0;
@@ -43,7 +47,27 @@ export function createArchive(canOpen: () => boolean) {
 
   function showPhoto() {
     if (!active || !language) return;
-    const album = albums[active];
+    const resources=active==='recursos';
+    photoControls.hidden=resources;figure.hidden=resources;digital.hidden=!resources;
+    if(resources){
+      pendingImage=undefined;frame.replaceChildren();openImage.removeAttribute('href');
+      frame.removeAttribute('aria-busy');delete frame.dataset.loading;view.removeAttribute('data-page-swipe');
+      title.textContent=copy[language].digitalResources;
+      find('archive-digital-intro').textContent=copy[language].digitalIntro;
+      find('archive-digital-hint').textContent=copy[language].digitalHint;
+      const lang=language;
+      find('archive-digital-list').replaceChildren(...archiveResources.map(resource=>{
+        const item=document.createElement('li'),link=document.createElement('a');
+        link.className='resource-link';link.href=resource.url;link.target='_blank';link.rel='noopener noreferrer';
+        const platform=document.createElement('span'),name=document.createElement('strong'),description=document.createElement('span'),arrow=document.createElement('span');
+        platform.className='resource-platform';platform.textContent=`${resource.platform} · ${resource.kind[lang]}`;
+        name.textContent=resource.title[lang];description.className='resource-description';description.textContent=resource.description[lang];
+        arrow.className='resource-arrow';arrow.textContent='↗';arrow.setAttribute('aria-hidden','true');
+        const text=document.createElement('span');text.append(platform,name,description);link.append(text,arrow);item.append(link);return item;
+      }));
+      return;
+    }
+    const album = albums[active as AlbumId];
     const photo = album.photos[index];
     const src = archivePath + photo.image;
     title.textContent = album.title[language];
@@ -87,7 +111,7 @@ export function createArchive(canOpen: () => boolean) {
 
   function syncRoute() {
     const hash = location.hash;
-    const requested = albumIds.find(id => hash === archiveHash + id);
+    const requested = archiveIds.find(id => hash === archiveHash + id);
     if (requested && canOpen()) {
       if (active === requested) return;
       if (!active) {
@@ -137,6 +161,7 @@ export function createArchive(canOpen: () => boolean) {
   }
 
   function step(delta: number) {
+    if(active==='recursos')return;
     if (delta < 0 ? prev.disabled : next.disabled) return;
     const focused = document.activeElement;
     index += delta;
@@ -146,7 +171,7 @@ export function createArchive(canOpen: () => boolean) {
   }
 
   const swipes = bindPageSwipes(view, frame, {
-    canStart: () => Boolean(active) && !panel.hidden && !pendingImage && Boolean(frame.querySelector('img')),
+    canStart: () => Boolean(active) && active!=='recursos' && !panel.hidden && !pendingImage && Boolean(frame.querySelector('img')),
     turnPage(delta) {
       if (delta < 0 ? prev.disabled : next.disabled) return false;
       step(delta);
@@ -175,6 +200,14 @@ export function createArchive(canOpen: () => boolean) {
     list.append(button);
   }
 
+  const resourceButton=document.createElement('button');
+  resourceButton.id='open-archive-resources';resourceButton.className='archive-resource-entry';resourceButton.type='button';
+  const resourceText=document.createElement('span');resourceText.append(document.createElement('strong'),document.createElement('small'));
+  const resourceArrow=document.createElement('span');resourceArrow.textContent='↗';resourceArrow.setAttribute('aria-hidden','true');
+  resourceButton.append(resourceText,resourceArrow);
+  resourceButton.addEventListener('click',()=>{history.pushState({...history.state,workArchive:true},'',archiveHash+'recursos');syncRoute();});
+  buttons.set('recursos',resourceButton);list.append(resourceButton);
+
   summary.addEventListener('click', event => {
     if (reducedMotion.matches || !list.animate) return;
     event.preventDefault();
@@ -202,7 +235,8 @@ export function createArchive(canOpen: () => boolean) {
   window.addEventListener('popstate', syncRoute);
   document.addEventListener('keydown', event => {
     if (!active) return;
-    if (event.key === 'Escape') close();
+    if (event.key === 'Escape'){close();return;}
+    if(active==='recursos')return;
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       event.preventDefault();
       step(event.key === 'ArrowLeft' ? -1 : 1);
@@ -213,8 +247,9 @@ export function createArchive(canOpen: () => boolean) {
     translate(lang: Language) {
       if (lang === language) return;
       language = lang;
-      find('archive-count').textContent = quantity(photoCount, lang);
+      find('archive-count').textContent = `${quantity(photoCount, lang)} · ${archiveResources.length} ${copy[lang].resources}`;
       for (const [id, button] of buttons) {
+        if(id==='recursos'){button.querySelector('strong')!.textContent=copy[lang].digitalResources;button.querySelector('small')!.textContent=copy[lang].digitalCount.replace('{count}',String(archiveResources.length));continue;}
         button.querySelector('strong')!.textContent = albums[id].title[lang];
         button.querySelector('small')!.textContent = quantity(albums[id].photos.length, lang);
       }
