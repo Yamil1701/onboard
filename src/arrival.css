@@ -61,7 +61,7 @@ html.is-landing { overflow: hidden; overscroll-behavior: none; }
 .wall-feedback:focus { outline: none; }
 .wall-retry,.wall-more { display: block; margin: 15px auto; min-height: 44px; padding: 10px 14px; border: 1px solid #9c956b70; border-radius: 3px; background: transparent; color: #dccca6; font: 14px/1.5 var(--reading); }
 .wall-browse { margin: 25px 0 13px; color: #99b6ae; font: 11px/1.6 var(--reading); text-align: center; }
-.wall-scroll { max-height: min(65svh,580px); min-height: 200px; overflow-y: auto; overscroll-behavior-y: contain; padding: 15px 12px 28px; border-block: 1px solid #9d9d7150; background: #06131c70; scrollbar-width: thin; scrollbar-color: #a28d63 #1a3238; }
+.wall-scroll { max-height: min(65svh,580px); min-height: 200px; overflow-y: auto; overscroll-behavior-y: auto; padding: 15px 12px 28px; border-block: 1px solid #9d9d7150; background: #06131c70; scrollbar-width: thin; scrollbar-color: #a28d63 #1a3238; }
 .wall-scroll::-webkit-scrollbar { display: block; width: 3px; }
 .wall-scroll::-webkit-scrollbar-thumb { background: #a28d63; }
 .wall-scroll:focus-visible { outline: 1px solid var(--gold); outline-offset: 5px; }

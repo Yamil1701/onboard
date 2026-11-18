@@ -1,14 +1,19 @@
 import type { Language } from './copy';
+import penWritingUrl from './assets/pen-writing.mp3';
 import {flightEnvelope,landingTiming,type FlightMode} from './flight-timing';
 type Cue='tap'|'paper'|'stamp'|'success'|'error'|'finish'|'letter'|'whoosh'|'pen'|'touchdown';
 let context:AudioContext|undefined,master:GainNode|undefined,muted=false,language:Language='ar';
 let noise:AudioBuffer|undefined;
+let penBuffer:AudioBuffer|undefined,penLoad:Promise<void>|undefined;
+function loadPen(ctx:AudioContext){
+  return penLoad??=fetch(penWritingUrl).then(response=>{if(!response.ok)throw new Error('pen');return response.arrayBuffer();}).then(bytes=>ctx.decodeAudioData(bytes)).then(buffer=>{penBuffer=buffer;}).catch(()=>{penLoad=undefined;});
+}
 let flight:{mode:FlightMode;started:number;nodes:AudioScheduledSourceNode[]}|undefined;
 const key='voyageurs-sound-muted';
 try{muted=localStorage.getItem(key)==='true';}catch{/* Keep this visit's preference. */}
 function audioContext(){
   if(!context){const Constructor=window.AudioContext??(window as unknown as {webkitAudioContext?:typeof AudioContext}).webkitAudioContext;
-    if(Constructor){context=new Constructor();master=context.createGain();master.gain.value=muted?0:.7;master.connect(context.destination);}}
+    if(Constructor){context=new Constructor();master=context.createGain();master.gain.value=muted?0:.7;master.connect(context.destination);void loadPen(context);}}
   return context;
 }
 function tone(ctx:AudioContext,freq:number,start:number,duration:number,volume:number,end=freq,type:OscillatorType='sine'){
@@ -32,7 +37,15 @@ export function sound(cue:Cue,delay=0){
   if(cue==='letter'){air(context,t,.036,.095,2300);tone(context,210,t,.04,.028,150);}
   if(cue==='paper')air(context,t,.36,.09,2200);
   if(cue==='whoosh')air(context,t,.7,.11,300,1800);
-  if(cue==='pen')for(let i=0;i<5;i++)air(context,t+i*.075,.065,.06,2700-i*140,1500);
+  if(cue==='pen'){
+    if(penBuffer){const source=context.createBufferSource(),gain=context.createGain();source.buffer=penBuffer;gain.gain.value=.45;source.connect(gain).connect(master!);source.start(t);}
+    else {
+      // Smooth friction fallback: one continuous stroke, without taps or pulses.
+      const source=context.createBufferSource(),filter=context.createBiquadFilter(),gain=context.createGain();source.buffer=noiseBuffer(context);filter.type='bandpass';filter.frequency.value=2100;filter.Q.value=.65;
+      gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(.045,t+.05);gain.gain.linearRampToValueAtTime(.025,t+.3);gain.gain.linearRampToValueAtTime(.04,t+.48);gain.gain.linearRampToValueAtTime(0,t+.7);
+      source.connect(filter).connect(gain).connect(master!);source.start(t);source.stop(t+.72);
+    }
+  }
   if(cue==='stamp'){tone(context,95,t,.34,.2,42);air(context,t,.085,.25,700);air(context,t+.045,.2,.08,2300);}
   if(cue==='touchdown'){tone(context,65,t,.45,.15,40);air(context,t,.55,.18,800);}
   if(cue==='error')tone(context,240,t,.16,.035,190);

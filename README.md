@@ -89,3 +89,5 @@ La postal usa una acuarela de Salta y París como marca de agua y dos estampilla
 El enlace discreto «Revivir el viaje» reinicia una visita temporal. En este modo el guardado de sesión no reemplaza la visita original y el formulario de la huella no llama al servidor ni actualiza su identificador local. Al terminar, se restaura el recorrido original y su menú. Recargar también recupera la visita original. Las encuestas de la primera visita siguen siendo locales al navegador.
 
 La ilustración y el recorte fueron creados con el generador de imágenes integrado. Los assets listos para web están en `src/assets/postcard-watermark.webp` y `src/assets/passport-cutout.webp`. El arte conecta arquitectura de Salta, Andes y viñedos con París, en acuarela y tinta suave sobre transparencia. El recorte conserva la cubierta azul y dorada y elimina el blanco exterior.
+
+La firma usa ahora una grabación breve de lapicera sobre papel bajo CC0, con su origen documentado junto al archivo. El mural permite el encadenamiento del scroll hacia la página al alcanzar sus límites.

@@ -1115,14 +1115,6 @@ body:has(.is-reading) { overflow: hidden; }
 .journey[data-phase="materials"][data-completed="false"] .materials { padding-bottom: 38px; }
 .journey[data-phase="materials"][data-completed="false"] .materials-next { position: static; transform: none; width: 100%; margin: 25px auto 0; padding: 0; border: 0; background: transparent; box-shadow: none; }
 .journey[data-phase="materials"][data-completed="false"] .materials-next p { margin-bottom: 12px; font-size: 13px; }
-.choice { counter-increment: poll; display: grid; grid-template-columns: 24px minmax(0,1fr) 24px; gap: 13px; min-height: 78px; padding: 18px 9px; border: 0; border-bottom: 1px solid #bba888; border-radius: 0; background: transparent; font: 400 17px/1.65 var(--reading); transition: background .25s,color .25s; }
-.survey-card fieldset { counter-reset: poll; gap: 0; }
-.choice::before { content: counter(poll,upper-alpha); color: #9a7c50; font: 11px/1.4 var(--mono); }
-.choice input { grid-column: 3; grid-row: 1; width: 22px; height: 22px; appearance: none; border: 1px solid #968b70; border-radius: 50%; background: #fff9eb; }
-.choice input:checked { border: 6px solid #2a625f; background: #f4ddad; }
-.choice > span { grid-column: 2; grid-row: 1; }
-.choice:has(:checked) { background: #dce6d671; color: #205650; }
-.choice:focus-within { outline-offset: 3px; }
 .intro-start { display: block; margin: 28px auto 0; min-height: 48px; padding: 12px 22px; border: 1px solid #bba77980; border-radius: 4px; color: #f1d7a8; background: #102a35; font: 15px/1.5 var(--reading); }
 .gate:has(.intro-start:not([hidden])) { pointer-events: auto; }
 .relive-notice { padding: 10px 18px; color: #b4c8bc; text-align: center; border-bottom: 1px solid #bba77940; font: 11px/1.6 var(--reading); }
