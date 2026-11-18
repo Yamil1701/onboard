@@ -68,3 +68,42 @@
 @media(min-width:600px){.practice-placeholder .slip-open{margin-inline:-15px;padding-inline:15px}}
 @media(prefers-reduced-motion:no-preference){.practice-photo-surface[data-image-state=loading]::before{animation:skeleton-sweep 1.7s ease-in-out infinite}.practice-image-spinner{animation:spinner-turn .85s linear infinite}}
 @media(prefers-reduced-motion:reduce){.practice-image img,.practice-photo-surface::before{transition:none}}
+
+/* Results express correctness; personal selections use a separate neutral palette. */
+#practice-reader .practice-body .practice-answer{gap:12px;justify-content:space-between}
+#practice-reader .practice-body .practice-answer[data-result=correct],#practice-reader .practice-body .practice-answer[data-result=correct]:hover,#practice-reader .practice-body .practice-answer[data-result=correct]:active{background:#236443;color:#fffdf3;border-color:#236443}
+#practice-reader .practice-body .practice-answer[data-result=error],#practice-reader .practice-body .practice-answer[data-result=error]:hover,#practice-reader .practice-body .practice-answer[data-result=error]:active{background:#9c422e;color:#fffdf3;border-color:#9c422e}
+.answer-symbol{font:700 21px/1 var(--reading);flex-shrink:0}
+.practice-feedback{display:flex;align-items:flex-start;gap:12px;border:1px solid transparent}
+.practice-feedback strong{display:block;line-height:1.4}.practice-feedback p{margin:7px 0 0;font-size:14px}
+.practice-feedback.feedback-correct{color:#194a30;background:#dfefdf;border-color:#548b64}
+.practice-feedback.feedback-error{color:#612b20;background:#f8e1d6;border-color:#b3624d}
+.feedback-symbol{display:grid;place-items:center;width:29px;height:29px;flex-shrink:0;border:2px solid currentColor;border-radius:50%;font:700 18px/1 var(--reading)}
+.vinification-list li[data-result=correct]{border-left:3px solid #438359;padding-left:12px;background:#e4efdf}
+.vinification-list li[data-result=error]{border-left:3px solid #b35942;padding-left:12px;background:#f6e1d6}
+.vinification-result{display:block;margin-top:6px;font-size:13px;font-weight:700}
+.vinification-list li[data-result=correct] .vinification-result{color:#245435}.vinification-list li[data-result=error] .vinification-result{color:#763325}
+.experience-mission{display:flex;align-items:center;gap:10px;padding:11px 13px;margin:-4px 0 23px;border:1px solid #aeb9a8;border-radius:6px;background:#e4e9dc;font:700 12px/1.45 var(--reading)}
+.experience-mission>span:first-child{font-size:24px;color:#397b72}.experience-mission small{margin-left:auto;font:10px/1.3 var(--mono);text-align:right;color:#576d65;max-width:120px}
+.experience-question p:first-child{font:700 24px/1.3 var(--reading);margin-bottom:8px}.experience-question p:last-child{font:14px/1.5 var(--reading);color:#526c68;margin-bottom:20px}
+.experience-hint{font-size:13px;color:#526c68;line-height:1.5;margin-top:15px!important}
+.experience-intro{font-size:18px;line-height:1.5}.practice-teacher-notes{background:#ebe8d8}
+.fridge-scene{width:100%;max-width:470px;margin:20px auto;border:8px solid #adbdba;border-left-width:16px;border-radius:14px;background:#e1e9e4;box-shadow:inset 0 0 0 2px #f4f9f4,0 12px 22px #183a3219;overflow:hidden}
+.fridge-label{display:flex;justify-content:space-between;padding:12px 18px;background:#294f53;color:#f4edda;font:700 11px/1.4 var(--mono);letter-spacing:.12em}
+.fridge-interior{min-height:195px;padding:20px;display:grid;align-items:end;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 10px;background:repeating-linear-gradient(0deg,transparent 0 92px,#95ada580 93px 96px)}
+.fridge-interior>p{grid-column:1/-1;align-self:center;text-align:center;font-size:15px;color:#58716c}
+.fridge-product{display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px;min-width:0;padding-bottom:8px}.fridge-product>span{font-size:36px;line-height:1.2}.fridge-product small{font:700 12px/1.35 var(--reading);overflow-wrap:anywhere}
+.fridge-missing{margin:0!important;padding:10px 14px;border-top:1px dashed #9aaea3;font:13px/1.4 var(--reading);color:#71634d;background:#f2efdf}.fridge-missing>span{opacity:.45;margin-right:6px}
+.fridge-groceries,.guide-route-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:18px 0}
+#practice-reader .practice-body .fridge-groceries button[aria-pressed=true],#practice-reader .practice-body .guide-route-choices button[aria-pressed=true]{color:#f8f8f1;background:#315875;border-color:#315875}
+.experience-output{padding:22px;margin-top:24px;border:1px solid #99ad95;border-radius:7px;background:#e8efdf;box-shadow:4px 5px 0 #7f9e841c}.experience-output>p[lang=fr]{font-size:19px;line-height:1.55}.experience-output p:last-child{margin-bottom:0}
+.guide-invitation{padding:25px;border-radius:8px;background:linear-gradient(130deg,#153440,#365b50);color:#fff3d4;margin-bottom:22px}.guide-invitation small{font:11px/1.4 var(--mono);letter-spacing:.15em;color:#e0c78a}.guide-invitation h3{font:700 30px/1.2 var(--reading);margin:18px 0}.guide-invitation p{font-size:15px;line-height:1.6;margin-bottom:0}
+.guide-route-summary{display:flex;flex-direction:column;gap:6px;margin-bottom:22px;padding:16px;border-left:3px solid #42677c;background:#e2e9e8;font-size:14px}.guide-route-summary strong{font-size:21px}
+.guide-task{padding:17px;border:1px solid #b4bcaa;background:#e8ecdf;border-radius:6px;margin-bottom:24px}.guide-task .experience-question p:first-child{font-size:20px}
+.visitor-brochure{padding:28px 22px;margin:24px 0;border:1px solid #b49e70;border-radius:5px;background:linear-gradient(130deg,#fffbed,#e5e6ce);box-shadow:6px 7px 0 #736b4b19;overflow-wrap:anywhere}
+.visitor-brochure h3{font:700 clamp(32px,8vw,48px)/1.15 var(--reading);color:#6c3335;margin:8px 0}.visitor-brochure .brochure-subtitle{color:#74644b;font:12px/1.5 var(--mono);letter-spacing:.06em}.visitor-brochure p[lang=fr]{font-size:18px;line-height:1.7}
+.brochure-route{display:flex;gap:9px;align-items:center;flex-wrap:wrap;padding:15px 0;margin:15px 0;border-top:1px dashed #b9ad8c;border-bottom:1px dashed #b9ad8c;font-size:12px;color:#506b62}.visitor-brochure .brochure-signoff{margin:20px 0 0;font-size:12px;color:#6b745b}
+@media(min-width:600px){.fridge-groceries{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(prefers-reduced-motion:no-preference){.answer-just-chosen[data-result=correct]{animation:answer-bounce .42s ease-out}.answer-just-chosen[data-result=error]{animation:answer-shake .32s ease-out}.feedback-correct,.feedback-error{animation:practice-reveal .22s ease-out}.fridge-product{animation:practice-reveal .24s ease-out}}
+@keyframes answer-bounce{0%,100%{transform:translateY(0)}45%{transform:translateY(-5px)}75%{transform:translateY(1px)}}
+@keyframes answer-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}55%{transform:translateX(4px)}80%{transform:translateX(-2px)}}

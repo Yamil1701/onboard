@@ -74,6 +74,10 @@ Los materiales nuevos están en `public/materiales/practicas/`. Se muestran ocho
 
 Los estilos de prácticas se importan después de los generales y los controles se acotan a `#practice-reader` para mantener contraste y ajuste de respuestas largas en todos sus estados. Las fotos utilizan las dimensiones reales de `src/material-image-sizes.json`: reservan espacio antes de cargar, muestran skeleton/spinner y permiten reintentar errores sin cambiar de página. `src/material-images.ts` espera la decodificación y descarta resultados de elementos retirados al navegar. UNATE y Secundaria se presentan como tarjetas de práctica con sus materiales pendientes.
 
+`src/practice-experience.ts` conecta las actividades como pequeñas clases: los productos elegidos en BSPA pasan a la negación y a la presentación final; el destino y las elecciones de Turismo forman un folleto de ensayo del visitante antes de mostrar los trabajos reales. Las notas y materiales se despliegan sin perder su apertura al responder o pasar una producción. Las respuestas objetivas distinguen aciertos y errores con texto, símbolo, color, sonido y una animación breve que respeta movimiento reducido; las recomendaciones personales conservan un color neutral. La vinificación marca cada asociación al comprobar y permite corregirla.
+
+La vista previa compartida usa `public/social/voyageurs-practicas-4to-2026.jpg` y presenta Prácticas de 4.º año del Profesorado de Francés con Rico, Cyntia Valeria; Esteban Jara Vargas; Veronica Estrada; Francisco Burgos. Su fuente editable se reconstruye con `scripts/build-social-card.mjs` dentro del runtime de desarrollo.
+
 La revisión final agrupa las cinco respuestas en filas editables con lápiz. Antes de confirmar ofrece cinco estrellas centradas y opcionales. La valoración elegida se conserva al cambiar de idioma y recargar. Las preguntas de ambas encuestas usan PT Serif; toda la interfaz usa la misma familia legible. La foto del aula solo se usa como previa, antes de la actividad.
 
 ## Cierre y exploración
