@@ -6,12 +6,14 @@ import { createArchive } from './archive';
 import { createWorkshop } from './workshop';
 import { createMemoryTransition } from './memory-transition';
 import { createFinalSurvey } from './final-survey';
+import { createArrival } from './arrival';
 import './style.css';
 import './workshop.css';
 import './memory.css';
 import './final-survey.css';
+import './arrival.css';
 
-type Phase = 'gate' | 'boarding' | 'takeoff' | 'survey' | 'materials' | 'workshop' | 'finalSurvey';
+type Phase = 'gate' | 'boarding' | 'takeoff' | 'survey' | 'materials' | 'workshop' | 'finalSurvey' | 'arrival';
 type Expectation = 'adapt' | 'play' | 'ideas';
 
 function find<T extends HTMLElement>(id: string): T {
@@ -55,6 +57,8 @@ const enterWorkshop = find<HTMLButtonElement>('enter-workshop');
 const finalSection = find('final-survey');
 const finalTitle = find('final-title');
 const resumeFinal = find<HTMLButtonElement>('resume-final-survey');
+const arrivalSection = find('arrival');
+const resumeArrival = find<HTMLButtonElement>('resume-arrival');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const progress = find('progress');
 const progressValue = find('progress-value');
@@ -85,6 +89,7 @@ const archive = createArchive(() => phase === 'materials');
 const workshop = createWorkshop(save);
 const memory = createMemoryTransition();
 const finalSurvey = createFinalSurvey(save);
+const arrival = createArrival(save);
 
 function isExpectation(value: unknown): value is Expectation {
   return value === 'adapt' || value === 'play' || value === 'ideas';
@@ -100,11 +105,13 @@ function restore() {
     if (isExpectation(stored.submitted)) state.submitted = stored.submitted;
     workshop.restore(stored.workshop);
     finalSurvey.restore(stored.finalSurvey);
-    if (stored.stop === 5 && state.submitted) phase = 'finalSurvey';
+    arrival.restore(stored.arrival);
+    if (stored.stop === 6 && state.submitted && finalSurvey.snapshot().submitted) phase = 'arrival';
+    else if (stored.stop === 5 && state.submitted) phase = 'finalSurvey';
     else if (stored.stop === 4 && state.submitted) phase = 'workshop';
     else if (stored.stop === 3 && state.submitted) phase = 'materials';
     else if (stored.stop === 2) phase = 'survey';
-    const priorProgress = Number.isInteger(stored.furthestStop) && stored.furthestStop >= 1 && stored.furthestStop <= 5
+    const priorProgress = Number.isInteger(stored.furthestStop) && stored.furthestStop >= 1 && stored.furthestStop <= 6
       ? stored.furthestStop : 1;
     const participated = workshop.snapshot().replies.some(reply => reply !== null) ? 4 : 1;
     state.furthestStop = Math.max(currentStop(), priorProgress, participated);
@@ -121,6 +128,7 @@ function save() {
       stop: currentStop(),
       workshop: workshop.snapshot(),
       finalSurvey: finalSurvey.snapshot(),
+      arrival: arrival.snapshot(),
     }));
   } catch {
     storageBlock = true;
@@ -158,7 +166,7 @@ function renderPoll() {
 }
 
 function renderStageLabel() {
-  const key = phase === 'materials' || phase === 'survey' || phase === 'workshop' || phase === 'finalSurvey' ? phase : flightBeat ?? 'welcome';
+  const key = phase === 'materials' || phase === 'survey' || phase === 'workshop' || phase === 'finalSurvey' || phase === 'arrival' ? phase : flightBeat ?? 'welcome';
   stageLabel.dataset.copy = key;
   stageLabel.textContent = copy[state.language][key];
 }
@@ -184,9 +192,11 @@ function renderLanguage(animateIntro = false) {
   workshop.translate(state.language, state.name);
   memory.translate(state.language);
   finalSurvey.translate(state.language, state.submitted ? copy[state.language][state.submitted] : '');
+  arrival.translate(state.language, state.name, workshop.takeaway());
 }
 
 function currentStop() {
+  if (phase === 'arrival') return 6;
   if (phase === 'finalSurvey') return 5;
   if (phase === 'workshop') return 4;
   if (phase === 'materials') return 3;
@@ -201,12 +211,14 @@ function renderPhase() {
   materials.hidden = phase !== 'materials';
   workshopSection.hidden = phase !== 'workshop';
   finalSection.hidden = phase !== 'finalSurvey';
+  arrivalSection.hidden = phase !== 'arrival';
   progress.hidden = phase === 'gate';
   const stop = currentStop();
   state.furthestStop = Math.max(stop, state.furthestStop);
   progress.dataset.stop = String(state.furthestStop);
   progressValue.textContent = `${state.furthestStop} / 6`;
   resumeFinal.hidden = !workshop.snapshot().stamped && state.furthestStop < 5;
+  resumeArrival.hidden = state.furthestStop < 6;
 }
 
 function openBoarding(focusButton = false) {
@@ -433,6 +445,19 @@ function leaveFinalSurvey(destination: 'materials' | 'workshop') {
   (destination === 'materials' ? materialsTitle : workshopTitle).focus({ preventScroll: true });
 }
 
+function openArrival() {
+  if (phase !== 'finalSurvey' && phase !== 'materials') return;
+  if (!finalSurvey.snapshot().submitted && state.furthestStop < 6) return;
+  phase = 'arrival';renderPhase();renderLanguage();save();
+  window.scrollTo({top:0,behavior:'instant'});arrival.play(()=>{});
+}
+
+function leaveArrival() {
+  if (phase !== 'arrival') return;
+  arrival.pauseAudio();phase='materials';renderPhase();renderLanguage();save();
+  window.scrollTo({top:0,behavior:'instant'});materialsTitle.focus({preventScroll:true});
+}
+
 function restartJourney() {
   memory.cancel();
   closingMemory?.cancel();
@@ -459,6 +484,7 @@ function restartJourney() {
   archive.reset();
   workshop.reset();
   finalSurvey.reset();
+  arrival.reset();
   flightBeat = null;
   takeoff.clear();
   gsap.killTweensOf([boarding, survey, result, confirmationStamp, windowPhoto, workshopSection]);
@@ -491,6 +517,7 @@ renderPhase();
 renderLanguage(true);
 reader.syncRoute();
 archive.syncRoute();
+if (currentStop() === 6) arrival.play(()=>{});
 
 let languageFades: Animation[] = [];
 for (const button of languageButtons) {
@@ -506,7 +533,7 @@ for (const button of languageButtons) {
     const readerPanel = journey.querySelector('.reader:not([hidden])');
     const surfaces = readerPanel
       ? [...readerPanel.querySelectorAll('.reader-header, .reader-controls, figcaption')]
-      : [gate, boarding, survey, materials, workshopSection, finalSection].filter(surface => !surface.hidden);
+      : [gate, boarding, survey, materials, workshopSection, finalSection, arrivalSection].filter(surface => !surface.hidden);
     languageFades = [stageLabel, ...surfaces].map(surface =>
       surface.animate([{ opacity: .68 }, { opacity: 1 }], { duration: 160, easing: 'ease-out' }),
     );
@@ -552,6 +579,9 @@ continueJourney.addEventListener('click', beginFlight);
 enterWorkshop.addEventListener('click', openWorkshop);
 find('open-final-survey').addEventListener('click', openFinalSurvey);
 resumeFinal.addEventListener('click', openFinalSurvey);
+find('start-arrival').addEventListener('click',openArrival);
+resumeArrival.addEventListener('click',openArrival);
+find('arrival-materials').addEventListener('click',leaveArrival);
 find('final-back').addEventListener('click', () => leaveFinalSurvey('workshop'));
 find('final-materials').addEventListener('click', () => leaveFinalSurvey('materials'));
 for (const button of workshopSection.querySelectorAll('[data-back-materials]')) {

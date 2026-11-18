@@ -15,13 +15,17 @@ La experiencia se abre desde un QR y se diseña primero para celular. Las seis p
 | Pasaporte y materiales | Un portadocumentos de viaje reúne el informe en PDF, las fichas de BSPA y Turismo y el archivo de trabajos. El informe y las galerías se abren dentro del sitio. Cerrar o usar Atrás devuelve al punto de partida. |
 | ¿Confirmás o verificás? | El cuaderno de a bordo abre una página de las prácticas. Una transición de libro a escena de aula sitúa al visitante dentro de ese recuerdo. Las decisiones recuperan la anécdota del litchi y lo aprendido al verificar. |
 | Antes de aterrizar | Cinco preguntas sobre expectativas, presentaciones, materiales, aplicación a la futura práctica y aprendizaje personal. Avance visible, revisión y envío dentro del recorrido. |
-| Llegada | Regreso a la ventanilla, sello final y pausa antes de ofrecer el recuerdo, la bitácora y el canal de WhatsApp posterior a la experiencia. El cierre visual se afina después de probar el resto. |
+| Llegada | Descenso suave, reflexión, sello final y despedida. Después, pasaporte y postal personales en PNG y un mural anónimo compartido, con moderación en el servidor. |
 
 ## Pasaporte personal y encuestas
 
-Propuesta de interacción: tocar el renglón «Nombre y apellido» sobre el propio pase. Es un campo de texto real, integrado al papel, con etiqueta visible y teclado nativo. Un solo campo, editable, sin separar ni normalizar nombres. «Embarcar» funciona aunque se deje en blanco. Al aterrizar, la acción «Guardar mi pase» genera un PNG limpio del boleto con su sello y, si se escribió, el nombre.
+El nombre opcional se escribe sobre el pase de embarque y se conserva en la sesión. La llegada genera un pasaporte escolar y una postal en PNG, con ese nombre y la reflexión elegida en el cuaderno. Se pueden guardar sin publicar ningún dato personal.
 
-Los formularios propios son las preguntas y opciones dibujadas como parte de la escena. Por ejemplo, la encuesta inicial puede ser una tarjeta con tres opciones grandes que se marcan al tocar. Detrás, un servicio mínimo recibe las respuestas para que el equipo pueda consultarlas. El nombre se reutiliza sin pedir que se escriba otra vez. Propuesta: mostrarlo al enviar y dejar que la persona elija si quiere adjuntarlo. Conservar las respuestas ante un error de conexión y permitir reintentar sin duplicarlas.
+Las encuestas inicial y final y las decisiones del cuaderno se guardan solamente en la sesión del navegador. No hay un servidor de encuestas conectado ni un envío centralizado de sus resultados.
+
+El mural de la llegada sí se comparte entre visitantes mediante una función de Supabase. Recibe solo el mensaje anónimo, su idioma y un identificador aleatorio para evitar duplicados. El nombre del pasaporte no se envía. La moderación se repite en el servidor y los mensajes dudosos esperan revisión. La configuración y las instrucciones para revisar el mural están en [backend/voyageurs-wall/README.md](backend/voyageurs-wall/README.md).
+
+La grabación de Cyntia aún no fue entregada. El cierre presenta una reflexión escrita basada en el cuaderno. Para habilitar el audio real y su transcripción se completa `src/arrival-config.ts`; no hay voz sintética ni reproducción automática.
 
 ## Dirección visual y técnica
 
@@ -38,7 +42,7 @@ Los formularios propios son las preguntas y opciones dibujadas como parte de la 
 
 ## Vista previa móvil
 
-El pasaporte lleva a «Antes de despegar». Al guardar la respuesta aparece «Despegar», que inicia el vuelo y abre «Pasaporte y materiales». Se puede leer el informe y recorrer el archivo bilingüe de trabajos. El cuaderno integrado al portadocumentos abre la parada 4, «¿Confirmás o verificás?», como un recuerdo de las prácticas. La foto permanece quieta con la invitación «¿Listo para ser profe por un momento?» hasta tocar «Continuar», también con movimiento reducido. Incluye las tres situaciones del informe, consulta de apoyos, una respuesta para compartir, la anécdota real, una reflexión personal y el sello de las estaciones 1 y 4. Después del sello se abre la parada 5, «Antes de aterrizar», con cinco preguntas, regreso a la anterior, revisión editable y confirmación. La parada 6 sigue prevista.
+El pasaporte lleva a «Antes de despegar». Al guardar la respuesta aparece «Despegar», que inicia el vuelo y abre «Pasaporte y materiales». Se puede leer el informe y recorrer el archivo bilingüe de trabajos. El cuaderno integrado al portadocumentos abre la parada 4, «¿Confirmás o verificás?», como un recuerdo de las prácticas. La foto permanece quieta con la invitación «¿Listo para ser profe por un momento?» hasta tocar «Continuar», también con movimiento reducido. Incluye las tres situaciones del informe, consulta de apoyos, una respuesta para compartir, la anécdota real, una reflexión personal y el sello de las estaciones 1 y 4. Después del sello se abre la parada 5, «Antes de aterrizar», con cinco preguntas, regreso a la anterior, revisión editable y confirmación. La parada 6 cierra el vuelo con una breve llegada cinematográfica, omisible y respetuosa del movimiento reducido. La despedida precede a un botón que revela los recuerdos y el mural, sin avanzar automáticamente.
 
 Las preguntas de cierre de `src/final-survey-copy.ts` recuperan la versión bilingüe de la conversación del 15/11, asociada al mensaje de Tía Mimi del 14/11 a las 21:30. Sus opciones se conservan. El selector de idioma y la recarga mantienen respuestas, pregunta y revisión; el enlace en materiales permite retomar la parada 5 después de visitarla o completar el cuaderno. Se recuerda la expectativa inicial al comenzar la encuesta. La finalización conserva los resultados en la sesión, sin afirmar un envío al servidor.
 

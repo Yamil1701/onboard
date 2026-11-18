@@ -175,6 +175,7 @@
           </div>
         </div>
         <button class="final-resume" id="resume-final-survey" type="button" data-copy="finalSurvey" hidden>Antes de aterrizar</button>
+        <button class="final-resume" id="resume-arrival" type="button" data-copy="resumeArrival" hidden>Volver a la llegada</button>
       </section>
 
       <section class="workshop" id="workshop" aria-labelledby="workshop-title" hidden>
@@ -299,9 +300,64 @@
             <span class="final-mark" aria-hidden="true">✓</span>
             <h2 id="final-done-title" tabindex="-1" data-final-copy="doneTitle">Gracias por dejar tu huella</h2>
             <p data-final-copy="done"></p>
-            <div class="final-actions"><button type="button" class="primary" id="final-materials" data-final-copy="materials">Volver a materiales</button><button type="button" class="final-secondary" id="final-review-again" data-final-copy="review">Revisar mis respuestas</button></div>
+            <div class="final-actions"><button type="button" class="primary" id="start-arrival" data-copy="enterArrival">Preparar el aterrizaje</button><button type="button" class="final-secondary" id="final-materials" data-final-copy="materials">Volver a materiales</button><button type="button" class="final-secondary" id="final-review-again" data-final-copy="review">Revisar mis respuestas</button></div>
           </section>
           <p class="final-note" data-final-copy="local">En esta versión de prueba, las respuestas se guardan en este navegador durante la visita.</p>
+        </div>
+      </section>
+      <section class="arrival" id="arrival" aria-labelledby="arrival-title" hidden>
+        <div class="arrival-cinematic" id="arrival-cinematic" hidden>
+          <div class="arrival-scene" id="arrival-scene" aria-hidden="true">
+            <img class="arrival-runway" id="arrival-runway" src="./src/assets/runway.webp" width="840" height="1132" alt="" decoding="async">
+            <img class="arrival-sky" id="arrival-sky" src="./src/assets/flight-air.webp" width="840" height="1132" alt="" decoding="async">
+          </div>
+          <p class="arrival-flight-caption" id="arrival-flight-caption" aria-live="polite"></p>
+          <button type="button" class="skip-arrival" id="skip-arrival" data-arrival-copy="skip">Ir a la llegada</button>
+        </div>
+        <div class="arrival-content" id="arrival-content">
+          <header class="arrival-intro">
+            <p class="arrival-kicker" data-arrival-copy="eyebrow">FR 101 · 06 / 06</p>
+            <h1 id="arrival-title" tabindex="-1" data-arrival-copy="heading">El viaje termina. Lo aprendido sigue.</h1>
+            <p data-arrival-copy="intro">Gracias por acompañar este recorrido por mis prácticas.</p>
+          </header>
+          <section class="arrival-reflection" aria-labelledby="arrival-reflection-title">
+            <p class="arrival-kicker" id="arrival-reflection-title" data-arrival-copy="reflection">Una reflexión para llevarte</p>
+            <blockquote class="arrival-quote" data-arrival-copy="quote">Enseñar también es aprender a decir «lo verificamos juntos».</blockquote>
+            <cite data-arrival-copy="author">Cyntia Valeria Rico</cite>
+            <div class="arrival-audio" id="arrival-audio-group" hidden>
+              <audio controls preload="none" id="arrival-audio"></audio>
+              <details id="arrival-transcript-details" hidden><summary data-arrival-copy="transcript">Leer la reflexión</summary><p id="arrival-transcript"></p></details>
+            </div>
+          </section>
+          <div class="arrival-seal" id="arrival-seal"><strong data-arrival-copy="seal">Viaje compartido</strong><span data-arrival-copy="date">30 noviembre 2026</span></div>
+          <p class="arrival-farewell" data-arrival-copy="farewell">Ojalá alguna de estas ideas te acompañe en tu propio camino.</p>
+          <div class="arrival-takeaway"><p class="arrival-kicker" data-arrival-copy="takeaway">Tu frase del viaje</p><blockquote id="arrival-personal-phrase"></blockquote></div>
+          <button type="button" class="primary arrival-reveal" id="arrival-reveal" data-arrival-copy="reveal">Llevarme un recuerdo</button>
+          <div class="arrival-afterword" id="arrival-afterword" tabindex="-1" hidden>
+            <section class="workshop-paper souvenir-paper" aria-labelledby="souvenir-title">
+              <h2 id="souvenir-title" data-arrival-copy="souvenirTitle">Un recuerdo para guardar</h2>
+              <p data-arrival-copy="souvenirBody">Tu pasaporte sellado y una postal con la frase que elegiste.</p>
+              <div class="souvenir-actions"><button class="primary" type="button" id="save-passport" data-souvenir data-arrival-copy="passport">Guardar mi pasaporte</button><button class="primary" type="button" id="save-postcard" data-souvenir data-arrival-copy="postcard">Guardar mi postal</button></div>
+              <p id="souvenir-status" role="status"></p>
+            </section>
+            <button class="wall-toggle" type="button" id="open-wall" aria-expanded="false" aria-controls="arrival-wall"><span data-arrival-copy="wallOpen">Antes de irte, dejá tu huella</span><svg aria-hidden="true"><use href="#arrow"/></svg></button>
+            <section class="arrival-wall" id="arrival-wall" aria-labelledby="wall-title" hidden>
+              <h2 id="wall-title" tabindex="-1" data-arrival-copy="wallTitle">Huellas de este viaje</h2>
+              <p class="wall-intro" data-arrival-copy="wallIntro">Una palabra, una idea, algo que te acompañe al salir.</p>
+              <form class="wall-form" id="wall-form">
+                <label for="wall-message" data-arrival-copy="wallLabel">Tu huella</label>
+                <textarea id="wall-message" maxlength="160" rows="3" aria-describedby="wall-public wall-count wall-feedback"></textarea>
+                <output class="wall-count" id="wall-count">0/160</output>
+                <p class="wall-public" id="wall-public" data-arrival-copy="wallPublic">El mensaje será público, sin tu nombre. Evitá incluir datos personales.</p>
+                <button type="submit" class="primary" id="wall-submit" data-arrival-copy="wallSend">Publicar mi huella</button>
+                <p class="wall-feedback" id="wall-feedback" role="status" tabindex="-1" hidden></p>
+              </form>
+              <p class="wall-notice" id="wall-notice" role="status"></p>
+              <button type="button" class="wall-retry" id="wall-retry" data-arrival-copy="retry" hidden>Reintentar</button>
+              <ul class="wall-list" id="wall-list"></ul>
+            </section>
+          </div>
+          <button type="button" class="arrival-back" id="arrival-materials" data-arrival-copy="back">Volver a materiales</button>
         </div>
       </section>
     </main>

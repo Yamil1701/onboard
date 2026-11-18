@@ -1,0 +1,68 @@
+.journey[data-phase="arrival"] { max-width: 800px; }
+html.is-landing { overflow: hidden; overscroll-behavior: none; }
+.is-landing body { position: fixed; inset: 0; width: 100%; overflow: hidden; }
+.is-landing .progress { visibility: hidden; }
+.arrival-quote { margin: 22px 0 17px; color: #f5e9c9; font: italic 24px/1.6 var(--reading); }
+.journey[data-phase="arrival"] .window { visibility: hidden; }
+.arrival { position: relative; width: 100%; background: radial-gradient(ellipse at 50% 3%, #183342, #08131f 65%); }
+.arrival-content { width: min(100%, 640px); margin-inline: auto; padding: 36px 22px 40px; }
+.arrival-intro { text-align: center; }
+.arrival-kicker { color: var(--gold); font: 10px/1.5 var(--mono); letter-spacing: .12em; }
+.arrival-intro h1 { max-width: 12em; margin: 22px auto 18px; color: #fff0d0; font: 600 clamp(35px, 9vw, 52px)/1.1 var(--serif); }
+.arrival-intro > p:last-child { max-width: 31em; margin-inline: auto; color: #c8dad8; font: 17px/1.65 var(--reading); }
+.arrival-reflection { margin: 30px 0 0; padding: 30px 22px; border-block: 1px solid #ad956353; text-align: center; }
+.arrival-reflection h2, .arrival-takeaway h2 { margin: 0 0 18px; color: #bbcdca; font: 11px/1.5 var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+.arrival-reflection blockquote { margin: 0 auto; max-width: 24em; font: italic 25px/1.65 var(--reading); color: #f4e1b9; }
+.arrival-reflection cite { display: block; margin-top: 18px; color: #b8c9c5; font: 13px/1.5 var(--reading); }
+.arrival-audio { margin-top: 25px; }
+.arrival-audio audio { width: 100%; max-width: 420px; }
+.arrival-audio details { margin-top: 15px; font: 15px/1.6 var(--reading); }
+.arrival-audio summary { min-height: 44px; cursor: pointer; }
+.arrival-seal { width: fit-content; max-width: 100%; margin: 34px auto 28px; padding: 18px 25px; border: 3px double #b69b66; border-radius: 8px; color: #e4c78f; text-align: center; transform: rotate(-7deg); font: 11px/1.5 var(--mono); text-transform: uppercase; }
+.arrival-seal strong { display: block; margin-bottom: 5px; font-size: 18px; letter-spacing: .03em; }
+.arrival-farewell { max-width: 29em; margin: 0 auto 28px; text-align: center; font: 18px/1.7 var(--reading); color: #e6dfc9; }
+.arrival-takeaway { margin: 25px 0; text-align: center; }
+.arrival-takeaway blockquote { margin: 0; color: #c2e2d8; font: italic 21px/1.6 var(--reading); }
+.arrival-reveal { max-width: 390px; margin: 30px auto 0; border: 1px solid #8a9c8b; background: #173b43; white-space: normal; font-size: 16px; }
+.arrival-afterword { scroll-margin-top: 90px; }
+.arrival-afterword:focus { outline: none; }
+.souvenir-paper { margin-top: 28px; padding: 25px; }
+.souvenir-paper h2 { margin: 0 0 12px; font: 600 29px/1.25 var(--serif); }
+.souvenir-paper p { font: 16px/1.6 var(--reading); }
+.souvenir-actions { display: grid; gap: 10px; margin-top: 22px; }
+.souvenir-actions button { width: 100%; padding-inline: 16px; white-space: normal; font-size: 16px; }
+#souvenir-status { margin-top: 12px; font-size: 13px; }
+.wall-toggle { display: flex; justify-content: space-between; align-items: center; gap: 14px; width: 100%; min-height: 60px; margin-top: 28px; padding: 15px 0; border: 0; border-block: 1px solid #6b82726b; background: transparent; color: #e0cd9f; text-align: left; font: 19px/1.5 var(--reading); }
+.wall-toggle svg { flex: none; font-size: 20px; transition: transform .25s; }
+.wall-toggle[aria-expanded="true"] svg { transform: rotate(90deg); }
+.arrival-wall { padding-top: 25px; scroll-margin-top: 90px; }
+.arrival-wall h2 { margin: 0 0 12px; font: 600 32px/1.2 var(--serif); }
+.arrival-wall h2:focus { outline: none; }
+.wall-intro { margin-bottom: 22px; color: #c6d9d4; font: 16px/1.6 var(--reading); }
+.wall-form { margin-bottom: 25px; padding: 20px; border: 1px solid #6a8072; border-radius: 6px; background: #122d36; }
+.wall-form label { display: block; margin-bottom: 10px; font: 700 16px/1.5 var(--reading); }
+.wall-form textarea { display: block; width: 100%; min-height: 112px; resize: vertical; padding: 13px; border: 1px solid #a0afa1; border-radius: 4px; background: #f6ecd7; color: #203c43; font: 17px/1.6 var(--reading); }
+.wall-form textarea:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.wall-form textarea[aria-invalid="true"] { border-color: #df9986; }
+.wall-form textarea:disabled { opacity: .8; }
+.wall-count { display: block; margin-top: 7px; text-align: right; color: #bdd1c9; font: 11px/1.4 var(--mono); }
+.wall-public { margin: 13px 0 18px; color: #b9cfca; font: 12px/1.6 var(--reading); }
+.wall-form .primary { padding-inline: 12px; font-size: 16px; }
+.wall-feedback { margin-top: 17px; color: #e4d49d; font: 15px/1.6 var(--reading); }
+.wall-feedback:focus { outline: none; }
+.wall-notice { color: #b8cdca; font: 15px/1.6 var(--reading); }
+.wall-retry { min-height: 44px; padding: 8px 0; border: 0; background: transparent; color: #cfdeb6; text-decoration: underline; font: 15px/1.5 var(--reading); }
+.wall-list { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,230px),1fr)); gap: 14px; padding: 0; margin: 20px 0 0; list-style: none; }
+.wall-list li { padding: 22px 18px; border: 1px solid #a18b5a; border-radius: 3px 9px 9px 3px; background: #eaddbd; color: #244b50; box-shadow: 2px 3px 0 #938367; overflow-wrap: anywhere; }
+.wall-list blockquote { margin: 0; font: italic 18px/1.7 var(--reading); }
+.wall-list span { display: block; margin-top: 16px; font: 10px/1.4 var(--mono); color: #786c4f; }
+.arrival-back { display: block; margin: 30px auto 0; min-height: 44px; padding: 10px; border: 0; background: transparent; color: #c6dcd5; text-decoration: underline; font: 14px/1.5 var(--reading); }
+.arrival-cinematic { position: fixed; z-index: 15; inset: calc(70px + env(safe-area-inset-top,0px)) 0 0; width: min(100%,800px); margin-inline: auto; overflow: hidden; background: #07111c; touch-action: none; }
+.arrival-scene { position: absolute; inset: 0; width: min(100%,480px); margin-inline: auto; }
+.arrival-runway, .arrival-sky { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.arrival-sky { z-index: 1; mask-image: linear-gradient(transparent 4%, #000 19% 65%, transparent 85%); }
+.arrival-flight-caption { position: absolute; z-index: 2; inset: auto 22px 22%; color: #f6e5c3; text-align: center; font: 23px/1.5 var(--reading); text-shadow: 0 3px 9px #000; }
+.skip-arrival { position: absolute; z-index: 3; bottom: max(35px,env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); min-height: 44px; padding: 10px 18px; border: 1px solid #bca67a99; border-radius: 4px; background: #122833cc; color: #f7e6c5; font: 14px/1.4 var(--reading); white-space: nowrap; }
+.progress[data-stop="6"] { --position: 100%; }
+.progress[data-stop="6"] .progress-track i { background: var(--gold); }
+@media (prefers-reduced-motion: reduce) { .wall-toggle svg { transition: none; } }

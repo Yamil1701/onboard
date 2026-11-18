@@ -216,6 +216,7 @@ export function createWorkshop(onChange: () => void) {
       render();
     },
     snapshot: () => data,
+    takeaway: () => data.reflection ? workshopCopy[language][data.reflection] : '',
     restore(value: unknown) {
       if (!value || typeof value !== 'object') return;
       const stored = value as Record<string, unknown>;
