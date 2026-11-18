@@ -5,7 +5,7 @@
 .future-practices p{width:100%;margin:0 0 2px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 .future-practices strong{border:1px dashed #e5c88d88;border-radius:4px;padding:5px 8px;font-size:12px}
 .future-practices small{font-size:10px;opacity:.8}
-.practice-reader{grid-template-rows:auto auto minmax(0,1fr) auto;background:#f5efdf;color:#223d45}
+.reader.practice-reader{grid-template-rows:auto auto minmax(0,1fr) auto;background:#f5efdf;color:#223d45}
 .practice-reader .reader-header{color:#f5efdf;justify-content:space-between}
 .practice-reader .reader-header h2{font-size:15px;text-align:right}
 .practice-meter{height:3px;background:#cdbd9e;overflow:hidden}
