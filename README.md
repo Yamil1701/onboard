@@ -14,7 +14,7 @@ La experiencia se abre desde un QR y se diseña primero para celular. Las seis p
 | Antes de despegar | Encuesta real de expectativas, dentro de la web. Una pregunta con tres opciones: adaptar una clase, participar del juego o llevarse ideas para la futura Práctica IV. |
 | Pasaporte y materiales | Un portadocumentos de viaje reúne el informe en PDF, las fichas de BSPA y Turismo y el archivo de trabajos. El informe y las galerías se abren dentro del sitio. Cerrar o usar Atrás devuelve al punto de partida. |
 | ¿Confirmás o verificás? | El cuaderno de a bordo abre una página de las prácticas. Una transición de libro a escena de aula sitúa al visitante dentro de ese recuerdo. Las decisiones recuperan la anécdota del litchi y lo aprendido al verificar. |
-| Última estación | Cinco preguntas sobre expectativas, presentaciones, materiales, aplicación a la futura práctica y aprendizaje personal. Avance visible, revisión y envío dentro del recorrido. |
+| Antes de aterrizar | Cinco preguntas sobre expectativas, presentaciones, materiales, aplicación a la futura práctica y aprendizaje personal. Avance visible, revisión y envío dentro del recorrido. |
 | Llegada | Regreso a la ventanilla, sello final y pausa antes de ofrecer el recuerdo, la bitácora y el canal de WhatsApp posterior a la experiencia. El cierre visual se afina después de probar el resto. |
 
 ## Pasaporte personal y encuestas
@@ -38,7 +38,7 @@ Los formularios propios son las preguntas y opciones dibujadas como parte de la 
 
 ## Vista previa móvil
 
-El pasaporte lleva a «Antes de despegar». Al guardar la respuesta aparece «Despegar», que inicia el vuelo y abre «Pasaporte y materiales». Se puede leer el informe y recorrer el archivo bilingüe de trabajos. El cuaderno integrado al portadocumentos abre la parada 4, «¿Confirmás o verificás?», como un recuerdo de las prácticas. La foto permanece quieta con la invitación «¿Listo para ser profe por un momento?» hasta tocar «Continuar», también con movimiento reducido. Incluye las tres situaciones del informe, consulta de apoyos, una respuesta para compartir, la anécdota real, una reflexión personal y el sello de las estaciones 1 y 4. Después del sello se abre la parada 5, «Última estación», con cinco preguntas, regreso a la anterior, revisión editable y confirmación. La parada 6 sigue prevista.
+El pasaporte lleva a «Antes de despegar». Al guardar la respuesta aparece «Despegar», que inicia el vuelo y abre «Pasaporte y materiales». Se puede leer el informe y recorrer el archivo bilingüe de trabajos. El cuaderno integrado al portadocumentos abre la parada 4, «¿Confirmás o verificás?», como un recuerdo de las prácticas. La foto permanece quieta con la invitación «¿Listo para ser profe por un momento?» hasta tocar «Continuar», también con movimiento reducido. Incluye las tres situaciones del informe, consulta de apoyos, una respuesta para compartir, la anécdota real, una reflexión personal y el sello de las estaciones 1 y 4. Después del sello se abre la parada 5, «Antes de aterrizar», con cinco preguntas, regreso a la anterior, revisión editable y confirmación. La parada 6 sigue prevista.
 
 Las preguntas de cierre de `src/final-survey-copy.ts` recuperan la versión bilingüe de la conversación del 15/11, asociada al mensaje de Tía Mimi del 14/11 a las 21:30. Sus opciones se conservan. El selector de idioma y la recarga mantienen respuestas, pregunta y revisión; el enlace en materiales permite retomar la parada 5 después de visitarla o completar el cuaderno. Se recuerda la expectativa inicial al comenzar la encuesta. La finalización conserva los resultados en la sesión, sin afirmar un envío al servidor.
 
@@ -61,3 +61,5 @@ Usá Node.js 24. GitHub Actions compila y publica en [GitHub Pages](https://yami
 Cada colección vive en `src/archive-data.json`. Tiene un título por idioma y una lista ordenada de imágenes con sus leyendas. Las imágenes WebP van en `public/materiales/archivo/<colección>/`. El resumen y el paginador calculan sus totales a partir de la lista. Para agregar una colección se usa un identificador breve en minúsculas y se agrega su imagen `portada.webp` junto a los demás archivos de la colección.
 
 Las 67 láminas recibidas están en el archivo temático. Los espacios de BSPA y Turismo esperan las versiones definitivas de sus materiales de presentación.
+
+La revisión final agrupa las cinco respuestas en filas editables con lápiz. Antes de confirmar ofrece una valoración opcional de 0 a 5 estrellas. Se distingue una valoración de cero de una visita sin calificar y se conserva al cambiar de idioma y recargar. Las preguntas de ambas encuestas usan PT Serif; los títulos generales mantienen Noto Serif Display. La foto del aula solo se usa como previa, antes de la actividad.

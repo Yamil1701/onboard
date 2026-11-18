@@ -174,7 +174,7 @@
             </details>
           </div>
         </div>
-        <button class="final-resume" id="resume-final-survey" type="button" data-copy="finalSurvey" hidden>Última estación</button>
+        <button class="final-resume" id="resume-final-survey" type="button" data-copy="finalSurvey" hidden>Antes de aterrizar</button>
       </section>
 
       <section class="workshop" id="workshop" aria-labelledby="workshop-title" hidden>
@@ -184,7 +184,6 @@
             <h1 id="workshop-title" tabindex="-1" data-workshop-copy="title">¿Confirmás o verificás?</h1>
             <p id="workshop-welcome"></p>
           </header>
-          <figure class="workshop-scene"><img src="./src/assets/workshop-room.webp" width="1200" height="800" alt="" decoding="async"><figcaption data-workshop-copy="memoryCaption">Una página de la práctica · Turismo y BSPA</figcaption></figure>
 
           <article class="workshop-paper" id="workshop-paper" tabindex="-1" aria-labelledby="workshop-question">
             <div class="workshop-paper-header"><span id="workshop-context"></span><span id="workshop-position" aria-live="polite"></span></div>
@@ -246,7 +245,7 @@
               <summary data-workshop-copy="summary">Las respuestas que construimos</summary>
               <ol id="workshop-summary"></ol>
             </details>
-            <button type="button" class="primary" id="open-final-survey" data-copy="enterFinalSurvey">Continuar a la última estación</button>
+            <button type="button" class="primary" id="open-final-survey" data-copy="enterFinalSurvey">Continuar el viaje</button>
             <button type="button" class="workshop-replay" data-back-materials data-workshop-copy="back">Volver a materiales</button>
             <button type="button" class="workshop-replay" id="workshop-replay" data-workshop-copy="replay">Volver a participar</button>
           </section>
@@ -258,7 +257,7 @@
         <button type="button" class="workshop-back" id="final-back"><span aria-hidden="true">‹</span><span data-final-copy="back">Volver al cuaderno</span></button>
         <header class="final-heading">
           <p class="final-kicker">FR 101 · 05 / 06</p>
-          <h1 id="final-title" data-final-copy="title" tabindex="-1">Última estación</h1>
+          <h1 id="final-title" data-final-copy="title" tabindex="-1">Antes de aterrizar</h1>
           <p data-final-copy="intro">Antes de llegar, tu mirada también forma parte de este viaje.</p>
         </header>
         <div class="final-route" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
@@ -281,6 +280,19 @@
             <h2 id="final-review-title" tabindex="-1" data-final-copy="reviewTitle">Tu mirada sobre el viaje</h2>
             <p data-final-copy="reviewIntro">Podés cambiar cualquier respuesta antes de finalizar.</p>
             <ol class="final-review-list" id="final-review-list"></ol>
+            <fieldset class="final-rating" id="final-rating">
+              <legend data-final-copy="ratingTitle">¿Qué tanto te gustó esta experiencia?</legend>
+              <p class="final-note" id="rating-hint" data-final-copy="ratingHint">Opcional · Podés elegir de 0 a 5 estrellas.</p>
+              <div class="rating-stars">
+                <label><input type="radio" name="rating" value="1" aria-describedby="rating-hint"><span aria-hidden="true">★</span><span class="visually-hidden"></span></label>
+                <label><input type="radio" name="rating" value="2" aria-describedby="rating-hint"><span aria-hidden="true">★</span><span class="visually-hidden"></span></label>
+                <label><input type="radio" name="rating" value="3" aria-describedby="rating-hint"><span aria-hidden="true">★</span><span class="visually-hidden"></span></label>
+                <label><input type="radio" name="rating" value="4" aria-describedby="rating-hint"><span aria-hidden="true">★</span><span class="visually-hidden"></span></label>
+                <label><input type="radio" name="rating" value="5" aria-describedby="rating-hint"><span aria-hidden="true">★</span><span class="visually-hidden"></span></label>
+              </div>
+              <div class="rating-footer"><label class="rating-zero"><input type="radio" name="rating" value="0" aria-describedby="rating-hint"><span data-final-copy="ratingZero">0 estrellas</span></label><output id="rating-value" aria-live="polite"></output></div>
+              <button class="final-secondary" id="clear-rating" type="button" data-final-copy="ratingClear" hidden>Quitar valoración</button>
+            </fieldset>
             <button type="button" class="primary" id="final-finish" data-final-copy="finish">Finalizar encuesta</button>
           </section>
           <section id="final-completed" aria-labelledby="final-done-title" hidden>

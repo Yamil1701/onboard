@@ -602,7 +602,7 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   padding: 20px 19px 15px;
 }
 .survey-card fieldset { display: grid; gap: 7px; margin: 0; padding: 0; border: 0; min-width: 0; }
-.survey-card legend { padding: 0; margin-bottom: 17px; font: 600 25px/1.18 var(--serif); }
+.survey-card legend { padding: 0; margin-bottom: 17px; font: 700 23px/1.35 var(--reading); }
 .choice {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -735,6 +735,7 @@ html[lang="fr"] .flap { font-size: clamp(14px, 5.1vw, 26px); }
   place-items: center;
   width: 45px;
   height: 45px;
+  margin-inline: auto;
   border: 1px solid #507c72;
   border-radius: 50%;
   background: #e3eadd;

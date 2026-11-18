@@ -2,8 +2,8 @@ import type { Language } from './copy';
 import { finalSurveyCopy } from './final-survey-copy';
 
 type Answer = 0 | 1 | 2 | null;
-type SurveyState = { answers: Answer[]; step: number; submitted: boolean };
-const emptyState = (): SurveyState => ({ answers: [null, null, null, null, null], step: 0, submitted: false });
+type SurveyState = { answers: Answer[]; step: number; submitted: boolean; rating: number | null };
+const emptyState = (): SurveyState => ({ answers: [null, null, null, null, null], step: 0, submitted: false, rating: null });
 const isAnswer = (value: unknown): value is Answer => value === null || value === 0 || value === 1 || value === 2;
 
 export function createFinalSurvey(onChange: () => void) {
@@ -19,6 +19,9 @@ export function createFinalSurvey(onChange: () => void) {
   const reviewList = find('final-review-list');
   const completed = find('final-completed');
   const expectationLine = find('final-expectation');
+  const rating = find('final-rating');
+  const ratingRadios = [...rating.querySelectorAll<HTMLInputElement>('input')];
+  const clearRating = find<HTMLButtonElement>('clear-rating');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let data = emptyState();
   let language: Language = 'ar';
@@ -26,6 +29,19 @@ export function createFinalSurvey(onChange: () => void) {
   let editingFromReview = false;
   let motion: Animation | undefined;
   const allAnswered = () => data.answers.every(value => value !== null);
+
+  function renderRating() {
+    const words = finalSurveyCopy[language];
+    for (const radio of ratingRadios) {
+      const value = Number(radio.value);
+      radio.checked = data.rating === value;
+      radio.closest('label')!.classList.toggle('is-filled', value > 0 && data.rating !== null && value <= data.rating);
+      const label = radio.closest('label')!.querySelector('.visually-hidden');
+      if (label) label.textContent = words.ratingStars.replace('{count}', String(value));
+    }
+    find('rating-value').textContent = data.rating === null ? words.ratingEmpty : `${data.rating}/5`;
+    clearRating.hidden = data.rating === null;
+  }
 
   function render() {
     const words = finalSurveyCopy[language];
@@ -38,6 +54,7 @@ export function createFinalSurvey(onChange: () => void) {
     form.hidden = reviewing || data.submitted;
     review.hidden = !reviewing || data.submitted;
     completed.hidden = !data.submitted;
+    renderRating();
     expectationLine.hidden = !expectation || data.step !== 0 || data.submitted;
     expectationLine.textContent = words.expectation.replace('{answer}', expectation);
     find('final-position').textContent = words.progress.replace('{count}', String(data.answers.filter(value => value !== null).length));
@@ -59,21 +76,30 @@ export function createFinalSurvey(onChange: () => void) {
     }
     reviewList.replaceChildren(...words.questions.map((item, index) => {
       const row = document.createElement('li');
-      const title = document.createElement('h3');
-      title.textContent = item.question;
-      const answer = document.createElement('p');
+      const title = document.createElement('span');
+      title.className = 'final-review-label';
+      title.textContent = words.reviewLabels[index];
+      const answer = document.createElement('span');
+      answer.className = 'final-review-answer';
       const value = data.answers[index];
       answer.textContent = value === null ? '—' : item.options[value];
       const edit = document.createElement('button');
       edit.type = 'button';
-      edit.textContent = words.edit.replace('{step}', String(index + 1));
+      edit.setAttribute('aria-label', `${words.edit.replace('{step}', String(index + 1))}: ${item.question}`);
+      const text = document.createElement('span');
+      text.append(title, answer);
+      const pencil = document.createElement('span');
+      pencil.className = 'final-review-edit';
+      pencil.setAttribute('aria-hidden', 'true');
+      pencil.textContent = '✎';
+      edit.append(text, pencil);
       edit.addEventListener('click', () => {
         editingFromReview = true;
         data.submitted = false;
         data.step = index;
         update();
       });
-      row.append(title, answer, edit);
+      row.append(edit);
       return row;
     }));
   }
@@ -119,6 +145,20 @@ export function createFinalSurvey(onChange: () => void) {
     data.step = 5;
     update();
   });
+  rating.addEventListener('change', event => {
+    if (!(event.target instanceof HTMLInputElement)) return;
+    const value = Number(event.target.value);
+    if (!Number.isInteger(value) || value < 0 || value > 5) return;
+    data.rating = value;
+    renderRating();
+    onChange();
+  });
+  clearRating.addEventListener('click', () => {
+    data.rating = null;
+    renderRating();
+    ratingRadios[0].focus({ preventScroll: true });
+    onChange();
+  });
   render();
 
   return {
@@ -133,8 +173,10 @@ export function createFinalSurvey(onChange: () => void) {
       if (!Array.isArray(stored.answers) || stored.answers.length !== 5 || !stored.answers.every(isAnswer)) return;
       const firstMissing = stored.answers.indexOf(null);
       const requested = typeof stored.step === 'number' && Number.isInteger(stored.step) && stored.step >= 0 && stored.step <= 5 ? stored.step : 0;
-      data = { answers: [...stored.answers], step: firstMissing === -1 ? requested : Math.min(requested, firstMissing), submitted: firstMissing === -1 && stored.submitted === true };
+      const restoredRating = typeof stored.rating === 'number' && Number.isInteger(stored.rating) && stored.rating >= 0 && stored.rating <= 5 ? stored.rating : null;
+      data = { answers: [...stored.answers], step: firstMissing === -1 ? requested : Math.min(requested, firstMissing), submitted: firstMissing === -1 && stored.submitted === true, rating: restoredRating };
       if (data.submitted) data.step = 5;
+      editingFromReview = firstMissing === -1 && data.step < 5;
       render();
     },
     reset() { motion?.cancel(); data = emptyState(); editingFromReview = false; render(); },
