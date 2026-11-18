@@ -1098,3 +1098,6 @@ body:has(.is-reading) { overflow: hidden; }
 @media(max-width:390px) { .topbar { padding-inline: 12px; gap: 3px; } .stage-label { font-size: 9px; gap: 5px; } .languages button { width: 52px; gap: 4px; padding-inline: 6px; } .sound-toggle { width: 34px; } }
 .top-menu { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 5px 0; border: 0; color: #d8c9a8; background: transparent; font: 10px/1.4 var(--mono); text-align: left; }
 .top-menu svg { flex: none; width: 15px; height: 15px; transform: rotate(180deg); }
+.journey[data-phase="materials"][data-completed="false"] .materials { padding-bottom: 155px; }
+.journey[data-phase="materials"][data-completed="false"] .materials-next { position: fixed; z-index: 5; left: 50%; bottom: max(12px,env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(calc(100% - 36px),400px); margin: 0; padding: 12px; border: 1px solid #67807780; border-radius: 6px; background: #0d222bf5; box-shadow: 0 4px 20px #0005; }
+.journey[data-phase="materials"][data-completed="false"] .materials-next p { margin-bottom: 8px; font-size: 11px; }

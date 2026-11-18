@@ -215,6 +215,7 @@ function currentStop() {
 
 function renderPhase() {
   journey.dataset.phase = phase;
+  journey.dataset.completed=String(arrival.snapshot().finished);
   gate.hidden = phase !== 'gate';
   boarding.hidden = phase !== 'boarding';
   survey.hidden = phase !== 'survey';
@@ -484,6 +485,7 @@ function openMenu(){
   memory.cancel();flight?.kill();flight=undefined;takeoff.clear();
   passportOpening?.kill();passportOpening=undefined;walletOpening?.kill();walletOpening=undefined;
   wallet.inert=false;materials.inert=false;
+  gsap.set([wallet,walletCover,walletContents,materials],{clearProps:'opacity,transform'});
   closingMemory?.cancel();closingMemory=undefined;workshopSection.inert=false;
   arrival.pauseAudio();phase='menu';renderPhase();renderLanguage();save();
   window.scrollTo({top:0,behavior:'instant'});find('travel-menu-title').focus({preventScroll:true});

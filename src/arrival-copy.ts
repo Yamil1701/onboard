@@ -2,7 +2,7 @@ export const arrivalCopy = {
   ar: {
     title: 'Llegada',
     scroll: 'Deslizá para seguir', storyNext: 'Ver mis recuerdos',
-    audioPlaceholder: 'La voz de Cyntia', audioSoon: 'Próximamente, una reflexión en su propia voz.', soon: 'Próximamente',
+    audioPlaceholder: 'La voz de Cyntia', audioSoon: 'Una reflexión en su propia voz.', soon: 'Próximamente',
     download: 'Descargar', previewLoading: 'Preparando tu recuerdo…', wallNext: 'Dejar mi huella',
     finish: 'Terminar viaje', finishing: 'Guardamos este viaje.',
     menuTitle: 'El viaje queda con vos.', menuIntro: 'Ahora podés volver a explorar, a tu ritmo.',
@@ -44,7 +44,7 @@ export const arrivalCopy = {
   fr: {
     title: 'Arrivée',
     scroll: 'Fais défiler pour continuer', storyNext: 'Voir mes souvenirs',
-    audioPlaceholder: 'La voix de Cyntia', audioSoon: 'Bientôt, une réflexion avec sa propre voix.', soon: 'Bientôt',
+    audioPlaceholder: 'La voix de Cyntia', audioSoon: 'Une réflexion avec sa propre voix.', soon: 'Bientôt',
     download: 'Télécharger', previewLoading: 'Préparation de ton souvenir…', wallNext: 'Laisser ma trace',
     finish: 'Terminer le voyage', finishing: 'Ce voyage reste avec nous.',
     menuTitle: 'Le voyage reste avec toi.', menuIntro: 'Tu peux maintenant tout explorer à ton rythme.',
