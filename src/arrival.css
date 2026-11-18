@@ -99,3 +99,6 @@ html.is-landing { overflow: hidden; overscroll-behavior: none; }
 .progress[data-stop="6"] { --position: 100%; }
 .progress[data-stop="6"] .progress-track i { background: var(--gold); }
 @media(prefers-reduced-motion:reduce) { .arrival[data-reveal-ready] [data-reveal] { opacity: 1; transform: none; transition: none; } .souvenir-showcase.is-visible .souvenir-stage img { animation: none; } }
+.menu-passport { clip-path: inset(2.6% 4.2% 2.3% 4.2% round 3px); }
+.closing-book img { clip-path: inset(2.6% 4.2% 2.3% 4.2% round 4px); }
+.closing-paper { inset: 2.6% 4.2% 2.3% 4.2%; }

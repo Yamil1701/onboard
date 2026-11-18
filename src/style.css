@@ -1096,3 +1096,5 @@ body:has(.is-reading) { overflow: hidden; }
 .sound-toggle[aria-pressed="true"] .sound-off { display: block; }
 .explore-menu { display: block; align-self: center; margin: 16px auto; min-height: 44px; padding: 10px 18px; border: 1px solid #ae976b70; border-radius: 4px; color: var(--gold); background: transparent; font: 14px/1.4 var(--reading); }
 @media(max-width:390px) { .topbar { padding-inline: 12px; gap: 3px; } .stage-label { font-size: 9px; gap: 5px; } .languages button { width: 52px; gap: 4px; padding-inline: 6px; } .sound-toggle { width: 34px; } }
+.top-menu { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 5px 0; border: 0; color: #d8c9a8; background: transparent; font: 10px/1.4 var(--mono); text-align: left; }
+.top-menu svg { flex: none; width: 15px; height: 15px; transform: rotate(180deg); }

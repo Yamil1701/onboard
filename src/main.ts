@@ -60,7 +60,7 @@ const finalTitle = find('final-title');
 const resumeFinal = find<HTMLButtonElement>('resume-final-survey');
 const arrivalSection = find('arrival');
 const resumeArrival = find<HTMLButtonElement>('resume-arrival');
-const menuSection=find('travel-menu'),menuButton=find('explore-menu');
+const menuSection=find('travel-menu'),menuButton=find('explore-menu'),topMenu=find('top-menu');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const progress = find('progress');
 const progressValue = find('progress-value');
@@ -224,6 +224,7 @@ function renderPhase() {
   arrivalSection.hidden = phase !== 'arrival';
   menuSection.hidden=phase!=='menu';
   menuButton.hidden=!arrival.snapshot().finished||phase==='menu';
+  topMenu.hidden=menuButton.hidden;stageLabel.parentElement!.hidden=!topMenu.hidden;
   progress.hidden = phase === 'gate'||phase==='menu'||arrival.snapshot().finished;
   const stop = currentStop();
   state.furthestStop = Math.max(stop, state.furthestStop);
@@ -603,6 +604,7 @@ ticketForm.addEventListener('submit', event => {
 passportCover.addEventListener('click', openPassport);
 restart.addEventListener('click', restartJourney);
 menuButton.addEventListener('click',openMenu);
+topMenu.addEventListener('click',openMenu);
 for(const button of menuSection.querySelectorAll<HTMLButtonElement>('[data-explore]'))button.addEventListener('click',()=>explore(button.dataset.explore!));
 
 surveyForm.addEventListener('change', event => {
