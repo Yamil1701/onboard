@@ -1,3 +1,5 @@
+import { sound } from './sound';
+
 type SwipeActions = {
   canStart: () => boolean;
   turnPage: (delta: number) => boolean;
@@ -83,7 +85,7 @@ export function bindPageSwipes(view: HTMLElement, content: HTMLElement, actions:
       && Math.abs(x) > Math.abs(y) * 1.7 && event.timeStamp - gesture.time < 1800;
     if (deliberate && pointers.size === 0 && actions.canStart()
       && (window.visualViewport?.scale ?? 1) <= 1.01) {
-      actions.turnPage(x < 0 ? 1 : -1);
+      if(actions.turnPage(x < 0 ? 1 : -1))sound('paper');
     }
     resetVisual();
   });
