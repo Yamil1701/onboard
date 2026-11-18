@@ -1,7 +1,7 @@
 import type { Language } from './copy';
 
 // Preguntas recuperadas de la conversación del 15/11 y del mensaje de Tía Mimi.
-// Se conservan las opciones recibidas; la traducción sigue la versión bilingüe.
+// Revisión de redacción: opciones declarativas y tratamiento de vos / tu coherente.
 export const finalSurveyCopy = {
   ar: {
     title: 'Antes de aterrizar',
@@ -15,10 +15,10 @@ export const finalSurveyCopy = {
     reviewIntro: 'Tocá una respuesta para editarla.',
     reviewLabels: ['Expectativas', 'Exposiciones', 'Materiales', 'Para mi práctica', 'Lo que me llevo'],
     ratingTitle: '¿Qué tanto te gustó esta experiencia?',
-    ratingHint: 'Opcional · Podés elegir de 0 a 5 estrellas.',
-    ratingZero: '0 estrellas', ratingStars: '{count} de 5 estrellas', ratingClear: 'Quitar valoración',
+    ratingHint: 'Opcional',
+    ratingStars: '{count} de 5 estrellas',
     ratingOne: '1 de 5 estrellas',
-    ratingEmpty: 'Sin calificar · 0/5',
+    ratingEmpty: 'Sin calificar',
     edit: 'Cambiar respuesta {step}',
     finish: 'Finalizar encuesta',
     doneTitle: 'Gracias por dejar tu huella',
@@ -30,7 +30,7 @@ export const finalSurveyCopy = {
       { question: '¿Qué te parecieron las exposiciones?', options: ['Confusas', 'Claras y accesibles', 'Interesantes'] },
       { question: 'Respecto a los materiales didácticos, ¿qué te pareció su utilización?', options: ['Adecuada', 'Excesiva', 'Entretenida y útil'] },
       { question: 'A partir de las experiencias contadas, sistematizar estas experiencias te va a servir para:', options: ['No cometer los mismos errores.', 'Tener en cuenta lo positivo, para enriquecerme y aplicarlo.', 'Tomarlo como un aprendizaje del cual servirme cuando sea necesario.'] },
-      { question: 'Y al final, ¿qué me llevo de este viaje?', options: ['¿Respuestas a mis interrogantes?', '¿Una visión clara para evitar errores en mi recorrido?', '¿Herramientas valiosas que me guíen a superar los posibles obstáculos?'] },
+      { question: 'Y al final, ¿qué me llevo de este viaje?', options: ['Respuestas a mis interrogantes.', 'Una visión clara para evitar errores en mi recorrido.', 'Herramientas valiosas para superar posibles obstáculos.'] },
     ],
   },
   fr: {
@@ -45,10 +45,10 @@ export const finalSurveyCopy = {
     reviewIntro: 'Touche une réponse pour la modifier.',
     reviewLabels: ['Attentes', 'Expositions', 'Supports', 'Pour ma pratique', 'Ce que je retiens'],
     ratingTitle: 'As-tu aimé cette expérience ?',
-    ratingHint: 'Facultatif · Tu peux choisir de 0 à 5 étoiles.',
-    ratingZero: '0 étoile', ratingStars: '{count} étoiles sur 5', ratingClear: 'Effacer la note',
+    ratingHint: 'Facultatif',
+    ratingStars: '{count} étoiles sur 5',
     ratingOne: '1 étoile sur 5',
-    ratingEmpty: 'Sans note · 0/5',
+    ratingEmpty: 'Sans note',
     edit: 'Modifier la réponse {step}',
     finish: 'Terminer le questionnaire',
     doneTitle: 'Merci d’avoir laissé ta trace',
@@ -56,11 +56,11 @@ export const finalSurveyCopy = {
     local: 'Dans cette version de test, les réponses sont conservées dans ce navigateur pendant la visite.',
     back: 'Retour au carnet', materials: 'Retour aux ressources',
     questions: [
-      { question: 'Cette expérience a-t-elle répondu à vos attentes ?', options: ['Ce n’est pas ce que j’attendais', 'Elle a répondu à mes attentes', 'Elle a dépassé mes attentes'] },
-      { question: 'Que pensez-vous des expositions ?', options: ['Confuses', 'Claires et accessibles', 'Intéressantes'] },
-      { question: 'Concernant les supports didactiques, que pensez-vous de leur utilisation ?', options: ['Adaptée', 'Excessive', 'Divertissante et utile'] },
-      { question: 'À partir des expériences racontées, systématiser ces expériences vous servira à :', options: ['Ne pas commettre les mêmes erreurs.', 'Prendre en compte le positif, pour m’enrichir et l’appliquer.', 'Le prendre comme un apprentissage dont je pourrai me servir quand ce sera nécessaire.'] },
-      { question: 'Et à la fin, qu’est-ce que je retiens de ce voyage ?', options: ['Des réponses à mes questions ?', 'Une vision claire pour éviter les erreurs dans mon parcours ?', 'Des outils précieux qui me guident pour surmonter les obstacles possibles ?'] },
+      { question: 'Cette expérience a-t-elle répondu à tes attentes ?', options: ['Ce n’est pas ce que j’attendais', 'Elle a répondu à mes attentes', 'Elle a dépassé mes attentes'] },
+      { question: 'Qu’as-tu pensé des expositions ?', options: ['Confuses', 'Claires et accessibles', 'Intéressantes'] },
+      { question: 'Qu’as-tu pensé de l’utilisation des supports didactiques ?', options: ['Adaptée', 'Excessive', 'Divertissante et utile'] },
+      { question: 'À partir des expériences racontées, systématiser ces expériences te servira à :', options: ['Ne pas commettre les mêmes erreurs.', 'Prendre en compte le positif, pour m’enrichir et l’appliquer.', 'Le prendre comme un apprentissage dont je pourrai me servir quand ce sera nécessaire.'] },
+      { question: 'Et à la fin, qu’est-ce que je retiens de ce voyage ?', options: ['Des réponses à mes questions.', 'Une vision claire pour éviter les erreurs dans mon parcours.', 'Des outils précieux pour surmonter les obstacles possibles.'] },
     ],
   },
 } satisfies Record<Language, unknown>;

@@ -7,13 +7,14 @@ import { createWorkshop } from './workshop';
 import { createMemoryTransition } from './memory-transition';
 import { createFinalSurvey } from './final-survey';
 import { createArrival } from './arrival';
+import { initSound, sound, translateSound } from './sound';
 import './style.css';
 import './workshop.css';
 import './memory.css';
 import './final-survey.css';
 import './arrival.css';
 
-type Phase = 'gate' | 'boarding' | 'takeoff' | 'survey' | 'materials' | 'workshop' | 'finalSurvey' | 'arrival';
+type Phase = 'gate' | 'boarding' | 'takeoff' | 'survey' | 'materials' | 'workshop' | 'finalSurvey' | 'arrival' | 'menu';
 type Expectation = 'adapt' | 'play' | 'ideas';
 
 function find<T extends HTMLElement>(id: string): T {
@@ -59,6 +60,7 @@ const finalTitle = find('final-title');
 const resumeFinal = find<HTMLButtonElement>('resume-final-survey');
 const arrivalSection = find('arrival');
 const resumeArrival = find<HTMLButtonElement>('resume-arrival');
+const menuSection=find('travel-menu'),menuButton=find('explore-menu');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const progress = find('progress');
 const progressValue = find('progress-value');
@@ -89,7 +91,8 @@ const archive = createArchive(() => phase === 'materials');
 const workshop = createWorkshop(save);
 const memory = createMemoryTransition();
 const finalSurvey = createFinalSurvey(save);
-const arrival = createArrival(save);
+const arrival = createArrival(save,openMenu);
+initSound();
 
 function isExpectation(value: unknown): value is Expectation {
   return value === 'adapt' || value === 'play' || value === 'ideas';
@@ -106,7 +109,10 @@ function restore() {
     workshop.restore(stored.workshop);
     finalSurvey.restore(stored.finalSurvey);
     arrival.restore(stored.arrival);
-    if (stored.stop === 6 && state.submitted && finalSurvey.snapshot().submitted) phase = 'arrival';
+    if(arrival.snapshot().finished){
+      phase=stored.view==='materials'?'materials':stored.view==='workshop'?'workshop':stored.view==='arrival'?'arrival':'menu';
+    }
+    else if (stored.stop === 6 && state.submitted && finalSurvey.snapshot().submitted) phase = 'arrival';
     else if (stored.stop === 5 && state.submitted) phase = 'finalSurvey';
     else if (stored.stop === 4 && state.submitted) phase = 'workshop';
     else if (stored.stop === 3 && state.submitted) phase = 'materials';
@@ -126,6 +132,7 @@ function save() {
     sessionStorage.setItem(storageKey, JSON.stringify({
       ...state,
       stop: currentStop(),
+      view: phase,
       workshop: workshop.snapshot(),
       finalSurvey: finalSurvey.snapshot(),
       arrival: arrival.snapshot(),
@@ -166,6 +173,7 @@ function renderPoll() {
 }
 
 function renderStageLabel() {
+  if(phase==='menu'){stageLabel.dataset.copy='travelMenu';stageLabel.textContent=copy[state.language].travelMenu;return;}
   const key = phase === 'materials' || phase === 'survey' || phase === 'workshop' || phase === 'finalSurvey' || phase === 'arrival' ? phase : flightBeat ?? 'welcome';
   stageLabel.dataset.copy = key;
   stageLabel.textContent = copy[state.language][key];
@@ -193,10 +201,12 @@ function renderLanguage(animateIntro = false) {
   memory.translate(state.language);
   finalSurvey.translate(state.language, state.submitted ? copy[state.language][state.submitted] : '');
   arrival.translate(state.language, state.name, workshop.takeaway());
+  translateSound(state.language);
+  const finalLink=find('open-final-survey');finalLink.dataset.copy=arrival.snapshot().finished?'travelMenu':'enterFinalSurvey';finalLink.textContent=language[finalLink.dataset.copy as CopyKey];
 }
 
 function currentStop() {
-  if (phase === 'arrival') return 6;
+  if (phase === 'arrival' || phase === 'menu') return 6;
   if (phase === 'finalSurvey') return 5;
   if (phase === 'workshop') return 4;
   if (phase === 'materials') return 3;
@@ -212,13 +222,15 @@ function renderPhase() {
   workshopSection.hidden = phase !== 'workshop';
   finalSection.hidden = phase !== 'finalSurvey';
   arrivalSection.hidden = phase !== 'arrival';
-  progress.hidden = phase === 'gate';
+  menuSection.hidden=phase!=='menu';
+  menuButton.hidden=!arrival.snapshot().finished||phase==='menu';
+  progress.hidden = phase === 'gate'||phase==='menu'||arrival.snapshot().finished;
   const stop = currentStop();
   state.furthestStop = Math.max(stop, state.furthestStop);
   progress.dataset.stop = String(state.furthestStop);
   progressValue.textContent = `${state.furthestStop} / 6`;
-  resumeFinal.hidden = !workshop.snapshot().stamped && state.furthestStop < 5;
-  resumeArrival.hidden = state.furthestStop < 6;
+  resumeFinal.hidden = arrival.snapshot().finished || (!workshop.snapshot().stamped && state.furthestStop < 5);
+  resumeArrival.hidden = arrival.snapshot().finished || state.furthestStop < 6;
 }
 
 function openBoarding(focusButton = false) {
@@ -242,6 +254,7 @@ function prepareBoarding(focusButton = false) {
 
 function openPassport() {
   if (phase !== 'boarding' || passportOpened || passportOpening) return;
+  sound('paper');
   passportCover.disabled = true;
   passportCover.setAttribute('aria-expanded', 'true');
   ticket.hidden = false;
@@ -268,6 +281,7 @@ function openPassport() {
 
 function openSurvey() {
   flight = undefined;
+  if(arrival.snapshot().finished){phase='survey';beginFlight();return;}
   phase = 'survey';
   renderPhase();
   renderLanguage();
@@ -289,6 +303,7 @@ function boardJourney() {
   boardButton.disabled = true;
   nameInput.readOnly = true;
   stamp.hidden = false;
+  sound('stamp');
   renderLanguage();
   if (reducedMotion.matches) {
     flight = gsap.timeline({ onComplete: openSurvey })
@@ -367,6 +382,7 @@ function beginFlight() {
     openMaterials();
     return;
   }
+  sound('flight');
   phase = 'takeoff';
   flightBeat = 'runway';
   renderPhase();
@@ -385,14 +401,16 @@ function beginFlight() {
   flight.call(() => openMaterials(true), [], flightExit);
 }
 
-function openWorkshop() {
+function openWorkshop(skipPrelude=false) {
   if (phase !== 'materials') return;
   phase = 'workshop';
   renderPhase();
   renderLanguage();
   save();
   window.scrollTo(0, 0);
-  memory.play(() => {
+  sound('paper');
+  if(skipPrelude)workshopTitle.focus({preventScroll:true});
+  else memory.play(() => {
     if (phase === 'workshop') workshopTitle.focus({ preventScroll: true });
   });
 }
@@ -425,6 +443,7 @@ function backToMaterials() {
 }
 
 function openFinalSurvey() {
+  if(arrival.snapshot().finished){openMenu();return;}
   if (phase !== 'workshop' && phase !== 'materials') return;
   if (!workshop.snapshot().stamped && state.furthestStop < 5) return;
   phase = 'finalSurvey';
@@ -449,16 +468,43 @@ function openArrival() {
   if (phase !== 'finalSurvey' && phase !== 'materials') return;
   if (!finalSurvey.snapshot().submitted && state.furthestStop < 6) return;
   phase = 'arrival';renderPhase();renderLanguage();save();
-  window.scrollTo({top:0,behavior:'instant'});arrival.play(()=>{});
+  window.scrollTo({top:0,behavior:'instant'});arrival.play();
 }
 
 function leaveArrival() {
   if (phase !== 'arrival') return;
+  if(arrival.snapshot().finished){openMenu();return;}
   arrival.pauseAudio();phase='materials';renderPhase();renderLanguage();save();
   window.scrollTo({top:0,behavior:'instant'});materialsTitle.focus({preventScroll:true});
 }
 
+function openMenu(){
+  if(!arrival.snapshot().finished)return;
+  memory.cancel();flight?.kill();flight=undefined;takeoff.clear();
+  passportOpening?.kill();passportOpening=undefined;walletOpening?.kill();walletOpening=undefined;
+  wallet.inert=false;materials.inert=false;
+  closingMemory?.cancel();closingMemory=undefined;workshopSection.inert=false;
+  arrival.pauseAudio();phase='menu';renderPhase();renderLanguage();save();
+  window.scrollTo({top:0,behavior:'instant'});find('travel-menu-title').focus({preventScroll:true});
+}
+function explore(part:string){
+  if(!arrival.snapshot().finished||phase!=='menu')return;
+  sound('paper');
+  if(part==='materials'){openMaterials();return;}
+  if(part==='flight'){phase='survey';beginFlight();return;}
+  if(part==='workshop'){workshop.reset();phase='materials';openWorkshop();return;}
+  if(part==='memories'){phase='arrival';arrival.revisit();renderPhase();renderLanguage();save();arrival.play();return;}
+  if(part==='passport'){
+    passportOpening?.kill();passportOpening=undefined;passportOpened=false;
+    passportCover.hidden=false;passportCover.disabled=false;passportCover.setAttribute('aria-expanded','false');
+    ticket.hidden=true;ticket.inert=true;boardButton.disabled=false;stamp.hidden=true;nameInput.readOnly=false;
+    gsap.set([passportCover,boarding,ticket,stamp,windowPhoto],{clearProps:'opacity,transform'});
+    phase='gate';renderPhase();renderLanguage(true);save();window.scrollTo(0,0);prepareBoarding(true);
+  }
+}
+
 function restartJourney() {
+  if(arrival.snapshot().finished){openMenu();return;}
   memory.cancel();
   closingMemory?.cancel();
   closingMemory = undefined;
@@ -517,7 +563,7 @@ renderPhase();
 renderLanguage(true);
 reader.syncRoute();
 archive.syncRoute();
-if (currentStop() === 6) arrival.play(()=>{});
+if ((phase as Phase) === 'arrival') arrival.play();
 
 let languageFades: Animation[] = [];
 for (const button of languageButtons) {
@@ -533,7 +579,7 @@ for (const button of languageButtons) {
     const readerPanel = journey.querySelector('.reader:not([hidden])');
     const surfaces = readerPanel
       ? [...readerPanel.querySelectorAll('.reader-header, .reader-controls, figcaption')]
-      : [gate, boarding, survey, materials, workshopSection, finalSection, arrivalSection].filter(surface => !surface.hidden);
+      : [gate, boarding, survey, materials, workshopSection, finalSection, arrivalSection,menuSection].filter(surface => !surface.hidden);
     languageFades = [stageLabel, ...surfaces].map(surface =>
       surface.animate([{ opacity: .68 }, { opacity: 1 }], { duration: 160, easing: 'ease-out' }),
     );
@@ -556,6 +602,8 @@ ticketForm.addEventListener('submit', event => {
 });
 passportCover.addEventListener('click', openPassport);
 restart.addEventListener('click', restartJourney);
+menuButton.addEventListener('click',openMenu);
+for(const button of menuSection.querySelectorAll<HTMLButtonElement>('[data-explore]'))button.addEventListener('click',()=>explore(button.dataset.explore!));
 
 surveyForm.addEventListener('change', event => {
   if (!(event.target instanceof HTMLInputElement) || !isExpectation(event.target.value)) return;
@@ -576,7 +624,8 @@ surveyForm.addEventListener('submit', event => {
 });
 
 continueJourney.addEventListener('click', beginFlight);
-enterWorkshop.addEventListener('click', openWorkshop);
+enterWorkshop.addEventListener('click',()=>openWorkshop());
+find('continue-to-workshop').addEventListener('click',()=>openWorkshop(true));
 find('open-final-survey').addEventListener('click', openFinalSurvey);
 resumeFinal.addEventListener('click', openFinalSurvey);
 find('start-arrival').addEventListener('click',openArrival);

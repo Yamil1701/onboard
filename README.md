@@ -48,7 +48,7 @@ Las preguntas de cierre de `src/final-survey-copy.ts` recuperan la versión bili
 
 El nombre, la encuesta inicial y las decisiones de la actividad se conservan en la sesión del navegador. Recargar o cambiar de idioma conserva el avance. La línea del viaje conserva la parada más avanzada, aunque se cierre el cuaderno para revisar materiales. Los textos de `src/workshop-copy.ts` adaptan el informe, págs. 4 y 7–8. Las escenas de aula y del litchi son imágenes ilustrativas creadas para la web. El envío usa almacenamiento de sesión y no tiene un servidor de encuestas conectado. «Reiniciar» vuelve al inicio y limpia los datos de esta visita, conservando el idioma.
 
-PT Serif se aloja localmente para los textos de lectura, con su licencia en `src/assets/fonts/`. Noto Serif Display se usa en los títulos. El cambio AR/FR conserva el estado y mueve el indicador del selector, con banderas decorativas y foco visible para teclado.
+PT Serif se aloja localmente para los textos de lectura, con su licencia en `src/assets/fonts/`. PT Serif también se usa en todos los títulos y confirmaciones. El cambio AR/FR conserva el estado y mueve el indicador del selector, con banderas decorativas y foco visible para teclado.
 
 Fotos y PDF aceptan gestos horizontales sobre la imagen o la hoja, además de sus botones. `src/page-swipes.ts` filtra movimientos cortos, diagonales, desplazamientos verticales y gestos con varios dedos. En PDF, la navegación gestual se suspende al ampliar la hoja o la vista del navegador, para permitir desplazar y ampliar el documento.
 
@@ -66,4 +66,14 @@ Cada colección vive en `src/archive-data.json`. Tiene un título por idioma y u
 
 Las 67 láminas recibidas están en el archivo temático. Los espacios de BSPA y Turismo esperan las versiones definitivas de sus materiales de presentación.
 
-La revisión final agrupa las cinco respuestas en filas editables con lápiz. Antes de confirmar ofrece una valoración opcional de 0 a 5 estrellas. Se distingue una valoración de cero de una visita sin calificar y se conserva al cambiar de idioma y recargar. Las preguntas de ambas encuestas usan PT Serif; los títulos generales mantienen Noto Serif Display. La foto del aula solo se usa como previa, antes de la actividad.
+La revisión final agrupa las cinco respuestas en filas editables con lápiz. Antes de confirmar ofrece cinco estrellas centradas y opcionales. La valoración elegida se conserva al cambiar de idioma y recargar. Las preguntas de ambas encuestas usan PT Serif; toda la interfaz usa la misma familia legible. La foto del aula solo se usa como previa, antes de la actividad.
+
+## Cierre y exploración
+
+Materiales ofrece un botón visible para continuar a la parada 4 sin abrir la previa del cuaderno. El cuaderno mantiene su entrada cinematográfica opcional. El portadocumentos conserva su bisagra izquierda con bordes, sombras e interior más livianos.
+
+La llegada tiene tres capítulos: despedida con aparición progresiva al desplazar, dos recuerdos con vistas previas reales y descarga, y el mural anónimo. El audio de Cyntia tiene un espacio visible identificado como próximo; no se simula una grabación. Las notas se intercalan dentro de un área con desplazamiento y carga por páginas. Publicar una huella cierra su formulario; un mensaje pendiente sigue sin mostrarse públicamente.
+
+«Terminar viaje» cierra el pasaporte y abre el menú de exploración. Se pueden repetir pasaporte, despegue, materiales, actividad y despedida/recuerdos, sin reabrir encuestas ni publicar nuevas huellas. La recarga conserva el cierre y el acceso al menú.
+
+Los sonidos de interfaz, papel, sellos, vuelo y cierre se sintetizan localmente con Web Audio, a volumen discreto. Empiezan solo después de una interacción; el botón junto a AR/FR silencia inmediatamente todo el sonido y conserva la preferencia. El audio real también respeta ese silencio. Las animaciones respetan movimiento reducido y el desplazamiento es nativo.

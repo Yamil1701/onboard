@@ -21,7 +21,6 @@ export function createFinalSurvey(onChange: () => void) {
   const expectationLine = find('final-expectation');
   const rating = find('final-rating');
   const ratingRadios = [...rating.querySelectorAll<HTMLInputElement>('input')];
-  const clearRating = find<HTMLButtonElement>('clear-rating');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let data = emptyState();
   let language: Language = 'ar';
@@ -40,7 +39,6 @@ export function createFinalSurvey(onChange: () => void) {
       if (label) label.textContent = value === 1 ? words.ratingOne : words.ratingStars.replace('{count}', String(value));
     }
     find('rating-value').textContent = data.rating === null ? words.ratingEmpty : `${data.rating}/5`;
-    clearRating.hidden = data.rating === null;
   }
 
   function render() {
@@ -140,23 +138,12 @@ export function createFinalSurvey(onChange: () => void) {
     data.submitted = true;
     update();
   });
-  find('final-review-again').addEventListener('click', () => {
-    data.submitted = false;
-    data.step = 5;
-    update();
-  });
   rating.addEventListener('change', event => {
     if (!(event.target instanceof HTMLInputElement)) return;
     const value = Number(event.target.value);
-    if (!Number.isInteger(value) || value < 0 || value > 5) return;
+    if (!Number.isInteger(value) || value < 1 || value > 5) return;
     data.rating = value;
     renderRating();
-    onChange();
-  });
-  clearRating.addEventListener('click', () => {
-    data.rating = null;
-    renderRating();
-    ratingRadios[0].focus({ preventScroll: true });
     onChange();
   });
   render();
@@ -173,7 +160,7 @@ export function createFinalSurvey(onChange: () => void) {
       if (!Array.isArray(stored.answers) || stored.answers.length !== 5 || !stored.answers.every(isAnswer)) return;
       const firstMissing = stored.answers.indexOf(null);
       const requested = typeof stored.step === 'number' && Number.isInteger(stored.step) && stored.step >= 0 && stored.step <= 5 ? stored.step : 0;
-      const restoredRating = typeof stored.rating === 'number' && Number.isInteger(stored.rating) && stored.rating >= 0 && stored.rating <= 5 ? stored.rating : null;
+      const restoredRating = typeof stored.rating === 'number' && Number.isInteger(stored.rating) && stored.rating >= 1 && stored.rating <= 5 ? stored.rating : null;
       data = { answers: [...stored.answers], step: firstMissing === -1 ? requested : Math.min(requested, firstMissing), submitted: firstMissing === -1 && stored.submitted === true, rating: restoredRating };
       if (data.submitted) data.step = 5;
       editingFromReview = firstMissing === -1 && data.step < 5;

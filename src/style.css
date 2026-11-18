@@ -1,18 +1,4 @@
 @font-face {
-  font-family: 'Noto Serif Display';
-  src: url('./assets/display.woff2') format('woff2');
-  font-weight: 100 900;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Noto Serif Display';
-  src: url('./assets/display-italic.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
   font-family: 'PT Serif';
   font-style: normal;
   font-weight: 400;
@@ -51,7 +37,7 @@
   --muted: #526068;
   --line: #4b626b;
   --stamp-ink: #9b3a29;
-  --serif: 'Noto Serif Display', Georgia, serif;
+  --serif: 'PT Serif', Georgia, serif;
   --reading: 'PT Serif', Georgia, serif;
   --mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
   --view-height: 100vh;
@@ -1086,3 +1072,27 @@ body:has(.is-reading) { overflow: hidden; }
   box-shadow: 0 5px 20px #0006;
 }
 .archive-figure a { display: inline-block; margin-top: 12px; padding: 12px; color: var(--teal); font-size: 14px; }
+
+/* A lighter wallet: a narrow binding, a single lining and quieter paper pockets. */
+.wallet { --binding: #38282b; --thread: #c1a281; --lining: #5b4140; padding: 6px; border-color: #8b6f61; border-radius: 9px 13px 13px 9px; background: #4a3332; box-shadow: inset 3px 0 5px #160e1240, 0 14px 28px #0004; }
+.wallet-cover { inset: 6px; border-style: solid; border-color: #ad8d6d55; border-radius: 5px 9px 9px 5px; background: #513735; }
+.wallet-contents { gap: 17px; padding: 19px 15px; border: 0; border-left: 1px solid #ba997563; border-radius: 4px 9px 9px 4px; background: #5b4140; }
+.wallet-header { padding-bottom: 6px; font-weight: 400; letter-spacing: .04em; }
+.document-entry, .wallet-slip { border-color: #d0ba9870; border-radius: 3px 6px 6px 3px; box-shadow: 0 2px 3px #24171c35; }
+.wallet-pockets { gap: 13px; }
+.wallet-slip { padding-top: 16px; }
+.wallet-archive { border: 0; border-top: 1px solid #c1a28160; border-radius: 0; background: transparent; }
+.wallet-archive summary { padding-inline: 2px; }
+.wallet-archive summary:is(:hover,:active) { background: #ffffff08; }
+.archive-list { padding-inline: 0; gap: 12px; }
+.archive-entry { border-color: #bea68a40; background: #3f2e30; }
+.materials-next { margin: 30px auto 0; max-width: 400px; text-align: center; }
+.materials-next p { margin-bottom: 13px; color: #bacdca; font: 14px/1.6 var(--reading); }
+.materials-next .primary { width: 100%; white-space: normal; }
+.topbar-tools { display: flex; align-items: center; flex: none; gap: 3px; }
+.sound-toggle { display: grid; place-items: center; width: 40px; height: 44px; padding: 10px; border: 0; background: transparent; color: #c7c6ae; }
+.sound-toggle svg { width: 19px; height: 19px; }
+.sound-toggle .sound-off, .sound-toggle[aria-pressed="true"] .sound-waves { display: none; }
+.sound-toggle[aria-pressed="true"] .sound-off { display: block; }
+.explore-menu { display: block; align-self: center; margin: 16px auto; min-height: 44px; padding: 10px 18px; border: 1px solid #ae976b70; border-radius: 4px; color: var(--gold); background: transparent; font: 14px/1.4 var(--reading); }
+@media(max-width:390px) { .topbar { padding-inline: 12px; gap: 3px; } .stage-label { font-size: 9px; gap: 5px; } .languages button { width: 52px; gap: 4px; padding-inline: 6px; } .sound-toggle { width: 34px; } }

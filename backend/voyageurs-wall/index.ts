@@ -16,9 +16,16 @@ Deno.serve(async (request: Request) => {
   if (request.method === 'OPTIONS') return new Response(null, {status:204,headers});
   try {
     if (request.method === 'GET') {
-      const response = await fetch(`${api}/rest/v1/voyageurs_wall_entries?select=id,message,created_at&status=eq.approved&order=created_at.desc&limit=40`, {headers:auth});
-      if (!response.ok) throw new Error('read');
-      return reply({entries:await response.json()});
+      const url=new URL(request.url),before=url.searchParams.get('before'),beforeId=url.searchParams.get('beforeId');
+      const query=new URLSearchParams({select:'id,message,created_at',status:'eq.approved',order:'created_at.desc,id.desc',limit:'41'});
+      if(before||beforeId){
+        if(!before||!beforeId||!/^\d{4}-\d{2}-\d{2}T[\d:.]+(?:Z|[+-]\d{2}:\d{2})$/.test(before)||Number.isNaN(Date.parse(before))||!/^[0-9a-f-]{36}$/i.test(beforeId))return reply({error:'cursor'},400);
+        query.set('or',`(created_at.lt.${before},and(created_at.eq.${before},id.lt.${beforeId}))`);
+      }
+      const response=await fetch(`${api}/rest/v1/voyageurs_wall_entries?${query}`,{headers:auth});
+      if(!response.ok)throw new Error('read');
+      const rows=await response.json(),entries=rows.slice(0,40),last=entries.at(-1);
+      return reply({entries,nextCursor:rows.length>40?{date:last.created_at,id:last.id}:null});
     }
     if (request.method !== 'POST') return reply({error:'method'},405);
     if (Number(request.headers.get('content-length') ?? 0)>4096) return reply({error:'length'},413);
