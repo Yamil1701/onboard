@@ -143,7 +143,7 @@ export function createArchive(canOpen: () => boolean) {
       pendingImage = undefined;
       delete frame.dataset.loading;
       frame.removeAttribute('aria-busy');
-      if (hash !== '#informe') {
+      if (!['#informe','#secundaria','#practica-bspa','#practica-turismo'].includes(hash)) {
         journey.classList.remove('is-reading');
         stage.inert = progress.inert = false;
         window.scrollTo(0, originY);

@@ -170,7 +170,7 @@
             <div class="wallet-leaf" id="wallet-page-1">
             <button class="document-entry" type="button" id="open-passport">
               <svg aria-hidden="true"><use href="#file"/></svg>
-              <span><strong data-copy="reportTitle">Informe de práctica</strong><small data-copy="reportDetails">Estaciones 1 y 4 · PDF en español</small></span>
+              <span><strong data-copy="reportTitle">Informe de práctica</strong><small data-copy="reportDetails">4 diapositivas de resumen + informe completo</small></span>
               <svg aria-hidden="true"><use href="#arrow"/></svg>
             </button>
             <div class="wallet-pockets">
@@ -187,8 +187,8 @@
                 <span class="slip-open">Explorar la práctica ↗</span>
               </button>
             </div>
-            <section class="future-practices" id="future-practices" aria-label="Próximas experiencias">
-              <p class="future-title">Próximas experiencias</p>
+            <section class="future-practices" id="future-practices" aria-label="Otras experiencias">
+              <p class="future-title">Otras experiencias</p>
               <div class="wallet-pockets">
                 <article class="wallet-slip practice-placeholder">
                   <p class="slip-stop future-stop">Próximamente</p>
@@ -196,12 +196,12 @@
                   <p class="slip-topic future-topic">Una nueva experiencia de práctica</p>
                   <span class="slip-open future-status">Materiales pendientes</span>
                 </article>
-                <article class="wallet-slip practice-placeholder">
-                  <p class="slip-stop future-stop">Próximamente</p>
+                <button class="wallet-slip practice-entry secondary-entry" id="open-secondary" type="button">
+                  <p class="slip-stop" data-copy="secondaryAuthor">Veronica Estrada</p>
                   <h2>SECUNDARIA</h2>
-                  <p class="slip-topic future-topic">Una nueva experiencia de práctica</p>
-                  <span class="slip-open future-status">Materiales pendientes</span>
-                </article>
+                  <p class="slip-topic" data-copy="secondaryTopic">Enseñar en contextos diversos</p>
+                  <span class="slip-open" data-copy="secondaryOpen">Leer la experiencia</span>
+                </button>
               </div>
             </section>
             </div>
@@ -472,12 +472,16 @@
         <span id="progress-value">1 / 6</span>
       </div>
     </footer>
-    <section class="reader" id="reader" aria-labelledby="reader-title" hidden>
+    <section class="reader report-reader" id="reader" aria-labelledby="reader-title" hidden inert>
       <header class="reader-header">
         <button type="button" id="close-reader"><span aria-hidden="true">‹</span> <span data-copy="backMaterials">Volver</span></button>
-        <h2 id="reader-title" data-copy="reportTitle" tabindex="-1">Informe de práctica</h2>
+        <h2 id="reader-title" tabindex="-1">Informe de práctica</h2>
       </header>
-      <div class="reader-controls" aria-label="PDF">
+      <nav class="reader-sections" id="reader-sections" aria-label="Informe">
+        <button type="button" id="show-report-summary" aria-pressed="true">Resumen</button>
+        <button type="button" id="show-full-report" aria-pressed="false">Informe completo</button>
+      </nav>
+      <div class="reader-controls" id="report-controls" aria-label="Páginas">
         <div class="reader-pages">
           <button type="button" id="previous-page" disabled><span aria-hidden="true">‹</span><span class="visually-hidden" data-copy="previousPage">Página anterior</span></button>
           <output id="reader-page" aria-live="polite">—</output>

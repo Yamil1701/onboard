@@ -16,6 +16,7 @@ import './memory.css';
 import './final-survey.css';
 import './arrival.css';
 import './practices.css';
+import './report.css';
 
 type Phase = 'gate' | 'boarding' | 'takeoff' | 'survey' | 'materials' | 'workshop' | 'finalSurvey' | 'arrival' | 'menu';
 type Expectation = 'adapt' | 'play' | 'ideas';
@@ -212,7 +213,7 @@ function renderLanguage(animateIntro = false) {
   }
   if (phase === 'gate') renderDestination(animateIntro);
   renderPoll();
-  reader.translate(language);
+  reader.translate(language, state.language);
   archive.translate(state.language);
   practices.translate(state.language);
   workshop.translate(state.language, state.name);
