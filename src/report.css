@@ -25,6 +25,9 @@
 .secondary-document h3{margin:0 0 16px;font:700 clamp(26px,6vw,36px)/1.2 var(--reading);text-wrap:balance}
 .secondary-document h4{margin:32px 0 12px;font:700 22px/1.3 var(--reading);color:#315c5b}
 .secondary-document p{margin:0 0 16px}.secondary-document .secondary-byline{color:#5e716c;font-size:14px}
+.secondary-poster .practice-photo-surface{max-height:none;box-sizing:border-box}
+.secondary-poster figcaption{font-size:14px;line-height:1.5}
+#reader .secondary-poster .practice-image-status button{padding:10px 16px;background:#244f4b;color:#fff9e9;white-space:normal;line-height:1.4}
 .secondary-document .secondary-source{display:inline-block;line-height:1.4;padding:12px 15px;min-height:44px;box-sizing:border-box;border:1px solid #436d65;border-radius:5px;color:#244f4b;background:#e2e8da;text-decoration:none}
 #reader :is(button,a):focus-visible{outline:3px solid #be8f43;outline-offset:3px}
 @media(max-width:380px){.report-summary-slide,.secondary-document{padding:22px 19px}.report-summary-intro{font-size:16px}.report-summary-ideas{gap:16px}}

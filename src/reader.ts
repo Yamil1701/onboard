@@ -3,12 +3,15 @@ import type {copy,CopyKey,Language} from './copy';
 import {bindPageSwipes} from './page-swipes';
 import {reportSlides,renderReportSlide} from './report-summary';
 import secondaryParagraphs from './secondary-document.json';
+import {bindMaterialImages,materialImageSize} from './material-images';
 
 type PdfLibrary=typeof import('pdfjs-dist');
 type PdfDocument=Awaited<ReturnType<PdfLibrary['getDocument']>['promise']>;
 type ReaderCopy=(typeof copy)[Language];
 const reportUrl=`${import.meta.env.BASE_URL}materiales/Pasaporte_de_la_practica_docente.pdf`;
 const secondaryUrl=`${import.meta.env.BASE_URL}materiales/secundaria/Estrada_Las_practicas_docentes.docx`;
+const secondaryPosterPath='secundaria/ensenar-frances-contextos-diversos.jpg';
+const secondaryPosterUrl=`${import.meta.env.BASE_URL}materiales/${secondaryPosterPath}`;
 const zoomLevels=[1,1.35,1.8,2.4,3];
 
 export function createReader(onOpen:()=>boolean){
@@ -61,10 +64,21 @@ export function createReader(onOpen:()=>boolean){
     cancelRender();content='secondary';mode='ready';
     const article=document.createElement('article');article.className='secondary-document';article.lang='es';
     const byline=document.createElement('p');byline.className='secondary-byline';byline.textContent=text('Veronica Estrada · Relato de práctica · Lectura en español','Veronica Estrada · Récit de stage · Lecture en espagnol');article.append(byline);
+    const figure=document.createElement('figure');figure.className='practice-image secondary-poster';
+    const frame=document.createElement('div');frame.className='practice-photo-surface';frame.dataset.imageState='loading';frame.setAttribute('aria-busy','true');
+    const [width,height]=materialImageSize(secondaryPosterPath);frame.style.setProperty('--image-ratio',`${width}/${height}`);
+    const status=document.createElement('div');status.className='practice-image-status';status.setAttribute('role','status');
+    const spinner=document.createElement('span');spinner.className='practice-image-spinner';spinner.setAttribute('aria-hidden','true');
+    const loading=document.createElement('span');loading.textContent=text('Cargando imagen…','Chargement de l’image…');status.append(spinner,loading);
+    const image=document.createElement('img');image.src=secondaryPosterUrl;image.width=width;image.height=height;image.decoding='async';image.draggable=false;
+    image.alt=text('Enseñar francés en contextos diversos: un viaje de desafíos, aprendizajes y compromiso. Infografía sobre el punto de partida, los desafíos, primero y tercer año, las decisiones pedagógicas y la reflexión final.','Enseigner le français dans des contextes variés : défis, apprentissages et engagement. Infographie en espagnol sur le contexte, les défis, les cours de première et troisième année, les choix pédagogiques et la réflexion finale.');
+    frame.append(status,image);figure.append(frame);
+    const caption=document.createElement('figcaption');caption.lang=language==='ar'?'es':'fr';
+    const enlarge=document.createElement('a');enlarge.href=secondaryPosterUrl;enlarge.target='_blank';enlarge.rel='noopener noreferrer';enlarge.textContent=text('Abrir la infografía a tamaño completo','Ouvrir l’infographie en taille réelle');caption.append(enlarge);figure.append(caption);article.append(figure);
     const headings=new Set([1,8,13,18,29,37,43]);
     secondaryParagraphs.forEach((paragraph,i)=>{const node=document.createElement(i===0?'h3':headings.has(i)?'h4':'p');node.textContent=paragraph;article.append(node);});
     const original=document.createElement('a');original.className='secondary-source';original.href=secondaryUrl;original.download='Estrada.Las prácticas docentes.docx';original.textContent=text('Descargar el documento original (Word)','Télécharger le document original (Word)');article.append(original);
-    paper.replaceChildren(article);controls();view.scrollTo(0,0);
+    paper.replaceChildren(article);bindMaterialImages(paper,language);controls();view.scrollTo(0,0);
   }
 
   async function render(offset={x:0,y:0}){
