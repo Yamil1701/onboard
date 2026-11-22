@@ -38,11 +38,11 @@ export function sound(cue:Cue,delay=0){
   if(cue==='paper')air(context,t,.36,.09,2200);
   if(cue==='whoosh')air(context,t,.7,.11,300,1800);
   if(cue==='pen'){
-    if(penBuffer){const source=context.createBufferSource(),gain=context.createGain();source.buffer=penBuffer;gain.gain.value=.45;source.connect(gain).connect(master!);source.start(t);}
+    if(penBuffer){const source=context.createBufferSource(),gain=context.createGain();source.buffer=penBuffer;gain.gain.value=.18;source.connect(gain).connect(master!);source.start(t);}
     else {
       // Smooth friction fallback: one continuous stroke, without taps or pulses.
       const source=context.createBufferSource(),filter=context.createBiquadFilter(),gain=context.createGain();source.buffer=noiseBuffer(context);filter.type='bandpass';filter.frequency.value=2100;filter.Q.value=.65;
-      gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(.045,t+.05);gain.gain.linearRampToValueAtTime(.025,t+.3);gain.gain.linearRampToValueAtTime(.04,t+.48);gain.gain.linearRampToValueAtTime(0,t+.7);
+      gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(.018,t+.05);gain.gain.linearRampToValueAtTime(.01,t+.3);gain.gain.linearRampToValueAtTime(.016,t+.48);gain.gain.linearRampToValueAtTime(0,t+.7);
       source.connect(filter).connect(gain).connect(master!);source.start(t);source.stop(t+.72);
     }
   }
