@@ -3,8 +3,8 @@
 #reader .reader-sections button{flex:1;white-space:normal;line-height:1.35;padding:8px 10px;border:1px solid #708783;color:#e2e9df;font-size:14px}
 #reader .reader-sections button[aria-pressed=true]{background:#e7cf9f;color:#17343e;border-color:#e7cf9f}
 #reader .reader-pages output{min-width:116px;font-size:14px}
-#reader[data-content=secondary]{grid-template-rows:auto minmax(0,1fr)}
-#reader[data-content=summary] .reader-page,#reader[data-content=secondary] .reader-page{width:100%;min-width:0}
+#reader:is([data-content=secondary],[data-content=unate]){grid-template-rows:auto minmax(0,1fr)}
+#reader:is([data-content=summary],[data-content=secondary],[data-content=unate]) .reader-page{width:100%;min-width:0}
 .report-summary-slide{box-sizing:border-box;min-height:min(680px,69dvh);padding:clamp(22px,5vw,42px);border:1px solid #c9b68d;border-radius:5px;color:#243e44;background:radial-gradient(ellipse at right top,#d7e3d8 0,transparent 55%),#f5efdf;box-shadow:0 6px 20px #0002;overflow-wrap:anywhere}
 .report-summary-kicker{margin:0 0 14px;color:#57716b;font:700 12px/1.4 var(--reading);letter-spacing:.09em;text-transform:uppercase}
 .report-summary-slide h3{margin:0 0 17px;max-width:20ch;font:700 clamp(27px,6.7vw,43px)/1.13 var(--reading);letter-spacing:-.025em;text-wrap:balance}

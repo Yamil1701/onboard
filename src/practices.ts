@@ -85,7 +85,7 @@ export function createPractices(canOpen:()=>boolean){
     }
     if(requested)history.replaceState(history.state,'',location.pathname+location.search);
     if(active){const trigger=get(`open-${active}`);active=undefined;panel.hidden=true;panel.inert=true;
-      if(!['#informe','#secundaria'].includes(location.hash)&&!location.hash.startsWith('#archivo-')){journey.classList.remove('is-reading');stage.inert=progress.inert=false;window.scrollTo(0,originY);trigger.focus({preventScroll:true});}}
+      if(!['#informe','#secundaria','#unate'].includes(location.hash)&&!location.hash.startsWith('#archivo-')){journey.classList.remove('is-reading');stage.inert=progress.inert=false;window.scrollTo(0,originY);trigger.focus({preventScroll:true});}}
   }
   function close(){if(history.state?.practiceReader)history.back();else{history.replaceState(history.state,'',location.pathname+location.search);syncRoute();}}
   function step(delta:number){if(!active)return;const page=pages[active]+delta;if(page<0)return;if(page>=stepTitles[active].length){close();return;}pages[active]=page;sound('paper');render(true);}
