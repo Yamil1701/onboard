@@ -1,6 +1,6 @@
 import { gsap } from 'gsap';
 import { arrivalCopy } from './arrival-copy';
-import { arrivalAudio } from './arrival-config';
+import { createTestimonials } from './testimonials';
 import { createSouvenir } from './souvenirs';
 import { checkFootprint } from './wall-moderation';
 import { readWall, postFootprint, type Footprint, type WallCursor } from './wall-service';
@@ -21,7 +21,8 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
   const find=<T extends HTMLElement=HTMLElement>(id:string)=>root.querySelector<T>(`#${id}`)!;
   const intro=find('arrival-cinematic'),scene=find('arrival-scene'),sky=find('arrival-sky'),runway=find('arrival-runway');
   const content=find('arrival-content'),caption=find('arrival-flight-caption'),closing=find('arrival-closing');
-  const audio=find<HTMLAudioElement>('arrival-audio'),form=find<HTMLFormElement>('wall-form'),input=find<HTMLTextAreaElement>('wall-message');
+  const testimonials=createTestimonials(find('arrival-testimonials'));
+  const form=find<HTMLFormElement>('wall-form'),input=find<HTMLTextAreaElement>('wall-message');
   const submit=find<HTMLButtonElement>('wall-submit'),feedback=find('wall-feedback'),list=find('wall-list');
   const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
   let state=fresh(),language:Language='ar',name='',phrase='';
@@ -112,10 +113,7 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
     }
     for(const chapter of ['story','souvenirs','wall'] as const)find(`arrival-${chapter}`).hidden=state.chapter!==chapter;
     caption.textContent=w[landingBeat];find('arrival-personal-phrase').textContent=`“${phrase||w.quote}”`;
-    input.placeholder=w.wallPlaceholder;audio.setAttribute('aria-label',w.audio);
-    find('arrival-audio-group').hidden=!arrivalAudio.src;find('arrival-audio-placeholder').hidden=!!arrivalAudio.src;
-    if(arrivalAudio.src&&!audio.hasAttribute('src'))audio.src=arrivalAudio.src;
-    find('arrival-transcript').textContent=arrivalAudio.transcript[language];find('arrival-transcript-details').hidden=!arrivalAudio.transcript[language];
+    input.placeholder=w.wallPlaceholder;testimonials.translate(language);
     find('arrival-to-wall').textContent=state.finished?w.menuBack:w.wallNext;
     find('arrival-materials').textContent=state.finished?w.menuBack:w.back;
     for(const kind of ['passport','postcard'] as const)find<HTMLImageElement>(`preview-${kind}`).alt=kind==='passport'?w.passportTitle:w.postcardLabel;
@@ -138,7 +136,7 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
     find(id).focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});
   }
   function setChapter(chapter:Chapter){
-    state.chapter=chapter;audio.pause();render();onChange();focusChapter();sound('paper');
+    state.chapter=chapter;testimonials.pause();render();onChange();focusChapter();sound('paper');
     if(chapter==='wall')void refreshWall();
   }
   function finishLanding(){stopFlightSound();timeline?.kill();timeline=undefined;state.landed=true;unlock();render();onChange();focusChapter();}
@@ -172,7 +170,7 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
     finally{exporting=false;buttons.forEach(b=>b.disabled=false);renderStatus();}
   });
   function finishTrip(){
-    if(closingTimeline)return;audio.pause();
+    if(closingTimeline)return;testimonials.pause();
     // Switch the underlying screen while the opaque closing layer still covers it.
     const done=()=>{closingTimeline=undefined;state.finished=true;onChange();onFinish();unlock();};
     if(reducedMotion.matches){done();return;}
@@ -218,7 +216,7 @@ export function createArrival(onChange:()=>void,onFinish:()=>void) {
       const chapter:Chapter=saved.chapter==='wall'||saved.wallOpen===true?'wall':saved.chapter==='souvenirs'||saved.revealed===true?'souvenirs':'story';
       state={landed:saved.landed===true,chapter,finished:saved.finished===true,draft:typeof saved.draft==='string'?saved.draft.slice(0,320):''};render();
     },
-    reset(){stopFlightSound();replayEntry=undefined;generation++;timeline?.kill();closingTimeline?.kill();timeline=undefined;closingTimeline=undefined;audio.pause();unlock();clearPreviews();state=fresh();loading=false;sending=false;errorKey=undefined;souvenirMode=undefined;entries=[];cursor=null;wallMode='idle';for(const el of root.querySelectorAll('[data-reveal]'))el.classList.remove('is-visible');render();},
-    pauseAudio(){audio.pause();stopFlightSound();},
+    reset(){stopFlightSound();replayEntry=undefined;generation++;timeline?.kill();closingTimeline?.kill();timeline=undefined;closingTimeline=undefined;testimonials.reset();unlock();clearPreviews();state=fresh();loading=false;sending=false;errorKey=undefined;souvenirMode=undefined;entries=[];cursor=null;wallMode='idle';for(const el of root.querySelectorAll('[data-reveal]'))el.classList.remove('is-visible');render();},
+    pauseAudio(){testimonials.pause();stopFlightSound();},
   };
 }

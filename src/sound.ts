@@ -76,7 +76,7 @@ function render(){
   const button=document.querySelector<HTMLButtonElement>('#sound-toggle');if(!button)return;
   button.setAttribute('aria-pressed',String(muted));button.setAttribute('aria-label',language==='ar'?(muted?'Activar sonidos':'Silenciar sonidos'):(muted?'Activer les sons':'Couper les sons'));
   if(context&&master)master.gain.setTargetAtTime(muted?0:.7,context.currentTime,.015);
-  for(const audio of document.querySelectorAll('audio'))audio.muted=muted;
+  for(const media of document.querySelectorAll<HTMLMediaElement>('audio,video'))media.muted=muted;
 }
 export function translateSound(lang:Language){language=lang;render();}
 export function initSound(){
@@ -85,5 +85,5 @@ export function initSound(){
   document.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' ')unlock();},{capture:true});
   document.querySelector('#sound-toggle')?.addEventListener('click',()=>{muted=!muted;try{localStorage.setItem(key,String(muted));}catch{/* Memory preference remains. */}if(!muted)unlock();render();});
   document.addEventListener('click',event=>{const target=event.target instanceof Element?event.target.closest('button,summary,input[type="radio"]'):null;if(target&&target.id!=='sound-toggle'&&!target.hasAttribute('disabled'))sound('tap');});
-  document.addEventListener('visibilitychange',()=>{if(document.hidden){stopFlightSound();void context?.suspend();for(const audio of document.querySelectorAll('audio'))audio.pause();}});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){stopFlightSound();void context?.suspend();for(const media of document.querySelectorAll<HTMLMediaElement>('audio,video'))media.pause();}});
 }

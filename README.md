@@ -25,7 +25,7 @@ Las encuestas inicial y final y las estrellas se envían de forma anónima al se
 
 El mural de la llegada sí se comparte entre visitantes mediante una función de Supabase. Recibe solo el mensaje anónimo, su idioma y un identificador aleatorio para evitar duplicados. El nombre del pasaporte no se envía. La moderación se repite en el servidor y el contenido dudoso se rechaza para reformularlo; todo mensaje aceptado se publica automáticamente. La configuración y las instrucciones para revisar el mural están en [backend/voyageurs-wall/README.md](backend/voyageurs-wall/README.md).
 
-La grabación de Cyntia aún no fue entregada. El cierre presenta una reflexión escrita basada en el cuaderno. Para habilitar el audio real y su transcripción se completa `src/arrival-config.ts`; no hay voz sintética ni reproducción automática.
+El cierre conserva la reflexión escrita y presenta cuatro testimonios originales en video bajo «Voces que acompañan este viaje». Sustituyen el espacio previsto para la voz en off. Se eligen mediante cuatro tarjetas y se reproducen de a uno, sin inicio automático ni descarga anticipada del video. Los archivos se adaptaron a 360 × 640, con orientación corregida, inicio rápido y volumen de voz normalizado; conservan el contenido completo.
 
 ## Dirección visual y técnica
 
@@ -84,11 +84,11 @@ La revisión final agrupa las cinco respuestas en filas editables con lápiz. An
 
 Materiales ofrece un botón visible para continuar a la parada 4 sin abrir la previa del cuaderno. El cuaderno mantiene su entrada cinematográfica opcional. El portadocumentos conserva su bisagra izquierda con bordes, sombras e interior más livianos.
 
-La llegada tiene tres capítulos: despedida con aparición progresiva al desplazar, dos recuerdos con vistas previas reales y descarga, y el mural anónimo. El audio de Cyntia tiene un espacio visible identificado como próximo; no se simula una grabación. Las notas se intercalan dentro de un área con desplazamiento y carga por páginas. Publicar una huella cierra su formulario; todo mensaje aceptado por el filtro se publica inmediatamente.
+La llegada tiene tres capítulos: despedida con aparición progresiva al desplazar, dos recuerdos con vistas previas reales y descarga, y el mural anónimo. Los testimonios se integran a la despedida, entre la reflexión y los recuerdos. Cambiar de testimonio, salir del capítulo o reiniciar pausa la reproducción; cambiar de idioma conserva el video y su posición. Las notas se intercalan dentro de un área con desplazamiento y carga por páginas. Publicar una huella cierra su formulario; todo mensaje aceptado por el filtro se publica inmediatamente.
 
 «Terminar viaje» cierra el pasaporte, lo eleva y lo deja caer girando. Mantiene el fondo opaco hasta el cambio al menú, donde el pasaporte cae y rebota en su lugar. Se pueden repetir pasaporte, despegue, materiales, actividad y despedida/recuerdos, sin reabrir encuestas ni publicar nuevas huellas. La recarga conserva el cierre y el acceso al menú.
 
-Los sonidos de interfaz, papel, sellos, vuelo y cierre se sintetizan localmente con Web Audio, a volumen discreto. Empiezan solo después de una interacción; el botón junto a AR/FR silencia inmediatamente todo el sonido y conserva la preferencia. El audio real también respeta ese silencio. Las animaciones respetan movimiento reducido y el desplazamiento es nativo.
+Los sonidos de interfaz, papel, sellos, vuelo y cierre se sintetizan localmente con Web Audio, a volumen discreto. Empiezan solo después de una interacción; el botón junto a AR/FR silencia inmediatamente todo el sonido y conserva la preferencia. Los testimonios también respetan ese silencio y se pausan cuando la página pasa a segundo plano. Las animaciones respetan movimiento reducido y el desplazamiento es nativo.
 
 ## Audio y segunda visita
 

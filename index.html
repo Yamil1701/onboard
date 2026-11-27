@@ -378,14 +378,18 @@
               <h2 class="arrival-kicker" id="arrival-reflection-title" data-arrival-copy="reflection"></h2>
               <blockquote data-arrival-copy="quote"></blockquote>
               <p class="arrival-author" data-arrival-copy="author"></p>
-              <div class="audio-placeholder" id="arrival-audio-placeholder">
-                <svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="16" fill="none" stroke="currentColor"/><path d="M15 11v14l11-7Z" fill="currentColor"/></svg>
-                <div><strong data-arrival-copy="audioPlaceholder"></strong><p data-arrival-copy="audioSoon"></p><small data-arrival-copy="soon"></small></div>
-              </div>
-              <div class="arrival-audio" id="arrival-audio-group" hidden>
-                <audio controls preload="none" id="arrival-audio"></audio>
-                <details id="arrival-transcript-details" hidden><summary data-arrival-copy="transcript"></summary><p id="arrival-transcript"></p></details>
-              </div>
+              <section class="arrival-testimonials" id="arrival-testimonials" aria-labelledby="testimonials-title">
+                <p class="arrival-kicker" data-arrival-copy="testimonialsKicker"></p>
+                <h3 id="testimonials-title" data-arrival-copy="testimonialsTitle"></h3>
+                <p class="testimonials-intro" data-arrival-copy="testimonialsIntro"></p>
+                <p class="testimonial-position" data-testimonial-position aria-live="polite"></p>
+                <div class="testimonial-frame" data-testimonial-frame>
+                  <video id="arrival-testimonial-video" controls playsinline preload="none" width="360" height="640"></video>
+                  <div class="testimonial-feedback" data-testimonial-feedback role="status" hidden><i aria-hidden="true"></i><span></span><button type="button" data-testimonial-retry hidden></button></div>
+                </div>
+                <div class="testimonial-choices" data-testimonial-choices role="group"></div>
+                <p class="testimonials-hint" data-arrival-copy="testimonialsHint"></p>
+              </section>
               <p class="scroll-invitation"><span data-arrival-copy="scroll">Deslizá para seguir</span><svg aria-hidden="true"><use href="#arrow"/></svg></p>
             </section>
             <section class="arrival-beat arrival-goodbye" aria-labelledby="arrival-takeaway-title" data-reveal>
